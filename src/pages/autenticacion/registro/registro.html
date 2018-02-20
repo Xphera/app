@@ -1,0 +1,75 @@
+<ion-header no-border>
+  <ion-navbar transparent color="primary">
+
+  </ion-navbar>
+
+</ion-header>
+
+<!-- Content Options -->
+<ion-content id="registration-v1">
+
+
+
+  <!-- Logo -->
+  <div class="logo animated fadeInDown">
+    <img src="assets/imgs/logo.png">
+    <h2>IonicBucket</h2>
+  </div>
+
+  <!-- Main Body -->
+  <div class="main-body animated zoomIn" padding>
+    <form #formulario="ngForm" (ngSubmit)="registroUsuario(formulario)">
+      <ion-list>
+        <!-- Email -->
+        <ion-item>
+          <ion-label>
+            <ion-icon name="md-mail"></ion-icon>
+          </ion-label>
+          <ion-input class="ion-ios-locked-outline" type="email" placeholder="Correo Electrónico"
+            name="email" ngModel required email></ion-input>
+        </ion-item>
+
+        <!-- Password -->
+        <ion-item>
+          <ion-label>
+            <ion-icon name="md-eye"></ion-icon>
+          </ion-label>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Contraseña"
+            name="passw" ngModel required></ion-input>
+        </ion-item>
+
+        <!-- Confirm Password -->
+        <ion-item>
+          <ion-label>
+            <ion-icon name="md-eye"></ion-icon>
+          </ion-label>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Repita Contraseña"
+            name="repassw" ngModel required></ion-input>
+        </ion-item>
+
+        <!-- Buttons -->
+        <div class="buttons animated fadeInUp">
+          <button ion-button type="submit" color="primary" block
+          [disabled]="!formulario.valid">
+            Crear Cuenta
+          </button>
+        </div>
+
+        <ion-row>
+          <ion-col col-6>
+            <button ion-button color="white" block>
+              <ion-icon name="logo-facebook" style="zoom:2.0"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col col-6>
+            <button ion-button icon-only color="white" block >
+              <ion-icon name="logo-twitter"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+
+      </ion-list>
+    </form>
+
+  </div>
+</ion-content>

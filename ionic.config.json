@@ -1,0 +1,8 @@
+{
+  "name": "appServicioTema",
+  "app_id": "4ffe39a2",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

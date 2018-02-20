@@ -1,0 +1,130 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+
+
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$color1: #005bea;
+$color2: #3B5998;
+
+$colors: (
+  primary:    #3286d0,
+  secondary:  #2fd397,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+  navbarColor: #2fd397,
+  white: #ffffff,
+  tomato: #d14800,
+  whatsapp:   #075E54,
+  ash: #eceaea,
+  color1: $color1,
+  color2: $color2
+);
+
+
+$themeColor1:  ($color1, $color2);
+
+// Sample Theme COlor
+//$themeColor1: (#f83600, #f9d423);
+// $themeColor1: (#c471f5, #fa71cd);
+// $themeColor1: (#f6d365, #fda085);
+// $themeColor1: (#f093fb, #f5576c);
+// $themeColor1: (#ff0844, #ffb199);
+// $themeColor1: (#16a085, #f4d03f);
+// $themeColor1: (#b224ef, #7579ff);
+// $themeColor1: (#1e3c72, #2a5298);
+// $themeColor1: (#00c6fb, #005bea);
+// $themeColor1: (#4facfe, #00f2fe);
+
+// Alert box custom style
+$alert-ios-input-padding: 10px;
+$alert-md-input-padding: 10px;
+$alert-md-button-text-color: $color2;
+$alert-ios-button-text-color: $color2;
+
+// Toogle
+$toggle-ios-height: 20px;
+$toggle-md-height: 20px;
+
+// Searchbar
+$searchbar-ios-background-color: $color1;
+$searchbar-md-background-color: $color1;
+$searchbar-ios-min-height: 60px;
+$searchbar-md-min-height: 60px;
+$searchbar-ios-input-height: 5rem;
+$searchbar-md-input-height: 5rem;
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+
+
+
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+
+
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";

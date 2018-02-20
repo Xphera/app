@@ -1,0 +1,38 @@
+<ion-menu [content]="content" side="left">
+  <!-- Side menu header option -->
+  <ion-header no-border>
+    <ion-toolbar>
+      <div class="contents">
+        <div class="left">
+          <img class="logo" src="assets/imgs/logo.png">
+        </div>
+        <div class="right">
+          <span>IonicBucket</span>
+          <span>ionicbucket@gmail.com</span>
+        </div>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Side menu content option -->
+  <ion-content>
+    <ion-list no-lines>
+      <ion-item menuClose *ngFor="let p of pages" (click)="openPage(p.page)">
+        <ion-icon ion-text color="dark" [name]="p.leftIcon" item-left></ion-icon>
+        <span ion-text color="dark">{{p.title }}</span>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+  <!-- Side Menu Footer  -->
+  <ion-footer>
+    <button menuClose ion-button full color="dark" no-margin (click)="openPage('LoginPage')">
+      <ion-icon name="md-log-out"></ion-icon> &nbsp; Iniciar Sesión
+    </button>
+  </ion-footer>
+</ion-menu>
+
+
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

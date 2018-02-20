@@ -1,0 +1,39 @@
+<ion-header no-border>
+  <ion-navbar transparent color="primary">
+  </ion-navbar>
+
+</ion-header>
+
+<!-- Content Options -->
+<ion-content id="registration-v1">
+
+  <!-- Logo -->
+  <div class="logo animated fadeInDown">
+    <img src="assets/imgs/logo.png">
+    <h2>IonicBucket</h2>
+  </div>
+
+  <!-- Main Body -->
+  <div class="main-body animated zoomIn" padding>
+    <form>
+      <ion-list>
+        <!-- Email -->
+        <ion-item>
+          <ion-label>
+          </ion-label>
+          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Código de Activación"
+            name="email"></ion-input>
+        </ion-item>
+
+        <!-- Buttons -->
+        <div class="buttons animated fadeInUp">
+          <button ion-button type="button" color="primary" block (click)="activarCuenta()">
+            Activar Cuenta
+          </button>
+        </div>
+
+      </ion-list>
+    </form>
+
+  </div>
+</ion-content>
