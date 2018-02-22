@@ -27,7 +27,7 @@ export class ServiciosProvider {
     this.obtenerCategorias()
          .subscribe( data =>{
            this.servicios = data.filter((item) => {
-                 return (item.categoria===idcategoria);
+                 return (item.categoria_id===idcategoria);
              });
          });
   }

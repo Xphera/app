@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage ,AlertController,NavParams,NavController } from 'ionic-angular';
 import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
+import { CONFIG } from '../../../config/comunes.config';
 
 
 /**
@@ -18,6 +19,7 @@ import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
 export class LoginPage {
 
   registro:any = 'RegistroPage';
+  CONFIG = CONFIG
 
   constructor(
                 private alertCtrl: AlertController,

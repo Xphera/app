@@ -23,18 +23,54 @@ export class PaquetesProvider {
         nombre:"ORO",
         detalle:"The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.",
         valor:"800000",
-        ribbon:{'text':'-10%',estilo:'sales'}
+        ribbon:{'text':'-10%',estilo:'sales'},
+        sesiones:[
+          {
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          }
+        ]
       },
       {
         nombre:"PLATA",
         detalle:"The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.",
         valor:"680000",
-        ribbon:{'text':'nuevo',estilo:'nuevo'}
+        ribbon:{'text':'nuevo',estilo:'nuevo'},
+        sesiones:[
+          {
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          },{
+            ubicacion:'',
+            fecha:''
+          }
+        ]
       },
       {
         nombre:"ESMERALDA",
         detalle:"The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.",
-        valor:"450000"
+        valor:"450000",
+        sesiones:[
+          {
+            ubicacion:'',
+            fecha:''
+          }
+        ]
       }
     ]
   }

@@ -5,7 +5,8 @@ import { ServicioInterface } from '../interfaces/interfaces.index';
 */
 export class Servicio implements ServicioInterface{
   public id:number;
-  public categoria:number;
+  public categoria:string;
+  public categoria_id:number;
   public nombre:string;
   public imagePath:string;
   public detalle:string;

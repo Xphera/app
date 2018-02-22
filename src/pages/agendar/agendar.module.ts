@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { AgendarPage } from './agendar';
 
+
 @NgModule({
   declarations: [
-    AgendarPage,
+    AgendarPage
   ],
   imports: [
-    IonicPageModule.forChild(AgendarPage),
+    IonicPageModule.forChild(AgendarPage)
   ],
 })
 export class AgendarPageModule {}

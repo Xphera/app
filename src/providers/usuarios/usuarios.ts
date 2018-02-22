@@ -13,6 +13,7 @@ import { LoadingController, ToastController, AlertController } from 'ionic-angul
 */
 @Injectable()
 export class UsuariosProvider {
+  public ubicaciones: any[] = []
 
   constructor(
     private http: HttpClient,
@@ -23,7 +24,29 @@ export class UsuariosProvider {
     console.log('Hello UsuariosProvider Provider');
   }
 
-  activarCuenta(){
+
+  obtenerUbicaciones() {
+    this.ubicaciones = [
+      {
+        title: 'Parque urbano el Virrey',
+        latitude: 4.67424,
+        longitude: -74.0563
+      },
+      {
+        title: 'Parque Simón Bolívar',
+        latitude: 4.6586709,
+        longitude: -74.0939604,
+      },
+      {
+        title: 'Parque Nacional',
+        latitude: 4.6241379,
+        longitude: -74.0651253,
+      }
+    ]
+
+  }
+
+  activarCuenta() {
     let promesa = new Promise((resolve, reject) => {
       let loader = this.showloader("Please wait...");
       loader.dismiss();
@@ -41,7 +64,7 @@ export class UsuariosProvider {
 
       //enviar petición a servidor...
       this.http.post(BASE_URL_REGISTRO_USUARIO, { email, passw, repassw })
-      //  .map((result: Response)=> result.json())
+        //  .map((result: Response)=> result.json())
         .subscribe(
         //repuesta valida de servidor
         data => {

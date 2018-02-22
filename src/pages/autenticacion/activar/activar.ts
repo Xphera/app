@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage ,NavController, NavParams } from 'ionic-angular';
 import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
+import { CONFIG } from '../../../config/comunes.config';
 
 /**
  * Generated class for the ActivarPage page.
@@ -15,6 +16,7 @@ import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
   templateUrl: 'activar.html',
 })
 export class ActivarPage {
+  CONFIG = CONFIG
 
   constructor(
                 public navCtrl: NavController,

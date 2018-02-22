@@ -5,6 +5,8 @@ import { NgForm } from '@angular/forms';
 
 import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
 
+import { CONFIG } from '../../../config/comunes.config';
+
 //import { ActivarPage } from '../index.pages';
 
 /**
@@ -22,11 +24,13 @@ import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
 export class RegistroPage {
 
   activapage:any = 'ActivarPage';
+  CONFIG = CONFIG
 
   constructor(
                 public navCtrl: NavController,
                 public navParams: NavParams,
                 public _usuariosPrvdr:UsuariosProvider) {
+
   }
 
   ionViewDidLoad() {

@@ -22,7 +22,7 @@ import { PaquetesProvider } from '../providers/paquetes/paquetes';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpClientModule,
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
