@@ -1,0 +1,33 @@
+<!-- Generated template for the MapMarkerFixedComponent component -->
+<div class="buscador">
+<ion-searchbar
+    [(ngModel)]="titulo"
+    [showCancelButton]="true"
+    (ionInput)="updateSearch()"
+    (click)="mostrarListadoUbicacion()"
+    placeholder="Comience a escribir o seleccione ..."
+    id="inputsearchbar">
+</ion-searchbar>
+<ion-item-group *ngIf="listadoubicaciones" class="listadoubicaciones">
+
+    <ion-item *ngFor="let item of autocompleteItems" (click)="onSelectChange(item,'navegacion')">
+      <ion-icon name="navigate" item-start color="primary"></ion-icon>
+      {{ item.description }}
+    </ion-item>
+
+    <ion-item (click)="fijarUbicacion()">
+    <ion-icon name="locate" item-start color="primary"></ion-icon>
+    Fijar ubicación en el mapa
+  </ion-item>
+
+  <ion-item-divider color="light"> Mis Ubicaciones</ion-item-divider>
+  <ion-item *ngFor="let ubicacion of ubicaciones ; let i = index" (click)="onSelectChange(i)">
+    <ion-icon name="pin" item-start color="primary"></ion-icon>
+    {{ ubicacion.titulo }}
+  </ion-item>
+</ion-item-group>
+  </div>
+<!-- style="height:500px" -->
+<div>
+<div #gmapfixed id="gmapfixed" style="height:100vh"></div>
+</div>

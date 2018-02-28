@@ -39,7 +39,7 @@ export class ServiciosPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ServiciosPage');
   }
-
+  
   iraAsociados(){
     this.navCtrl.push(this.asociadosPage,{servicio:this._serviciosPrvdr.servicios[this.slideIndex]});
   }

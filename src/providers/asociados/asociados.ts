@@ -37,19 +37,6 @@ export class AsociadosProvider {
       date.setDate(date.getDate() + 1);
     }
     this.agendaasociado = events;
-    //
-    // this.agendaasociado =[{
-    //   title: '',
-    //   startTime: new Date("2018-02-22 01:00 PM"),
-    //   endTime: new Date("2018-02-22 2:00 PM"),
-    //   allDay: false
-    // },
-    //   {
-    //     title: '',
-    //     startTime: new Date("2018-03-21 15:00"),
-    //     endTime: new Date("2018-03-21 16:00"),
-    //     allDay: false
-    //   }];
   }
 
   obtenerAsociadosCategoria() {

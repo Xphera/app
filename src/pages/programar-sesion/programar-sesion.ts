@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
-import { Navbar } from 'ionic-angular';
+import { Component, } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 
@@ -18,18 +17,9 @@ import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 })
 export class ProgramarSesionPage {
 
-  @ViewChild(Navbar) navBar: Navbar;
-
-  // sesion: any = {}
-  // index: number = 0;
-
   //variables de calendario
   titulocalendario: string = '';
   calendar: any = {};
-
-  //variables de mapa
-  ubicacion: any;
-  mapa: any = {};
 
   //variables de navegacion
   paginas = {
@@ -37,32 +27,39 @@ export class ProgramarSesionPage {
     dia: { titulo: "2. Selecciona día", pagina: 'calendarioDia' },
     hora: { titulo: "3. Selecciona hora", pagina: 'calendarioHora' }
   };
-  navegacion:string = this.paginas.ubicacion.pagina;
+  navegacion: string = this.paginas.ubicacion.pagina;
   tituloaccion: string = this.paginas.ubicacion.titulo;
+
+  mapa: any = {}
+  ubicacion: any = {}
+  botonmapa:boolean = false;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewCtrl: ViewController,
     public _asociadosPrvdr: AsociadosProvider,
-    public _usuariosPrvdr: UsuariosProvider,
-    platform: Platform) {
+    public _usuariosPrvdr: UsuariosProvider) {
 
     this._asociadosPrvdr.obtenerAgendaAsociado();
     this._usuariosPrvdr.obtenerUbicaciones();
 
+    this.mapa = {
+      zoom: 17,
+      zoomControl: false,
+      streetViewControl: false,
+    }
 
-    platform.registerBackButtonAction(() => {
-      this.atras();
-    }, 1);
-
-    //  this.sesion = this.navParams.get("sesion");
-    //  this.index = this.navParams.get("index");
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProgramarSesionPage');
   }
+
+  ionViewCanLeave(): boolean {
+    return this.atras();
+  }
+
 
 
   // Acciones sobre el calendario.
@@ -70,7 +67,7 @@ export class ProgramarSesionPage {
     this.titulocalendario = title;
   }
   onEventSelected(event) {
-    console.log(event);
+    this.navegacion = this.paginas.ubicacion.pagina;
     this.viewCtrl.dismiss({ ubicacion: this.ubicacion, agenda: event });
   }
 
@@ -103,35 +100,30 @@ export class ProgramarSesionPage {
 
   //Acciones de navegacion
   cerrarModal() {
+    this.navegacion = this.paginas.ubicacion.pagina;
     this.viewCtrl.dismiss();
   }
 
-  atras() {
+  atras(): boolean {
     if (this.navegacion == this.paginas.dia.pagina) {
       this.tituloaccion = this.paginas.ubicacion.titulo;
       this.navegacion = this.paginas.ubicacion.pagina;
+      return false;
     } else if (this.navegacion == this.paginas.hora.pagina) {
       this.tituloaccion = this.paginas.dia.titulo;
       this.calendar.mode = 'month';
       this.navegacion = this.paginas.dia.pagina;
+      return false;
     } else if (this.navegacion == this.paginas.ubicacion.pagina) {
-      this.cerrarModal();
+      return true;
     }
   }
 
-
-  //accion de select de ubicaciones
-  onSelectChange(selectedValue: any) {
-    this.ubicacion = this._usuariosPrvdr.ubicaciones[selectedValue];
-    this.mapa = {
-      zoom: 18,
-      latitude: this.ubicacion.latitude,
-      longitude: this.ubicacion.longitude,
-      zoomControl: false,
-      streetViewControl: false,
-      title: this.ubicacion.title,
-      mostrar: true
-    }
+  coordenadas(event): void {
+    this.ubicacion = event.coordenadas;
+    console.log(event);
+    this.botonmapa = true;
   }
+
 
 }

@@ -1,7 +1,14 @@
 page-programar-sesion {
-  agm-map {
-    height: 300px;
+
+
+
+  .boton-mapa{
+    position: absolute;
+  	bottom: 0;
+  	z-index: 1;
+    width: 100%
   }
+
   h3{
     padding: 0 16px 0 16px;
   }

@@ -36,8 +36,8 @@ export class AgendarPage {
     let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion, index });
     modal.present();
     modal.onDidDismiss(programacion => {
-      if (programacion) {console.log( programacion.agenda.startTime);
-          this.paquete.sesiones[index].lugar = programacion.ubicacion.title;
+      if (programacion) {
+          this.paquete.sesiones[index].lugar = programacion.ubicacion.titulo;
           this.paquete.sesiones[index].fecha = programacion.agenda.startTime;
       }
     });

@@ -26,28 +26,13 @@
 <ion-content>
 
 <div *ngIf="navegacion=='ubicacion'">
-  <ion-item>
-        <ion-label>Selecciona ubicación</ion-label>
-        <ion-select interface="popover" (ionChange)="onSelectChange($event)">
-          <ion-option *ngFor="let ubicacion of _usuariosPrvdr.ubicaciones; let i = index" [value]="i">{{ ubicacion.title }}</ion-option>
-        </ion-select>
-      </ion-item>
-<div *ngIf="mapa.mostrar">
-  <agm-map
-    [latitude]="mapa.latitude"
-    [longitude]="mapa.longitude"
-    [scrollwheel]="mapa.false"
-    [zoomControl]="mapa.zoomControl"
-    [zoom]="mapa.zoom"
-    [streetViewControl]="mapa.streetViewControl">
-    <agm-marker
-      [latitude]="mapa.latitude"
-      [longitude]="mapa.longitude">
-       <agm-info-window>{{ mapa.title }}</agm-info-window>
-    </agm-marker>
-  </agm-map>
-<button ion-button block (click)="mostrarCalendario()">Siguiente</button>
-</div>
+<xph-map-marker-fixed 
+[zoom]="mapa.zoom"
+[latitud]="_usuariosPrvdr.ubicaciones[0].latitud"
+[longitud]="_usuariosPrvdr.ubicaciones[0].longitud"
+(getCoordenadas)="coordenadas($event)"
+[ubicaciones]="_usuariosPrvdr.ubicaciones"></xph-map-marker-fixed>
+<button *ngIf="botonmapa" class="boton-mapa" ion-button block (click)="mostrarCalendario()">Siguiente</button>
 </div>
 
 

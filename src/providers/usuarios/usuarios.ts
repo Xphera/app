@@ -28,27 +28,27 @@ export class UsuariosProvider {
   obtenerUbicaciones() {
     this.ubicaciones = [
       {
-        title: 'Parque urbano el Virrey',
-        latitude: 4.67424,
-        longitude: -74.0563
+        titulo: 'Parque urbano el Virrey',
+        latitud: 4.67424,
+        longitud: -74.0563
       },
       {
-        title: 'Parque Simón Bolívar',
-        latitude: 4.6586709,
-        longitude: -74.0939604,
+        titulo: 'Parque Simón Bolívar',
+        latitud: 4.6586709,
+        longitud: -74.0939604,
       },
       {
-        title: 'Parque Nacional',
-        latitude: 4.6241379,
-        longitude: -74.0651253,
+        titulo: 'Parque Nacional',
+        latitud: 4.6241379,
+        longitud: -74.0651253,
       }
     ]
 
   }
 
   activarCuenta() {
-    let promesa = new Promise((resolve, reject) => {
-      let loader = this.showloader("Please wait...");
+      let promesa = new Promise((resolve, reject) => {
+      let loader = this.showloader("por favor espera...");
       loader.dismiss();
       //respuesta de promesa
       resolve({ activa: true });
@@ -60,7 +60,7 @@ export class UsuariosProvider {
     //crear promesa...
     let promesa = new Promise((resolve, reject) => {
 
-      let loader = this.showloader("Please wait...");
+      let loader = this.showloader("por favor espera...");
 
       //enviar petición a servidor...
       this.http.post(BASE_URL_REGISTRO_USUARIO, { email, passw, repassw })
@@ -89,11 +89,10 @@ export class UsuariosProvider {
           loader.dismiss();
 
           this.showAlert({
-            title: 'Error!',
-            subTitle: listaerrores,
+            titulo: 'Error!',
+            subtitulo: listaerrores,
             buttons: ['OK']
           });
-
           //respuesta de promesa
           resolve({ registro: false });
         }
