@@ -5,8 +5,10 @@ import { AgmCoreModule } from '@agm/core';
 import { } from 'googlemaps';
 import { Geolocation } from '@ionic-native/geolocation';
 
+
 @NgModule({
-	declarations: [MapMarkerFixedComponent],
+	declarations: [MapMarkerFixedComponent
+	],
 	imports: [
 						IonicModule,
 						AgmCoreModule.forRoot({
@@ -14,7 +16,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 				      libraries: ["places"]
 				    }),
 					],
-	exports: [MapMarkerFixedComponent],
+	exports: [MapMarkerFixedComponent,
+    ],
 	providers: [Geolocation]
 })
 export class ComponentsModule {}

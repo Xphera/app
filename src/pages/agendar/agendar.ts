@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 
 import { CONFIG } from '../../config/comunes.config';
 
+import { AgendaProvider } from '../../providers/agenda/agenda';
+
 /**
  * Generated class for the AgendarPage page.
  *
@@ -19,13 +21,16 @@ export class AgendarPage {
 
   paquete: any;
   CONFIG = CONFIG
+  metodosPagos:string = 'MetodosPagosPage';
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public _agendaPrvdr:AgendaProvider
   ) {
-    this.paquete = this.navParams.get("paquete")
+    this.paquete = this.navParams.get("paquete");
+    this._agendaPrvdr.agendar(this.paquete);
   }
 
   ionViewDidLoad() {
@@ -37,8 +42,8 @@ export class AgendarPage {
     modal.present();
     modal.onDidDismiss(programacion => {
       if (programacion) {
-          this.paquete.sesiones[index].lugar = programacion.ubicacion.titulo;
-          this.paquete.sesiones[index].fecha = programacion.agenda.startTime;
+          this.paquete.sesiones[index] = programacion;
+          this._agendaPrvdr.agendar(this.paquete);
       }
     });
   }

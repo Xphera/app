@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage ,NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
 import { CONFIG } from '../../../config/comunes.config';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 /**
  * Generated class for the ActivarPage page.
@@ -17,19 +18,38 @@ import { CONFIG } from '../../../config/comunes.config';
 })
 export class ActivarPage {
   CONFIG = CONFIG
-
-  constructor(
-                public navCtrl: NavController,
-                public navParams: NavParams,
-                private _usuariosPrvdr:UsuariosProvider) {
+  myForm: FormGroup;
+  camposForm = {
+    email: '',
+    codigo: ''
   }
 
-  activarCuenta(){
-    this._usuariosPrvdr.activarCuenta().then((resp)=>{
-      if(resp['activa']){
-        this.navCtrl.setRoot('HomePage');
-      }
-  });
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private _usuariosPrvdr: UsuariosProvider,
+    private formBuilder: FormBuilder) {
+
+    this.myForm = this.createMyForm();
+    _usuariosPrvdr.datosRegistro();
+  }
+
+  private createMyForm() {
+    return this.formBuilder.group({
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      codigo: ['', Validators.compose([Validators.required])]
+    });
+  }
+
+  activarCuenta(): void {
+    if (this.myForm.valid) {
+      this._usuariosPrvdr.activarCuenta(this.camposForm.email, this.camposForm.codigo).then((resp: any) => {
+        console.log(resp);
+        if (resp.respuesta) {
+          this.navCtrl.setRoot('LoginPage');
+        }
+      });
+    }
   }
 
   ionViewDidLoad() {

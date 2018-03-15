@@ -14,8 +14,8 @@
     [ngStyle]="{'background-image': 'url(' + servicio.imagePath +')'}">
       <div class="text-wrapper">
         <div class="slide-text">
-          <h2 class="slide-title" [innerHTML]="servicio.nombre"></h2><br>
-          <p [innerHTML]="servicio.detalle"></p>
+          <h2 class="slide-title">{{ servicio.nombre }}</h2><br>
+          <p>{{ servicio.detalle }}</p>
         </div>
       </div>
       <!-- Add Pagination -->

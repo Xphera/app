@@ -5,6 +5,8 @@ import { BASE_URL_CATEGORIA } from '../../config/url.confing';
 
 import { Categoria } from '../../models/models.index';
 
+import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
+
 /*
   Generated class for the CategoriasProvider provider.
 
@@ -13,19 +15,30 @@ import { Categoria } from '../../models/models.index';
 */
 @Injectable()
 export class CategoriasProvider {
-  categorias:Categoria[] = [];
-  constructor(public http: HttpClient) {
+  categorias: Array<Categoria> = new Array<Categoria>();
+  constructor(
+    public http: HttpClient,
+    public _almacenamientoPrvdr: AlmacenamientoProvider
+  ) {
     console.log('Hello CategoriasProvider Provider');
   }
 
-  obtenerCategorias(){
-     this.http.get<Categoria[]>(BASE_URL_CATEGORIA,)
-          .subscribe( data =>{
-            this.categorias = data;
-          });
+  obtenerCategorias() {
+    this._almacenamientoPrvdr.obtener('categoria').then((datos: { satatus: string, data: string }) => {
+      this.categorias = JSON.parse(datos.data);
+      console.log(this.categorias);
+    });
   }
-  obtenerCategoriaIndex(index:number){
-    return this.categorias[index];
+
+  grabarCategorias() {
+    console.log(BASE_URL_CATEGORIA);
+    this.http.get<Categoria[]>(BASE_URL_CATEGORIA, )
+      .subscribe(data => {
+        this._almacenamientoPrvdr.guardar('categoria', JSON.stringify(data)).then(() => {
+          this.categorias = data;
+          console.log(this.categorias);
+        })
+      });
   }
 
 }

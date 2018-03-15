@@ -15,20 +15,24 @@
 
   <!-- Main Body -->
   <div class="main-body animated zoomIn" padding>
-    <form>
+    <form [formGroup]="myForm" (ngSubmit)="activarUsuario(formulario)">
       <ion-list>
-        <!-- Email -->
         <ion-item>
-          <ion-label>
-          </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Código de Activación"
-            name="email"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Correo electrónico" formControlName="email" [value]="_usuariosPrvdr.infoRegistro" [(ngModel)]="camposForm.email"></ion-input>
         </ion-item>
-
+        <div class="error-box" *ngIf="myForm.controls.email.hasError('email') && myForm.controls.email.touched">
+          <p>Correo electrónico inválido</p>
+        </div>
+        <ion-item>
+          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Código de Activación" formControlName="codigo" [(ngModel)]="camposForm.codigo"></ion-input>
+        </ion-item>
+        <div class="error-box" *ngIf="myForm.controls.codigo.hasError('required') && myForm.controls.codigo.touched">
+          <p>Correo electrónico inválido</p>
+        </div>
         <!-- Buttons -->
         <div class="buttons animated fadeInUp">
-          <button ion-button type="button" color="primary" block (click)="activarCuenta()">
-            Activar Cuenta
+          <button ion-button type="button" color="primary" block (click)="activarCuenta()"  [disabled]="!myForm.valid">
+              Activar Cuenta
           </button>
         </div>
 

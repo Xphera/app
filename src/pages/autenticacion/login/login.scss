@@ -1,34 +1,41 @@
 page-login {
 
+  .invalid {
+    border: 1px solid #ea6153;
+  }
+
   #login-v1 {
-      /* Background Style */
-      height: 100%;
-      background: linear-gradient(-60deg, $themeColor1);
-      background-size: cover;
-      /* Logo Style */
-      .logo {
-          margin-top: 10%;
-          margin-bottom: 10%;
-          text-align: center;
-          color: #fff;
-          img {
-              width: 100px;
-              border-radius: 50%;
-          }
+    /* Background Style */
+    height: 100%;
+    background: linear-gradient(-60deg, $themeColor1);
+    background-size: cover;
+    /* Logo Style */
+    .logo {
+      margin-top: 10%;
+      margin-bottom: 10%;
+      text-align: center;
+      color: #fff;
+
+      img {
+        width: 100px;
+        border-radius: 50%;
       }
-      /* main body part style */
-      .main-body {
-          form {
-              ion-list {
-                  .item-input {
-                      ion-label {
-                          margin-left: 10px;
-                      }
-                  }
-                  .buttons {
-                      margin-top: 5%;
-                  }
-              }
+    }
+    /* main body part style */
+    .main-body {
+      form {
+        ion-list {
+          .item-input {
+            ion-label {
+              margin-left: 10px;
+            }
           }
+
+          .buttons {
+            margin-top: 5%;
+          }
+        }
       }
-  }}
+    }
+  }
+}

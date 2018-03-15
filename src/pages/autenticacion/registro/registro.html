@@ -18,39 +18,42 @@
 
   <!-- Main Body -->
   <div class="main-body animated zoomIn" padding>
-    <form #formulario="ngForm" (ngSubmit)="registroUsuario(formulario)">
+    <form [formGroup]="myForm" (ngSubmit)="registroUsuario(formulario)">
       <ion-list>
         <!-- Email -->
         <ion-item>
           <ion-label>
             <ion-icon name="md-mail"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="email" placeholder="Correo Electrónico"
-            name="email" ngModel required email></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="email" placeholder="Correo Electrónico" name="email" formControlName="email" [(ngModel)]="camposForm.email"></ion-input>
         </ion-item>
+        <div class="error-box" *ngIf="myForm.controls.email.hasError('email') && myForm.controls.email.touched">
+          <p>Correo electrónico inválido</p>
+        </div>
 
         <!-- Password -->
         <ion-item>
           <ion-label>
             <ion-icon name="md-eye"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Contraseña"
-            name="passw" ngModel required></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Contraseña" name="passw" formControlName="passw" [(ngModel)]="camposForm.passw"></ion-input>
         </ion-item>
-
+        <div class="error-box" *ngIf="myForm.controls.passw.hasError('required') && myForm.controls.passw.touched">
+          <p>Contraseña es obligatorio</p>
+        </div>
         <!-- Confirm Password -->
         <ion-item>
           <ion-label>
             <ion-icon name="md-eye"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Repita Contraseña"
-            name="repassw" ngModel required></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Repita Contraseña" name="repassw" formControlName="repassw" [(ngModel)]="camposForm.repassw"></ion-input>
         </ion-item>
-
+        <div class="error-box" *ngIf="myForm.errors?.mismatchedPasswords && myForm.controls.repassw.touched">
+          <p>Contraseña y Repita contraseña no coinciden</p>
+        </div>
         <!-- Buttons -->
         <div class="buttons animated fadeInUp">
-          <button ion-button type="submit" color="primary" block
-          [disabled]="!formulario.valid">
+          <button ion-button type="submit" color="primary" block [disabled]="!myForm.valid">
             Crear Cuenta
           </button>
         </div>
@@ -62,7 +65,7 @@
             </button>
           </ion-col>
           <ion-col col-6>
-            <button ion-button icon-only color="white" block >
+            <button ion-button icon-only color="white" block>
               <ion-icon name="logo-twitter"></ion-icon>
             </button>
           </ion-col>

@@ -1,4 +1,4 @@
-import { CategoriaInterface } from '../interfaces/interfaces.index';
+import { CategoriaInterface } from '../interface/interface.index';
 /**
 * Representa una categoria de servicios.
 * @class Categoria

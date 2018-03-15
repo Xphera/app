@@ -4,7 +4,7 @@ import { ProgramarSesionPage } from './programar-sesion';
 
 import { ComponentsModule } from '../../components/components.module';
 
-import { NgCalendarModule  } from 'ionic2-calendar';
+import { NgCalendarModule } from 'ionic2-calendar';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs);
@@ -19,4 +19,4 @@ registerLocaleData(localeEs);
     ComponentsModule
   ],
 })
-export class ProgramarSesionPageModule {}
+export class ProgramarSesionPageModule { }

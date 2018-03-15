@@ -1,14 +1,13 @@
-<ion-menu [content]="content" side="left">
+<ion-menu [content]="content" side="left" id="sesionInactiva">
   <!-- Side menu header option -->
   <ion-header no-border>
     <ion-toolbar>
       <div class="contents">
         <div class="left">
-          <img class="logo" src="assets/imgs/logo.png">
+          <img class="logo" [src]="CONFIG.LOGO">
         </div>
         <div class="right">
-          <span>IonicBucket</span>
-          <span>ionicbucket@gmail.com</span>
+          <h4>{{CONFIG.APP_NAME}}</h4>
         </div>
       </div>
     </ion-toolbar>
@@ -27,7 +26,32 @@
   <!-- Side Menu Footer  -->
   <ion-footer>
     <button menuClose ion-button full color="dark" no-margin (click)="openPage('LoginPage')">
-      <ion-icon name="md-log-out"></ion-icon> &nbsp; Iniciar Sesión
+      Iniciar Sesión
+    </button>
+
+  </ion-footer>
+</ion-menu>
+
+
+<!--Material Design Menu-->
+<ion-menu [content]="content" id="sesionActiva">
+  <ion-content>
+    <div class="menu-header">
+      <!--material-design-background-->
+      <img class="user-avatar round" [src]="chosenPicture || placeholder" onerror="this.src='assets/imgs/avatar/cosima-avatar.jpg'" />
+      <p class="name">Cosima Niehaus</p>
+      <p class="e-mail">pbolliger@email.com</p>
+    </div>
+    <ion-list no-lines>
+      <button menuClose="left" ion-item detail-none *ngFor="let p of pages_authenticated" (click)="openPage(p.page)">
+      <ion-icon [name]="p.leftIcon" item-left></ion-icon>
+      {{p.title}}
+    </button>
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <button menuClose ion-button full color="dark" no-margin (click)="cerrarSesion()">
+      Cerrar Sesión
     </button>
   </ion-footer>
 </ion-menu>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Asociado } from '../../models/models.index';
 
 /**
  * Generated class for the PerfilAsociadoPage page.
@@ -14,17 +15,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'perfil-asociado.html',
 })
 export class PerfilAsociadoPage {
-  asociado:any;
-  segment:string = 'perfil';
+  asociado: Asociado;
+  segment: string = 'perfil';
   paquetespage = 'PaquetesPage';
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.asociado = this.navParams.get("asociado");
-    console.log(this.asociado);
   }
 
-  verPaquetes(){
-    this.navCtrl.push(this.paquetespage)
+  verPaquetes(asociado: Asociado) {
+    this.navCtrl.push(this.paquetespage, { asociado })
   }
 
   ionViewDidLoad() {

@@ -30,7 +30,7 @@ export class MapMarkerFixedComponent {
   @Input() zoom: number = 15;
   @Input() latitud: number = 0;
   @Input() longitud: number = 0;
-  @Input() titulo: string = '';
+  @Input() direccion: string = '';
   @Input() ubicaciones: coordenadasInterfaces[] = [];
 
   /**
@@ -59,7 +59,7 @@ export class MapMarkerFixedComponent {
   */
   listadoubicaciones: boolean = true;
   /**
-  * contiene la lomgitud latitud y el titulo del punto seleccionado.
+  * contiene la lomgitud latitud y la direccion del punto seleccionado.
   */
   coordenadas: coordenadasInterfaces;
 
@@ -73,6 +73,7 @@ export class MapMarkerFixedComponent {
   */
   inputsearchbar: any;
 
+
   @Output() getCoordenadas = new EventEmitter();
 
   constructor(
@@ -81,6 +82,7 @@ export class MapMarkerFixedComponent {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController) {
     console.log('Hello MapMarkerFixedComponent Component');
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,7 +92,7 @@ export class MapMarkerFixedComponent {
       this.coordenadas = {
         latitud: this.latitud,
         longitud: this.longitud,
-        titulo: this.titulo
+        direccion: this.direccion,
       };
       this.pintarMapa();
     })
@@ -115,19 +117,18 @@ export class MapMarkerFixedComponent {
   * implmenta funcion search() para armar listado de predicciones de direcciones.
   */
   updateSearch() {
-    if (this.titulo == '') {
+    if (this.direccion == '') {
       this.autocompleteItems = [];
-    }else{
+    } else {
       let config = {
         //types: ['geocode'], // other types available in the API: 'establishment', 'regions', and 'cities'
-        input: this.titulo,
+        input: this.direccion,
         componentRestrictions: { country: 'CO' }
       }
-       Observable.fromPromise(this.search(config)).debounceTime(500).subscribe((resp:any)=>{
-         this.autocompleteItems = resp;
-       });
+      Observable.fromPromise(this.search(config)).debounceTime(500).subscribe((resp: any) => {
+        this.autocompleteItems = resp;
+      });
     }
-
   }
 
   /**
@@ -153,18 +154,31 @@ export class MapMarkerFixedComponent {
   /**
   *
   */
-  onSelectChange(selectedValue: any, tipo?: string) {
+  onSelectChange(selectedValue: number, tipo?: string) {
     this.autocompleteItems = [];
     let loader = this.showloader('Creando Mapa...');
     this.sleep(2000).then(() => {
       this.inputsearchbar[0].disabled = true;
       this.listadoubicaciones = false;
+      console.log(selectedValue);
       this.obtenerUbicacion(selectedValue, tipo).then((resp: coordenadasInterfaces) => {
-        this.coordenadas.titulo = resp.titulo;
+
+        this.coordenadas.direccion = resp.direccion;
         this.coordenadas.latitud = resp.latitud;
         this.coordenadas.longitud = resp.longitud;
         this.coordenadas.index = resp.index;
-        this.titulo = this.coordenadas.titulo;
+
+        if (resp.index >= 0) {
+          this.coordenadas.titulo = this.ubicaciones[selectedValue].titulo;
+          this.coordenadas.complemento = this.ubicaciones[selectedValue].complemento;
+
+        } else {
+          this.coordenadas.titulo = '';
+          this.coordenadas.complemento = '';
+        }
+
+        this.direccion = this.coordenadas.direccion;
+
         this.pintarMapa();
         loader.dismiss();
       });
@@ -188,7 +202,7 @@ export class MapMarkerFixedComponent {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
             ubicacion.longitud = place.geometry.location.lng();
             ubicacion.latitud = place.geometry.location.lat();
-            ubicacion.titulo = selectedValue.description;
+            ubicacion.direccion = selectedValue.description;
             ubicacion.index = -1;
             // ubicacion.titulo = place.formatted_address;
             resolve(ubicacion);
@@ -217,17 +231,19 @@ export class MapMarkerFixedComponent {
     loader.present();
     this.geolocation.getCurrentPosition({ timeout: 3000 })
       .then(
-      location => {
-        this.coordenadas.longitud = location.coords.longitude;
-        this.coordenadas.latitud = location.coords.latitude;
-        this.coordenadas.index = -1;
-        this.geocoder().then((titulo: string) => {
-          this.coordenadas.titulo = titulo;
-          this.titulo = this.coordenadas.titulo;
-          this.pintarMapa();
-          loader.dismiss();
-        })
-      }
+        location => {
+          this.coordenadas.longitud = location.coords.longitude;
+          this.coordenadas.latitud = location.coords.latitude;
+          this.coordenadas.index = -1;
+          this.coordenadas.titulo = '';
+          this.coordenadas.complemento = '';
+          this.geocoder().then((direccion: string) => {
+            this.coordenadas.direccion = direccion;
+            this.direccion = this.coordenadas.direccion;
+            this.pintarMapa();
+            loader.dismiss();
+          })
+        }
       )
       .catch(error => {
 
@@ -273,16 +289,16 @@ export class MapMarkerFixedComponent {
         this.coordenadas.longitud = this.map.getCenter().lng();
 
         if (distanciaCoordenadas >= 100) {
-          this.titulo = 'Ubicando....';
-          this.geocoder().then((titulo: string) => {
+          this.direccion = 'Ubicando....';
+          this.geocoder().then((direccion: string) => {
 
             coordenadasGeocoder = {
               latitud: this.coordenadas.latitud,
               longitud: this.coordenadas.longitud
             }
 
-            this.coordenadas.titulo = titulo;
-            this.titulo = this.coordenadas.titulo;
+            this.coordenadas.direccion = direccion;
+            this.direccion = this.coordenadas.direccion;
             this.recalculada = true;
             loader.dismiss();
             this.lanzarCorrdenadas();
@@ -426,6 +442,8 @@ export interface coordenadasInterfaces {
   latitud?: number,
   longitud?: number,
   titulo?: string,
+  direccion?: string,
+  complemento?: string
   /**
   * 0 o mayor indicada que el index del arrego de ubicaciones suministrado si es -1 es una direccion nueva.
   */

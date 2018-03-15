@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 
+import { CONFIG } from '../../config/comunes.config';
+
 /**
  * Generated class for the ProgramarSesionPage page.
  *
@@ -32,7 +34,7 @@ export class ProgramarSesionPage {
 
   mapa: any = {}
   ubicacion: any = {}
-  botonmapa:boolean = false;
+  botonmapa: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -68,7 +70,13 @@ export class ProgramarSesionPage {
   }
   onEventSelected(event) {
     this.navegacion = this.paginas.ubicacion.pagina;
-    this.viewCtrl.dismiss({ ubicacion: this.ubicacion, agenda: event });
+    this.viewCtrl.dismiss({
+      lugar: this.ubicacion.titulo,
+      fecha: event.startTime,
+      estado: CONFIG.ESTADO_SESION.PROGRAMADA,
+      latitud: this.ubicacion.latitud,
+      longitud: this.ubicacion.longitud
+    });
   }
 
   onTimeSelected(ev) {

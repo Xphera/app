@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PaquetesProvider } from '../../providers/paquetes/paquetes';
 import { CONFIG } from '../../config/comunes.config';
+import { Asociado } from '../../models/models.index';
 
 /**
  * Generated class for the PaquetesPage page.
@@ -16,16 +17,18 @@ import { CONFIG } from '../../config/comunes.config';
   templateUrl: 'paquetes.html',
 })
 export class PaquetesPage {
+  agendarpage = 'AgendarPage';
 
-  agendarpage='AgendarPage';
-  CONFIG = CONFIG
+  CONFIG = CONFIG;
+  asociado: Asociado;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private _paquetesPrvdr:PaquetesProvider
+    private _paquetesPrvdr: PaquetesProvider
   ) {
-      this._paquetesPrvdr.obeternerPaqueteCategoria();
+    this.asociado = this.navParams.get('asociado');
+    this._paquetesPrvdr.obeternerPaqueteCategoria(  this.asociado.servicios );
   }
 
 

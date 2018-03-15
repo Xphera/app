@@ -1,0 +1,62 @@
+<!--
+  Generated template for the ComplementoUbicacionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Complemento ubicación</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="cerrarModal()">
+            <ion-icon name="close"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="myForm" (ngSubmit)="guardar()">
+  <ion-list>
+
+    <ion-item>
+      <ion-label stacked>Titulo</ion-label>
+      <ion-input formControlName="titulo" type="text" placeholder="Parque el tunal"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.titulo.hasError('required') && myForm.controls.titulo.touched">
+      <p>Titulo es requerido</p>
+    </div>
+    <div class="error-box" *ngIf="myForm.controls.titulo.hasError('maxlength') && myForm.controls.titulo.touched">
+      <p>Titulo es mayor {{ myForm.controls.titulo.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+
+    <ion-item>
+      <ion-label stacked>Dirección</ion-label>
+      <ion-input formControlName="direccion" type="text" placeholder="Carrera 30 #12b-15"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.direccion.hasError('required') && myForm.controls.direccion.touched">
+      <p>Dirección es requerido</p>
+    </div>
+    <div class="error-box" *ngIf="myForm.controls.direccion.hasError('maxlength') && myForm.controls.direccion.touched">
+      <p>Dirección es mayor {{ myForm.controls.direccion.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+
+    <ion-item>
+      <ion-label stacked>Complemento</ion-label>
+      <ion-input formControlName="complemento" type="text" placeholder="Apartamento 404, Interior 5, Torre 4"></ion-input>
+    </ion-item>
+    <div class="error-box" *ngIf="myForm.controls.complemento.hasError('maxlength') && myForm.controls.complemento.touched">
+      <p>Complemento es mayor {{ myForm.controls.complemento.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+
+  </ion-list>
+  <button ion-button [disabled]="!myForm.valid" type="button" color="themeColor1" block type="submit">
+     Guardar
+  </button>
+</form>
+
+</ion-content>

@@ -15,17 +15,17 @@
 
 
 <ion-content>
-  <ion-card *ngFor="let asociado of _asociadosPrver.asociados">
+  <ion-card *ngFor="let asociado of _asociadosPrvr.asociados">
 
     <ion-item style="border-bottom: 1px solid #e7e7e7;">
       <ion-avatar item-start>
         <img src="{{ asociado.imagePath }}">
       </ion-avatar>
-      <h2>{{ asociado.nombre }}</h2>
+      <h2>{{ asociado.nombreCompleto }}</h2>
       <p>{{ asociado.titulo }}</p>
       <ion-row>
         <ion-col>
-          <rating [(ngModel)]="asociado.rate" readOnly="true" ></rating>
+          <rating [(ngModel)]="asociado.calificacion" readOnly="true" ></rating>
         </ion-col>
         <ion-col>
           <rating [(ngModel)]="asociado.insignia" class="insignia" readOnly="true" starIconName="md-medal" [max]="asociado.insignia" emptyStarIconName="md-medal-outline"></rating>
@@ -39,7 +39,7 @@
 
     <ion-row style="border-top: 1px solid #e7e7e7;">
       <ion-col>
-        <button ion-button icon-left clear small (click)="verPaquetes()">
+        <button ion-button icon-left clear small (click)="verPaquetes(asociado)">
           <ion-icon name="redo"></ion-icon>
           <div>Paquetes</div>
         </button>

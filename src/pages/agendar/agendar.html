@@ -53,8 +53,8 @@
       <p><b>Fecha:</b> {{ sesion.fecha | date:CONFIG.FORMATO_FECHA}} </p>
       <p><b>Lugar:</b> {{ sesion.lugar }}</p>
     </button>
-    <button ion-button full icon-start [navPush]="agendarpage" [navParams]="{paquete:paquete}">
-      Pagar
+    <button ion-button full icon-start [navPush]="metodosPagos" [navParams]="{paquete:paquete}">
+      Metodo de pago
     </button>
   </ion-list>
 </ion-card>

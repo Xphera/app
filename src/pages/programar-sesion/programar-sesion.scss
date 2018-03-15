@@ -1,23 +1,23 @@
 page-programar-sesion {
-
-
-
-  .boton-mapa{
+  .boton-mapa {
     position: absolute;
-  	bottom: 0;
-  	z-index: 1;
-    width: 100%
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
   }
 
-  h3{
-    padding: 0 16px 0 16px;
+  h3 {
+    padding: 0 16px;
   }
-.monthview-primary-with-event, .calendar-event-inner {
-    background-color:#488aff !important;
+
+  .calendar-event-inner,
+  .monthview-primary-with-event {
+    background-color: #488aff !important;
     color: white;
-}
-.monthview-current {
-  background-color: #32db64 !important;
-  color: white;
-}
+  }
+
+  .monthview-current {
+    background-color: #32db64 !important;
+    color: white;
+  }
 }

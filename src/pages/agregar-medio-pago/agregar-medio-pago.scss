@@ -1,0 +1,13 @@
+page-agregar-medio-pago {
+  .event-photo {
+    img {
+      min-height: 40vh;
+      max-height: 40vh;
+      size: cover;
+    }
+  }
+
+  .invalid {
+    font-size: 0.8em;
+  }
+}

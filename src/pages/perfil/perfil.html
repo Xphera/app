@@ -1,0 +1,60 @@
+<!--
+  Generated template for the PerfilPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle icon-only>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content parallax-header no-bounce class="bg-modal">
+    <div class="header-image"></div>
+    <div class="main-content" text-wrap text-center>
+        <div class="circular"></div>
+        <h2>{{user.name}}</h2>
+        <hr>
+        <ion-list no-lines>
+            <ion-item>
+                <ion-icon name="mail" color="primary" item-start></ion-icon>
+                <p>Correo electrónico</p>
+                {{user.email}}
+
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="card" color="twitter"></ion-icon>
+                <p>Documento</p>
+                CC 1052947713
+
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="call" color="danger"></ion-icon>
+                <p>Teléfono</p>
+                {{user.phone}}
+
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="calendar" color="secondary"></ion-icon>
+                <p>Fecha nacimiento</p>
+                03 marzo 1980
+
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="ios-contacts" color="twitter"></ion-icon>
+                <p>Sexo</p>
+                masculino
+            </ion-item>
+        </ion-list>
+
+    </div>
+
+</ion-content>
