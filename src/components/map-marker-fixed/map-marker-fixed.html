@@ -1,4 +1,7 @@
 <!-- Generated template for the MapMarkerFixedComponent component -->
+
+<div id="map-marker-fixed">
+
 <div class="buscador">
   <ion-searchbar [(ngModel)]="direccion" [showCancelButton]="true" (ionInput)="updateSearch()" (click)="mostrarListadoUbicacion()" placeholder="Comience a escribir o seleccione ..." id="inputsearchbar">
   </ion-searchbar>
@@ -23,7 +26,8 @@
     </ion-item>
   </ion-item-group>
 </div>
-<!-- style="height:500px" -->
-<div>
+<!--  height: calc(100vh - 50px - 50px);-->
+<div style="height:500px:background-color:#000">
   <div #gmapfixed id="gmapfixed" style="height: calc(100vh - 50px - 50px);"></div>
+</div>
 </div>

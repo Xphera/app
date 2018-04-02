@@ -1,10 +1,8 @@
 export interface TarjetaCreditoInterface{
-  cardType:string,
-  cardholderName:string,
+  creditCardTokenId:string,
+  maskedNumber:string,
+  paymentMethod:string,
+  fullName:string,
   cardNumber:string,
-  expiryMonth:number,
-  expiryYear:number,
-  cvv:string,
-  redactedCardNumber:string,
-  postalCode:string,
+  expirationDate:string
 }

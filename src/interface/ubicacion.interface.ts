@@ -6,5 +6,6 @@ export interface UbicacionInterface{
   latitud:number,
   longitud:number,
   imgPath:string,
-  complemento:string
+  complemento:string,
+  index:number
 }

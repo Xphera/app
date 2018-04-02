@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BASE_URL_ASOCIADOS } from '../../config/url.confing';
+import { URL_ASOCIADOS } from '../../config/url.confing';
 import { Asociado } from "../../models/models.index";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
+import { PeticionProvider } from '../peticion/peticion';
 
 /*
   Generated class for the AsociadosProvider provider.
@@ -14,14 +15,15 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 export class AsociadosProvider {
 
   asociados: Array<Asociado> = new Array<Asociado>();
+  key: string = 'asociados'
   agendaasociado: any[] = [];
 
   constructor(
     public http: HttpClient,
-    public _almacenamientoPrvidr: AlmacenamientoProvider
-  ) {
+    public _almacenamientoPrvidr: AlmacenamientoProvider,
+    private _peticionPrvdr: PeticionProvider) {
     console.log('Hello AsociadosProvider Provider');
-    //this.grabarAsociados();
+
   }
 
   obtenerAgendaAsociado() {
@@ -46,25 +48,29 @@ export class AsociadosProvider {
   }
 
   grabarAsociados() {
-    this.http.get<Asociado[]>(BASE_URL_ASOCIADOS).map((data: Asociado[]) => {
-      data.map((asociado: Asociado) => {
-        asociado.nombreCompleto = asociado.nombres + ' ' + asociado.primerApellido + ' ' + asociado.segundoApellido;
-        return asociado;
+    let request = this.http.get<Asociado[]>(URL_ASOCIADOS)
+    
+    this._peticionPrvdr.peticion(request)
+      .map((data: Asociado[]) => {
+        data.map((asociado: Asociado) => {
+          asociado.nombreCompleto = asociado.nombres + ' ' + asociado.primerApellido + ' ' + asociado.segundoApellido;
+          return asociado;
+        });
+        return data;
+      }).subscribe((data: Asociado[]) => {
+        this._almacenamientoPrvidr.guardar(this.key, JSON.stringify(data));
       });
-      return data;
-    }).subscribe((data: Asociado[]) => {
-      this._almacenamientoPrvidr.guardar('asociados', JSON.stringify(data));
-    });
   }
 
   obtenerAsociadosServicios(id: number) {
-    this._almacenamientoPrvidr.obtener('asociados').then((datos: { satatus: string, data: string }) => {
-      this.asociados = JSON.parse(datos.data).filter((asociado: Asociado) => {
-        if (asociado.servicios.indexOf(id) > -1) {
-          return asociado;
-        }
+    this._almacenamientoPrvidr.obtener(this.key)
+      .then((datos) => {
+        this.asociados = JSON.parse(datos['data']).filter((asociado: Asociado) => {
+          if (asociado.servicios.indexOf(id) > -1) {
+            return asociado;
+          }
+        });
       });
-    });
 
     // .filter((asociado: Asociado) => {
     //   if (asociado.servicios.indexOf(id) > -1) {

@@ -13,6 +13,39 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+ion-icon {
+  &[class*="custom-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1em;
+    height: 1em;
+    font-size: 1.8 em;
+
+  }
+
+  &[class*="custom-VISA"] {
+    mask-image: url("../assets/imgs/td/VISA.svg");
+  }
+
+  &[class*="custom-MASTERCARD"] {
+    mask-image: url("../assets/imgs/td/MASTERCARD.svg");
+  }
+
+  &[class*="custom-DINERS"] {
+    mask-image: url("../assets/imgs/td/DINERS.svg");
+  }
+
+  &[class*="custom-AMEX"] {
+    mask-image: url("../assets/imgs/td/AMEX.svg");
+  }
+
+  &[class*="custom-CODENSA"] {
+    mask-image: url("../assets/imgs/td/DEFAULT.svg");
+  }
+}
+
 .swiper-pagination-bullet {
   background: linear-gradient(-60deg, $themeColor1);
   width: 10px;
@@ -72,8 +105,8 @@
     }
   }
 }
-
 //errores  formulario
+
 .error-box {
   margin-top: 0;
   padding-top: 1px;
@@ -131,8 +164,8 @@
     border-radius: 60%;
   }
 }
-
 /*sin datos*/
+
 #sindatos {
   position: absolute;
   left: 50%;

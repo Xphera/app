@@ -4,12 +4,10 @@ import { TarjetaCreditoInterface } from '../interface/interface.index';
 * @class TarjetaCredito
 */
 export class TarjetaCredito implements TarjetaCreditoInterface {
-  public cardType: string;
-  public cardholderName: string;
-  public cardNumber: string;
-  public expiryMonth: number;
-  public expiryYear: number;
-  public cvv: string;
-  public redactedCardNumber:string;
-  public postalCode:string;
+  public creditCardTokenId: string;
+  public maskedNumber: string;
+  public paymentMethod: string;
+  public fullName:string;
+  public cardNumber:string;
+  public expirationDate:string;
 }

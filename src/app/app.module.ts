@@ -8,6 +8,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage';
 
 import { ImgCacheModule } from 'ng-imgcache';
+import { CacheModule } from 'ionic-cache';
 
 
 import { MyApp } from './app.component';
@@ -23,6 +24,8 @@ import { InicioProvider } from '../providers/inicio/inicio';
 import { MetodoPagoProvider } from '../providers/metodo-pago/metodo-pago';
 import { UbicacionesProvider } from '../providers/ubicaciones/ubicaciones';
 import { IonicComponentProvider } from '../providers/ionic-component/ionic-component';
+import { ClienteProvider } from '../providers/cliente/cliente';
+import { PeticionProvider } from '../providers/peticion/peticion';
 
 
 @NgModule({
@@ -33,7 +36,8 @@ import { IonicComponentProvider } from '../providers/ionic-component/ionic-compo
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    ImgCacheModule
+    ImgCacheModule,
+    CacheModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -55,7 +59,9 @@ import { IonicComponentProvider } from '../providers/ionic-component/ionic-compo
     InicioProvider,
     MetodoPagoProvider,
     UbicacionesProvider,
-    IonicComponentProvider
+    IonicComponentProvider,
+    ClienteProvider,
+    PeticionProvider
   ]
 })
 export class AppModule {}

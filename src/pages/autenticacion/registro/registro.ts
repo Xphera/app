@@ -58,7 +58,7 @@ export class RegistroPage {
       if (this.myForm.valid) {
         this._usuariosPrvdr.crearUsario(this.camposForm.email, this.camposForm.passw, this.camposForm.repassw)
           .then((resp) => {
-            if (resp['registro']) {
+            if (resp) {
               this.navCtrl.push('ActivarPage');
             }
           });

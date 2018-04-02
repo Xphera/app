@@ -43,9 +43,9 @@
     </ion-card-content>
     <ion-row no-padding class="linea">
       <ion-col>
-        <button ion-button clear full icon-start [navPush]="agendarpage" [navParams]="{paquete:paquete}">
-          <ion-icon name='calendar'></ion-icon>
-          Agendar
+        <button ion-button clear full icon-start (click)="detallePago(paquete)">
+          <ion-icon name='ios-checkmark-circle' color="primary"></ion-icon>
+          Comprar
         </button>
       </ion-col>
     </ion-row>

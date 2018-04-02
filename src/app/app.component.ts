@@ -8,6 +8,7 @@ import { CONFIG } from '../config/comunes.config';
 import { InicioProvider } from '../providers/inicio/inicio';
 
 import { ImgCacheService } from 'ng-imgcache';
+import { CacheService } from "ionic-cache";
 
 @Component({
   templateUrl: 'app.html'
@@ -29,6 +30,7 @@ export class MyApp {
     splashScreen: SplashScreen,
     private _autenticacionprvdr: AutenticacionProvider,
     _inicioPrvdr: InicioProvider,
+    cache: CacheService,
     imgCache: ImgCacheService) {
 
     platform.ready().then(() => {
@@ -40,6 +42,11 @@ export class MyApp {
       imgCache.init({
         // Pass any options here...
       });
+
+      // Set TTL to 12h
+      cache.setDefaultTTL(60 * 60 * 12);
+      // Keep our cached results when device is offline!
+      cache.setOfflineInvalidate(false);
 
     });
 
@@ -55,6 +62,8 @@ export class MyApp {
       { title: "Home", leftIcon: 'home', page: 'HomePage' },
       { title: "Ubicaciones", leftIcon: 'pin', page: 'UbicacionesPage' },
       { title: "Perfil", leftIcon: 'contact', page: 'PerfilPage' },
+      { title: "Cuenta", leftIcon: 'settings', page: 'CuentaPage' },
+      { title: "Tarjetas de Credito", leftIcon: 'card', page: 'TarjetasListarPage' },
     ];
 
   }

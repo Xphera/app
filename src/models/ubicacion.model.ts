@@ -12,4 +12,5 @@ export class Ubicacion implements UbicacionInterface{
   public longitud:number;
   public imgPath:string;
   public complemento:string
+  public index:number;
 }

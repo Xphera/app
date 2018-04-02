@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PaquetesProvider } from '../../providers/paquetes/paquetes';
 import { CONFIG } from '../../config/comunes.config';
 import { Asociado } from '../../models/models.index';
+import { Paquete } from '../../models/models.index';
 
 /**
  * Generated class for the PaquetesPage page.
@@ -34,6 +35,10 @@ export class PaquetesPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PaquetesPage');
+  }
+
+  detallePago(paquete:Paquete){
+      this.navCtrl.push('DetallePagoPage',{paquete})
   }
 
 }

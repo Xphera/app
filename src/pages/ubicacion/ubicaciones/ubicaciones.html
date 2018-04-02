@@ -21,7 +21,7 @@
 
 <ion-content>
 
-  <xph-map-marker-fixed *ngIf="mostrarmapa" [latitud]="3" [longitud]="2" [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
+  <xph-map-marker-fixed *ngIf="mostrarmapa" [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
   </xph-map-marker-fixed>
 
   <div class="boton-mapa">
@@ -41,8 +41,5 @@
       </ion-row>
     </ion-grid>
 
-
-    <!-- <button ion-button block (click)="guardar()">Continuar</button>
-    <button ion-button block *ngIf="mostrarBorrar" (click)="eliminar()" color="danger">Borrar</button> -->
   </div>
 </ion-content>

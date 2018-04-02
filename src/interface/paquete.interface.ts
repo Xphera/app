@@ -5,4 +5,5 @@ export interface PaqueteInterface{
   nombre:string,
   detalle:string,
   cantidadDeSesiones:string,
+  valor:number
 }

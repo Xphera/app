@@ -27,7 +27,7 @@ export class MapMarkerFixedComponent {
   @Input() zoomControl: boolean = false;
   @Input() fullscreenControl: boolean = false;
   @Input() mapTypeControl: boolean = false;
-  @Input() zoom: number = 15;
+  @Input() zoom: number = 17;
   @Input() latitud: number = 0;
   @Input() longitud: number = 0;
   @Input() direccion: string = '';
@@ -73,6 +73,8 @@ export class MapMarkerFixedComponent {
   */
   inputsearchbar: any;
 
+  activo:boolean = true;
+
 
   @Output() getCoordenadas = new EventEmitter();
 
@@ -84,6 +86,17 @@ export class MapMarkerFixedComponent {
     console.log('Hello MapMarkerFixedComponent Component');
 
   }
+
+  ngOnInit(){
+    console.log('ngOnInit');
+    this.activo = true;
+  }
+
+  ngOnDestroy(){
+    console.log('ngOnDestroy');
+      this.activo = false;
+  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     this.inputsearchbar = document.getElementById("inputsearchbar").getElementsByTagName("INPUT");
@@ -160,7 +173,7 @@ export class MapMarkerFixedComponent {
     this.sleep(2000).then(() => {
       this.inputsearchbar[0].disabled = true;
       this.listadoubicaciones = false;
-      console.log(selectedValue);
+
       this.obtenerUbicacion(selectedValue, tipo).then((resp: coordenadasInterfaces) => {
 
         this.coordenadas.direccion = resp.direccion;
@@ -171,10 +184,12 @@ export class MapMarkerFixedComponent {
         if (resp.index >= 0) {
           this.coordenadas.titulo = this.ubicaciones[selectedValue].titulo;
           this.coordenadas.complemento = this.ubicaciones[selectedValue].complemento;
+          this.coordenadas.id = this.ubicaciones[selectedValue].id;
 
         } else {
           this.coordenadas.titulo = '';
           this.coordenadas.complemento = '';
+
         }
 
         this.direccion = this.coordenadas.direccion;
@@ -237,6 +252,7 @@ export class MapMarkerFixedComponent {
           this.coordenadas.index = -1;
           this.coordenadas.titulo = '';
           this.coordenadas.complemento = '';
+
           this.geocoder().then((direccion: string) => {
             this.coordenadas.direccion = direccion;
             this.direccion = this.coordenadas.direccion;
@@ -281,7 +297,7 @@ export class MapMarkerFixedComponent {
     }
 
     this.eventoMapaCambiaCentro(this.map).debounceTime(500).subscribe((result) => {
-      if (this.listadoubicaciones === false) {
+      if (this.listadoubicaciones === false && this.activo == true) {
         let loader = this.showloader('Buscando ubicación...');
         // let distanciaCoordenadas: number = this.getDistanciaMetros(this.map.getCenter().lat(), this.map.getCenter().lng(), this.coordenadas.latitud, this.coordenadas.longitud);
         let distanciaCoordenadas: number = this.getDistanciaMetros(this.map.getCenter().lat(), this.map.getCenter().lng(), coordenadasGeocoder.latitud, coordenadasGeocoder.longitud);
@@ -443,7 +459,8 @@ export interface coordenadasInterfaces {
   longitud?: number,
   titulo?: string,
   direccion?: string,
-  complemento?: string
+  complemento?: string,
+  id?:number,
   /**
   * 0 o mayor indicada que el index del arrego de ubicaciones suministrado si es -1 es una direccion nueva.
   */

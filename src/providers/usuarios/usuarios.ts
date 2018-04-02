@@ -1,9 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BASE_URL_REGISTRO_USUARIO,BASE_URL_ACTIVAR_USUARIO } from '../../config/url.confing';
+
 import { LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
-
+import { PeticionProvider } from '../peticion/peticion';
+import { IonicComponentProvider } from '../ionic-component/ionic-component';
+import { AutenticacionProvider } from '../autenticacion/autenticacion';
+import { Observable } from "rxjs/Observable"
+import {
+  URL_REGISTRO_USUARIO,
+  URL_ACTIVAR_USUARIO,
+  URL_PAGAR,
+  URL_MIS_PAQUETES
+} from '../../config/url.confing';
 
 /*
   Generated class for the UsuariosProvider provider.
@@ -14,19 +23,24 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 @Injectable()
 export class UsuariosProvider {
   public ubicaciones: any[] = [];
-  public infoRegistro:string;
+  public infoRegistro: string;
+  public key: string = ''
+  public misPaquetes
 
   constructor(
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private _almacenamientoPrvdr: AlmacenamientoProvider
+    private _almacenamientoPrvdr: AlmacenamientoProvider,
+    private _peticionPrvdr: PeticionProvider,
+    private _ionicComponentPrvdr: IonicComponentProvider,
+    public _autenticacionPrvdr: AutenticacionProvider,
   ) {
     console.log('Hello UsuariosProvider Provider');
   }
 
-
+  //
   obtenerUbicaciones() {
     this.ubicaciones = [
       {
@@ -48,116 +62,87 @@ export class UsuariosProvider {
 
   }
 
-  activarCuenta(email:string,codigoValidacion:string) {
-    let promesa = new Promise((resolve, reject) => {
-      let loader = this.showloader("por favor espera...");
+  activarCuenta(email: string, codigoValidacion: string) {
 
-      //enviar petición a servidor...
-      this.http.post(BASE_URL_ACTIVAR_USUARIO, { email, codigoValidacion })
-      .subscribe(
-        data => {
-          loader.dismiss();
-          this.showLongToast(
-            {
-              message: 'Cuenta activada con éxito.',
-              duration: 6000
-            }
-          );
-          //respuesta de promesa
-          resolve({ respuesta: true });
-          //guardar infomarmacion de registroUsuario.
-          this._almacenamientoPrvdr.eliminar('registro');
-        },
-        //repuesta de error en servidor
-        error => {
-          let listaerrores: string = '';
-          for (let i in error.error) {
-            listaerrores = error.error[i];
-          }
-          loader.dismiss();
-          this.showAlert({
-            title: 'Error!',
-            subTitle: listaerrores,
-            buttons: ['OK']
-          });
-          //respuesta de promesa
-          resolve({ respuesta: false });
-        }
-      );
-    });
+    let request = this.http.post(URL_ACTIVAR_USUARIO, { email, codigoValidacion })
+    let promesa = new Promise((resolve, reject) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          this._almacenamientoPrvdr.eliminar(this.key)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Cuenta activada con éxito.')
+              resolve(true);
+            })
+        })
+    })
     return promesa;
   }
 
   crearUsario(email: string, passw: string, repassw: string) {
-    //crear promesa...
+    let request = this.http.post(URL_REGISTRO_USUARIO, { email, passw, repassw })
     let promesa = new Promise((resolve, reject) => {
-
-      let loader = this.showloader("por favor espera...");
-
-      //enviar petición a servidor...
-      this.http.post(BASE_URL_REGISTRO_USUARIO, { email, passw, repassw })
-        //  .map((result: Response)=> result.json())
-        .subscribe(
-          //repuesta valida de servidor
-          data => {
-            loader.dismiss();
-            this.showLongToast(
-              {
-                message: 'Cuenta creada, se ha enviado correo electrónico con código para activar cuenta.',
-                duration: 6000
-              }
-            );
-
-            //respuesta de promesa
-            resolve({ registro: true });
-            //guardar infomarmacion de registroUsuario.
-            this._almacenamientoPrvdr.guardar('registro', email);
-          },
-          //repuesta de error en servidor
-          error => {
-            let listaerrores: string = '';
-            for (let i in error.error) {
-              listaerrores = error.error[i];
-            }
-            console.log(error);
-            loader.dismiss();
-
-            this.showAlert({
-              title: 'Error!',
-              subTitle: listaerrores,
-              buttons: ['OK']
-            });
-            //respuesta de promesa
-            resolve({ registro: false });
-          }
-        );
-    });
-
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          //guardar infomarmacion de registroUsuario.
+          this._almacenamientoPrvdr.guardar(this.key, email)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Cuenta creada, se ha enviado correo electrónico con código para activar cuenta.')
+              resolve(true);
+            })
+        })
+    })
     return promesa;
   }
 
   public datosRegistro() {
-    this._almacenamientoPrvdr.obtener('registro').then(
-      (respuesta:any)=>{
-        this.infoRegistro =  respuesta.data;
+    this._almacenamientoPrvdr.obtener(this.key).then(
+      (respuesta: any) => {
+        this.infoRegistro = respuesta.data;
       }
     );
   }
 
-  showLongToast(confing) {
-    this.toastCtrl.create(confing).present();
+
+  public pagar(datos) {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_PAGAR, datos, { headers })
+    let observable = new Observable((observer) => {
+        this._peticionPrvdr.peticion(request)
+        .subscribe((resp)=>{
+            if(resp['error']== false){
+                this._ionicComponentPrvdr.showLongToastMessage('Pago realizado.')
+                observer.next(true);
+            }else{
+              console.log('paso algo')
+            }
+        })
+    })
+    return observable
   }
 
-  showAlert(confing) {
-    this.alertCtrl.create(confing).present();
+  public obtenerMisPaquetes() {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.get(URL_MIS_PAQUETES, { headers })
+    this._peticionPrvdr.peticion(request)
+    .subscribe((resp)=>{
+      console.log(resp)
+      this.misPaquetes = resp
+    })
+
+
+    let observable = new Observable((observer) => {
+        this._peticionPrvdr.peticion(request)
+        .subscribe((resp)=>{
+            if(resp['error']== false){
+                this._ionicComponentPrvdr.showLongToastMessage('Pago realizado.')
+                observer.next(true);
+            }else{
+              console.log('paso algo')
+            }
+        })
+    })
+    return observable
   }
 
-  showloader(texto) {
-    let loader = this.loadingCtrl.create({
-      content: texto,
-    });
-    loader.present();
-    return loader;
-  }
 
 }

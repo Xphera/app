@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { BASE_URL_CATEGORIA } from '../../config/url.confing';
+import { URL_CATEGORIA } from '../../config/url.confing';
 
 import { Categoria } from '../../models/models.index';
 
-import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
+import { PeticionProvider } from '../peticion/peticion';
 
 /*
   Generated class for the CategoriasProvider provider.
@@ -16,29 +16,27 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 @Injectable()
 export class CategoriasProvider {
   categorias: Array<Categoria> = new Array<Categoria>();
+  key:string = 'categoria'
+
   constructor(
     public http: HttpClient,
-    public _almacenamientoPrvdr: AlmacenamientoProvider
-  ) {
+    private _peticionPrvdr: PeticionProvider) {
     console.log('Hello CategoriasProvider Provider');
   }
 
   obtenerCategorias() {
-    this._almacenamientoPrvdr.obtener('categoria').then((datos: { satatus: string, data: string }) => {
-      this.categorias = JSON.parse(datos.data);
-      console.log(this.categorias);
-    });
+    this._peticionPrvdr.almacenamiento(this.key)
+      .then((datos) => {
+        this.categorias = JSON.parse(datos['data']);
+      });
   }
 
   grabarCategorias() {
-    console.log(BASE_URL_CATEGORIA);
-    this.http.get<Categoria[]>(BASE_URL_CATEGORIA, )
-      .subscribe(data => {
-        this._almacenamientoPrvdr.guardar('categoria', JSON.stringify(data)).then(() => {
-          this.categorias = data;
-          console.log(this.categorias);
-        })
-      });
+    let request = this.http.get<Categoria[]>(URL_CATEGORIA)
+    this._peticionPrvdr.peticion(request,this.key)
+      .subscribe((resp: Categoria[]) => {
+        this.categorias = resp;
+      })
   }
 
 }

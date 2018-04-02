@@ -4,3 +4,4 @@ export { TarjetaCredito } from './tarjeta-credito.model';
 export { Asociado } from './asociado.model';
 export { Paquete } from './paquete.model';
 export { Ubicacion } from './ubicacion.model';
+export { Cliente } from './cliente.model';

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BASE_URL_SERVICIO } from '../../config/url.confing';
+import { URL_SERVICIO } from '../../config/url.confing';
 import { Servicio } from '../../models/servicio.model';
 
-import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
+import { PeticionProvider } from '../peticion/peticion';
 
 /*
   Generated class for the ServiciosProvider provider.
@@ -14,36 +14,30 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 @Injectable()
 export class ServiciosProvider {
 
-  servicios: Servicio[] = [];
+  servicios: Array<Servicio> = new Array<Servicio>();
+  key: string = 'servicio'
 
   constructor(
     public http: HttpClient,
-    public _almacenamientoPrvdr: AlmacenamientoProvider) {
+    private _peticionPrvdr: PeticionProvider) {
     console.log('Hello ServiciosProvider Provider');
   }
 
   public grabarServicios() {
-    return this.http.get<Servicio[]>(BASE_URL_SERVICIO).subscribe(data => {
-      this._almacenamientoPrvdr.guardar('servicio', JSON.stringify(data)).then(() => {
-        this.servicios = data;
+    let request = this.http.get<Servicio[]>(URL_SERVICIO)
+    this._peticionPrvdr.peticion(request, this.key)
+      .subscribe((resp: Servicio[]) => {
+        this.servicios = resp;
       })
-    });
   }
 
   obtenerServicioCategoria(idcategoria: number) {
-    this._almacenamientoPrvdr.obtener('servicio').then((datos: { satatus: string, data: string }) => {
-      this.servicios = JSON.parse(datos.data).filter((item) => {
-        return (item.categoria_id === idcategoria);
-      });
-    })
-
-    // this.obtenerCategorias()
-    //      .subscribe( data =>{
-    //        this.servicios = data.filter((item) => {
-    //              return (item.categoria_id===idcategoria);
-    //          });
-    //      });
+    this._peticionPrvdr.almacenamiento(this.key)
+      .then((datos) => {
+        this.servicios = JSON.parse(datos['data']).filter((item) => {
+          return (item.categoria_id === idcategoria);
+        });
+      })
   }
-
-
+  
 }

@@ -19,6 +19,13 @@ export class IonicComponentProvider {
     console.log('Hello IonicComponentProvider Provider');
   }
 
+  showLongToastMessage(mensaje: string) {
+    this.showLongToast({
+      message: mensaje,
+      duration: 3000,
+      position: 'top'
+    })
+  }
 
   showLongToast(confing) {
     this.toastCtrl.create(confing).present();
@@ -28,10 +35,16 @@ export class IonicComponentProvider {
     this.alertCtrl.create(confing).present();
   }
 
-  showloader(texto) {
-    let loader = this.loadingCtrl.create({
+  showloaderMessage(texto) {
+    let loader = this.showloader({
       content: texto,
+      // dismissOnPageChange: true
     });
+    return loader;
+  }
+
+  showloader(confing) {
+    let loader = this.loadingCtrl.create(confing);
     loader.present();
     return loader;
   }

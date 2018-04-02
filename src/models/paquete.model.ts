@@ -11,5 +11,6 @@ export class Paquete implements PaqueteInterface {
   nombre: string;
   detalle: string;
   cantidadDeSesiones: string;
+  valor:number;
   sesiones:Array<{ubicacion:string,fecha:string}>
 }

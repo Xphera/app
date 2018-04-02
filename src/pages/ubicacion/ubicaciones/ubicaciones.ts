@@ -20,14 +20,14 @@ export class UbicacionesPage {
 
   mostrarBorrar: boolean = false;
   coordendas;
-  mostrarmapa:boolean = true;
+  mostrarmapa: boolean = true;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private _ubicacionesPrvdr: UbicacionesProvider,
-    private modalCtrl: ModalController,
-    private _ionicComponentPrvdr:IonicComponentProvider) {
+    private _ionicComponentPrvdr: IonicComponentProvider,
+    private modalCtrl: ModalController) {
     this._ubicacionesPrvdr.obtenerUbicaciones();
   }
 
@@ -36,21 +36,24 @@ export class UbicacionesPage {
   }
 
   coordenadas(event): void {
-    this.coordendas = event.coordenadas;
+
     if (event.coordenadas.index >= 0) {
       this.mostrarBorrar = true;
     } else {
       this.mostrarBorrar = false;
     }
 
-
+    if (this.mostrarmapa) {
+      this.coordendas = event.coordenadas;
+    }
+    console.log(this.coordendas,this.mostrarmapa);
   }
 
   eliminar() {
 
     this._ionicComponentPrvdr.showAlert({
       title: 'Ubicación',
-      message: '¿eliminar ubicación '+this.coordendas.titulo+'?',
+      message: '¿eliminar ubicación ' + this.coordendas.titulo + '?',
       buttons: [
         {
           text: 'Cancelar',
@@ -69,57 +72,25 @@ export class UbicacionesPage {
 
   }
 
-  confirmarEliminar(){
-    let id: number = this._ubicacionesPrvdr.ubicaciones[this.coordendas.index].id;
-    this._ubicacionesPrvdr.eliminarUbicacion(id, this.coordendas.index)
+  confirmarEliminar() {
+
+    this._ubicacionesPrvdr.eliminarUbicacion(this.coordendas)
       .subscribe((resp) => {
-        if (!resp) {
+        if (resp) {
           this.navCtrl.setRoot('UbicacionesPage');
         }
       });
-
   }
 
   guardar() {
     this.mostrarmapa = false;
-    console.log(this.coordendas);
-    let modal = this.modalCtrl.create('ComplementoUbicacionPage', {
-      ubicacion: {
-        titulo: this.coordendas.titulo,
-        direccion: this.coordendas.direccion,
-        complemento: this.coordendas.complemento
-      },
-    });
-
+    let modal = this.modalCtrl.create('ComplementoUbicacionPage', { coordendas: this.coordendas });
     modal.present();
-
     modal.onDidDismiss(data => {
-      this.mostrarmapa = true;
-      if (data != undefined) {
-
-        this.coordendas.titulo = data.titulo;
-        this.coordendas.direccion = data.direccion;
-        this.coordendas.complemento = data.complemento;
-        //editar
-        if (this.coordendas.index >= 0) {
-          let id: number = this._ubicacionesPrvdr.ubicaciones[this.coordendas.index].id;
-          this._ubicacionesPrvdr.editarUbicacion(id, this.coordendas)
-            .subscribe((resp) => {
-              if (!resp) {
-                this.navCtrl.setRoot('UbicacionesPage');
-              }
-            });
-        } else {
-          //crear
-          this._ubicacionesPrvdr.guardarUbicacion(this.coordendas)
-            .subscribe((resp) => {
-              if (!resp) {
-                this.navCtrl.setRoot('UbicacionesPage');
-              }
-            });
-        }
+      if(data){
+        this.navCtrl.setRoot('UbicacionesPage');
       }
-
+      this.mostrarmapa = true;
     });
   }
 
