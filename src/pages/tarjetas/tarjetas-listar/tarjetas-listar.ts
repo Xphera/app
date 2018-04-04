@@ -24,6 +24,7 @@ export class TarjetasListarPage {
     private _metodoPagoPrvdr: MetodoPagoProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
     private modalCtrl: ModalController) {
+    
     this._metodoPagoPrvdr.obtenerTarjetasCredito()
   }
 
@@ -34,6 +35,14 @@ export class TarjetasListarPage {
   modalAgregar() {
       let modal = this.modalCtrl.create('TarjetasAgregarPage')
       modal.present()
+  }
+
+  tarjetaCreditoPrincipal(creditCardTokenId:string){
+    this._metodoPagoPrvdr.tarjetaCreditoPrincipal(creditCardTokenId)
+  }
+
+  clickCard(){
+    this._ionicComponentPrvdr.showLongToastMessage('Deslize a la izquierda')
   }
 
   eliminarTarjeta(td: TarjetaCredito) {
@@ -49,7 +58,7 @@ export class TarjetasListarPage {
           handler: () => {
             this._metodoPagoPrvdr.eliminarTarjeta(td.creditCardTokenId)
             .subscribe((resp)=>{
-                  this._ionicComponentPrvdr.showLongToastMessage('Tarjeta de crédito eliminada')
+                  this._ionicComponentPrvdr.showLongToastMessage('Tarjeta de crédito eliminada.')
             })
           }
         }

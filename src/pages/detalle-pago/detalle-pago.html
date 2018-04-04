@@ -52,10 +52,11 @@
       <ion-item-group>
         <ion-item-divider color="light">
           Tarjetas de crédito
-          <button ion-button icon-only clear (click)="modalAgregar()" item-right>
-              <ion-icon name="md-add"></ion-icon>
-        </button>
+          <div ion-button icon-only clear (click)="modalAgregar()" item-right>
+            <ion-icon name="md-add"></ion-icon>
+          </div>
         </ion-item-divider>
+        <!-- <ion-list radio-group> -->
         <ion-list radio-group formControlName="tokenId">
           <ion-item *ngIf="_metodoPagoPrvdr.td.length == 0">
             <ion-label>Sin medio de pagos registrado ... </ion-label>
@@ -66,6 +67,8 @@
             <ion-label>{{ card.maskedNumber }}</ion-label>
             <ion-radio [value]="card.creditCardTokenId"></ion-radio>
           </ion-item>
+
+
         </ion-list>
       </ion-item-group>
 
@@ -84,11 +87,12 @@
 
       <ion-row no-padding class="linea">
         <ion-col>
-          <button ion-button full icon-start  [disabled]="!myForm.valid">
+          <button ion-button full icon-start [disabled]="!myForm.valid" type="submit">
           Pagar
         </button>
         </ion-col>
       </ion-row>
     </ion-card>
   </form>
+
 </ion-content>

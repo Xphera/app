@@ -6,9 +6,11 @@ import { PeticionProvider } from '../peticion/peticion';
 
 import { TarjetaCredito } from '../../models/models.index';
 
-import { URL_TARJETAS_CREDITO } from '../../config/url.confing';
+import { URL_TARJETAS_CREDITO, URL_TARJETAS_CREDITO_PRINCIPAL } from '../../config/url.confing';
 
 import { Observable } from "rxjs/Observable"
+import { Subject } from 'rxjs/Subject';
+
 
 
 
@@ -21,7 +23,9 @@ import { Observable } from "rxjs/Observable"
 
 @Injectable()
 export class MetodoPagoProvider {
-  public td: Array<TarjetaCredito> = new Array<TarjetaCredito>();
+  public td: Array<TarjetaCredito> = Array<TarjetaCredito>();
+  public tcPrincipal = new Subject();
+
 
   constructor(
     private http: HttpClient,
@@ -49,14 +53,30 @@ export class MetodoPagoProvider {
     return observable
   }
 
+
+
   obtenerTarjetasCredito() {
+    this.tcPrincipal = new Subject();
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.get<TarjetaCredito[]>(URL_TARJETAS_CREDITO, { headers })
+    this.td = Array<TarjetaCredito>()
+
+
     this._peticionPrvdr.peticion(request)
       .subscribe((resp: TarjetaCredito[]) => {
         this.td = resp
+        // ubicar tarjeta principal....
+        let principal: TarjetaCredito = this.td
+          .find((data: TarjetaCredito) => {
+            return data.principal
+          })
+
+        if (principal != undefined)
+          this.tcPrincipal.next(principal)
       })
   }
+
+
 
   eliminarTarjeta(token: string) {
     let headers = this._autenticacionPrvdr.gerHeaders();
@@ -75,6 +95,15 @@ export class MetodoPagoProvider {
     return observable
   }
 
-
+  public tarjetaCreditoPrincipal(creditCardTokenId: string) {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_TARJETAS_CREDITO_PRINCIPAL, { creditCardTokenId: creditCardTokenId }, { headers })
+    this._peticionPrvdr.peticion(request)
+      .subscribe((resp) => {
+        if (resp['estado'] == "ok") {
+          this.obtenerTarjetasCredito();
+        }
+      })
+  }
 
 }

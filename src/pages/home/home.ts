@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Slides,MenuController } from 'ionic-angular';
+import { IonicPage, NavController, Slides } from 'ionic-angular';
 
 import { CategoriasProvider } from '../../providers/categorias/categorias';
 
-import { AutenticacionProvider } from '../../providers/autenticacion/autenticacion';
+
 
 @IonicPage()
 @Component({
@@ -21,24 +21,10 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    public _categoriasPrvdr: CategoriasProvider,
-    public _autenticacionPrvdr: AutenticacionProvider,
-    private menuCtrl: MenuController) {
-    this.cargaMenu();
-  }
-
-  cargaMenu() {
-  //  this._autenticacionPrvdr.activo().then((resp:{data:string})=>{
-      if (this._autenticacionPrvdr.activo()) {
-        this.menuCtrl.enable(false, 'sesionInactiva');
-        this.menuCtrl.enable(true, 'sesionActiva');
-      } else {
-        this.menuCtrl.enable(true, 'sesionInactiva');
-        this.menuCtrl.enable(false, 'sesionActiva');
-      }
-    //})
+    public _categoriasPrvdr: CategoriasProvider) {
 
   }
+
 
   nextSlide() {
     this.slider.slideNext();

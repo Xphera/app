@@ -5,4 +5,5 @@ export interface TarjetaCreditoInterface{
   fullName:string,
   cardNumber:string,
   expirationDate:string
+  principal:boolean
 }

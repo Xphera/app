@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import { Platform, Nav,MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AutenticacionProvider } from '../providers/autenticacion/autenticacion';
@@ -9,6 +9,8 @@ import { InicioProvider } from '../providers/inicio/inicio';
 
 import { ImgCacheService } from 'ng-imgcache';
 import { CacheService } from "ionic-cache";
+
+
 
 @Component({
   templateUrl: 'app.html'
@@ -28,7 +30,8 @@ export class MyApp {
     public platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    private _autenticacionprvdr: AutenticacionProvider,
+    private _autenticacionPrvdr: AutenticacionProvider,
+    private menuCtrl: MenuController,
     _inicioPrvdr: InicioProvider,
     cache: CacheService,
     imgCache: ImgCacheService) {
@@ -38,6 +41,8 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+
+      this.cargaMenu();
 
       imgCache.init({
         // Pass any options here...
@@ -49,6 +54,9 @@ export class MyApp {
       cache.setOfflineInvalidate(false);
 
     });
+
+
+
 
     _inicioPrvdr.cargar();
 
@@ -68,6 +76,19 @@ export class MyApp {
 
   }
 
+  cargaMenu() {
+  //  this._autenticacionPrvdr.activo().then((resp:{data:string})=>{
+      if (this._autenticacionPrvdr.activo()) {
+        this.menuCtrl.enable(false, 'sesionInactiva');
+        this.menuCtrl.enable(true, 'sesionActiva');
+      } else {
+        this.menuCtrl.enable(true, 'sesionInactiva');
+        this.menuCtrl.enable(false, 'sesionActiva');
+      }
+    //})
+
+  }
+
 
 
   openPage(page) {
@@ -75,7 +96,7 @@ export class MyApp {
   }
 
   cerrarSesion() {
-    this._autenticacionprvdr.cerrarSesion();
+    this._autenticacionPrvdr.cerrarSesion();
     this.nav.setRoot(this.rootPage);
   }
 

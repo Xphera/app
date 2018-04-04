@@ -10,4 +10,5 @@ export class TarjetaCredito implements TarjetaCreditoInterface {
   public fullName:string;
   public cardNumber:string;
   public expirationDate:string;
+  public principal:boolean;
 }

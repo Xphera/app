@@ -112,7 +112,7 @@ export class UbicacionesProvider {
     let observable = new Observable((observer) => {
       this._peticionPrvdr.peticion(request)
         .subscribe((data: Ubicacion) => {
-          this.ubicaciones.push(data);
+          this.ubicaciones.push(ubicacion);
           this._almacenamientoPrvdr.guardar(this.key, JSON.stringify(this.ubicaciones))
             .then(() => {
               observer.next(true);

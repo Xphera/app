@@ -16,6 +16,9 @@ export class Asociado implements AsociadoInterface {
   insignia: string;
   servicios: Array<number>;
   paquetes: Array<number>;
+  nombreCompleto:string;
 
-  nombreCompleto = this.nombres + ' ' + this.primerApellido + ' ' + this.segundoApellido;
+  // nombreCompleto():string{
+  //   return  this.nombres + ' ' + this.primerApellido + ' ' + this.segundoApellido;
+  // }
 }

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { Paquete } from '../../models/models.index';
 import { CONFIG } from '../../config/comunes.config';
 import { MetodoPagoProvider } from '../../providers/metodo-pago/metodo-pago';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
+import { NgModel } from '@angular/forms';
 
 /**
  * Generated class for the DetallePagoPage page.
@@ -31,20 +32,28 @@ export class DetallePagoPage {
     private modalCtrl: ModalController,
     private _usuariosPrvdr: UsuariosProvider) {
 
+
+
     this._metodoPagoPrvdr.obtenerTarjetasCredito()
     this.paquete = this.navParams.get('paquete')
 
     this.myForm = this.createMyForm()
     this.myForm.patchValue({
       cuotas: 1,
-      paqueteId: this.paquete.id
+      paqueteId: this.paquete.id,
     })
 
+    this._metodoPagoPrvdr
+      .tcPrincipal.subscribe((data) => {
+        this.myForm.controls['tokenId'].setValue(data['creditCardTokenId']);
+      })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetallePagoPage');
   }
+
+
 
   public guardar() {
 

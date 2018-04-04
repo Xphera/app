@@ -19,7 +19,30 @@
 
 
 <ion-content padding>
+
   <ion-list>
+    <div *ngIf="_metodoPagoPrvdr.td.length == 0" id="sindatos"> Sin medio de pagos registrado ... </div>
+    <ion-item-sliding *ngFor="let card of _metodoPagoPrvdr.td">
+      <ion-item (click)="clickCard()">
+        <ion-icon name="custom-{{ card.paymentMethod }}" item-left></ion-icon>
+        <ion-label> {{ card.maskedNumber }}</ion-label>
+        <ion-icon *ngIf="card.principal" name="checkmark" (click)=" eliminarTarjeta(card)" color="secondary" item-end></ion-icon>
+      </ion-item>
+      <ion-item-options side="right">
+        <button *ngIf="!card.principal" ion-button color="secondary" (click)="tarjetaCreditoPrincipal(card.creditCardTokenId)">
+        <ion-icon name="checkmark"></ion-icon>
+        Principal
+      </button>
+        <button ion-button color="danger" (click)=" eliminarTarjeta(card)">
+        <ion-icon name="trash"></ion-icon>
+        Eliminar
+      </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+
+  <!-- <ion-list>
     <div *ngIf="_metodoPagoPrvdr.td.length == 0" id="sindatos"> Sin medio de pagos registrado ... </div>
 
     <ion-item *ngFor="let card of _metodoPagoPrvdr.td">
@@ -27,7 +50,7 @@
       <ion-label> {{ card.maskedNumber }}</ion-label>
       <ion-icon name="ios-trash-outline" (click)=" eliminarTarjeta(card)" color="danger" item-end></ion-icon>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
   <ion-fab right bottom>
     <button ion-fab color="primary" (click)="modalAgregar()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>

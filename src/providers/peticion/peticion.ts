@@ -13,7 +13,8 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 @Injectable()
 export class PeticionProvider {
 
-
+  peticionId: number = 0;
+  showloader:any;
 
   constructor(
     public http: HttpClient,
@@ -23,7 +24,11 @@ export class PeticionProvider {
   }
 
   peticion(request, key?: string) {
-    let showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
+
+    if (this.peticionId == 0) {
+      this.showloaderOpen()
+    }
+    this.peticionId++
     let observable = new Observable((observer) => {
       request.subscribe((resp) => {
         //si existe almacena valor por key
@@ -32,10 +37,18 @@ export class PeticionProvider {
         }
 
         observer.next(resp);
-        showloader.dismiss();
+
+        this.peticionId--
+        if (this.peticionId == 0) {
+          this.showloaderClose()
+        }
+
       },
         (errores) => {
-          showloader.dismiss()
+          this.peticionId--
+          if (this.peticionId == 0) {
+            this.showloaderClose()
+          }
           let listaerrores: string = this.httpErrores(errores);
           this._ionicComponentPrvdr.showAlert({
             title: 'Error!',
@@ -50,6 +63,16 @@ export class PeticionProvider {
     return observable;
   }
 
+  protected showloaderOpen() {
+    this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
+    console.log('abrir')
+  }
+
+  protected showloaderClose() {
+    this.showloader.dismiss()
+    console.log('cerrar')
+  }
+
   private httpErrores(errores) {
     const isBoolean = val => 'boolean' === typeof val;
     let listaerrores: string = '';
@@ -57,15 +80,15 @@ export class PeticionProvider {
     for (let e of Object.keys(errores.error)) {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {
-          if(!isBoolean(errores)){
+          if (!isBoolean(errores)) {
             listaerrores += e + ' ' + error + "<br>"
           }
 
         }
       }
       else {
-      if(!isBoolean(errores.error[e]))
-        listaerrores += errores.error[e] + "<br>"
+        if (!isBoolean(errores.error[e]))
+          listaerrores += errores.error[e] + "<br>"
       }
     }
     return listaerrores;
@@ -77,9 +100,9 @@ export class PeticionProvider {
         .then((datos) => {
           resolve(datos);
         },
-        error => {
-          reject({ satatus: 'false' });
-        });
+          error => {
+            reject({ satatus: 'false' });
+          });
     })
     return promesa;
   }
