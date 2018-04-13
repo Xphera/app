@@ -9,6 +9,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
 
 import { ImgCacheModule } from 'ng-imgcache';
 import { CacheModule } from 'ionic-cache';
+import { AppState } from './app.global';
+
 
 
 import { MyApp } from './app.component';
@@ -28,6 +30,7 @@ import { ClienteProvider } from '../providers/cliente/cliente';
 import { PeticionProvider } from '../providers/peticion/peticion';
 
 
+
 @NgModule({
   declarations: [
     MyApp,
@@ -45,6 +48,7 @@ import { PeticionProvider } from '../providers/peticion/peticion';
   ],
   providers: [
     StatusBar,
+    AppState,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CategoriasProvider,

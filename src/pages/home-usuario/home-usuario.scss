@@ -1,0 +1,14 @@
+page-home-usuario {
+  ul {
+    padding: 0px;
+    margin: 0px;
+    &.rating li {
+      padding: 5px !important;
+      background: none;
+      color: #ffb400;
+      ion-icon {
+        font-size: 40px;
+      }
+    }
+  }
+}

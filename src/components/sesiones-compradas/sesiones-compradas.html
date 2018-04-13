@@ -1,0 +1,184 @@
+<!-- Generated template for the SesionesCompradasComponent component -->
+<ion-card>
+  <!-- <ion-card-header>
+    Explore Nearby
+  </ion-card-header> -->
+
+  <ion-list class="custom-list" *ngFor="let item of compradetallesesiones" [ngSwitch]="item.estado.id">
+
+    <ion-item-sliding *ngSwitchCase="2" #slidingItem>
+      <ion-item text-wrap #ionItem (click)="slidingItemOpen(slidingItem,ionItem)">
+        <h4 item-start>
+        {{ contadorSesionesProgramadas() }}
+      </h4>
+      <p>  {{ item.fechaInicio|amCalendar }} en {{ item.titulo }}</p>
+        <ion-badge item-end>{{ item.estado.estado }}</ion-badge>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger">
+          <ion-icon name="ios-refresh-circle"></ion-icon>
+          Cancelar
+        </button>
+        <button ion-button color="secondary">
+          <ion-icon name="ios-refresh-circle"></ion-icon>
+          Reprogramar
+        </button>
+        <button ion-button color="primary">
+          <ion-icon name="ios-information-circle"></ion-icon>
+          Detalle
+        </button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+    <ion-item-sliding class="item-wrapper active-slide active-options-right" #slidingItem *ngSwitchCase="1">
+      <ion-item #ionItem (click)="slidingItemOpen(slidingItem,ionItem)" style="transform: translate3d(-199px, 0px, 0px);">
+
+        <ion-badge item-end>{{ item.estado.estado }}</ion-badge>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="secondary" (click)="programarSesion(item)">
+      <ion-icon name="ios-refresh-circle"></ion-icon>
+      Programar
+    </button>
+
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+    <!--
+    <ion-item-sliding>
+      <button ion-item>
+      <h2>Estado</h2>
+      <P>Programada</P>
+      <h2>Cuando</h2>
+      <P>02-05-2018 9:00 am</P>
+      <h2>Donde</h2>
+      <P>Casa</P>
+      <P>Cra. 7 #65-35, Bogotá, Colombia</P>
+      <P>int 3 apto 404</P>
+    </button>
+      <ion-item-options side="right">
+        <button ion-button color="secondary">
+        <ion-icon name="ios-refresh-circle"></ion-icon>
+        Reprogramar
+      </button>
+        <button ion-button color="primary">
+        <ion-icon name="ios-information-circle"></ion-icon>
+        Detalle
+      </button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Finalizada</P>
+    <h2>Cuando</h2>
+    <P>01-05-2018 9:00 am</P>
+    <h2>Donde</h2>
+    <P>Casa</P>
+    <P>Cra. 7 #65-35, Bogotá, Colombia</P>
+    <P>int 3 apto 404</P>
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="primary">
+      <ion-icon name="ios-information-circle"></ion-icon>
+      Detalle
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Cancelada</P>
+    <h2>Cuando</h2>
+    <P>30-04-2018 9:00 am</P>
+    <h2>Donde</h2>
+    <P>Casa</P>
+    <P>Cra. 7 #65-35, Bogotá, Colombia</P>
+    <P>int 3 apto 404</P>
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="primary">
+      <ion-icon name="ios-information-circle"></ion-icon>
+      Detalle
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Por Programar</P>
+
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="light">
+      <ion-icon name="ios-construct"></ion-icon>
+      Programar
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Por Programar</P>
+
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="light">
+      <ion-icon name="ios-construct"></ion-icon>
+      Programar
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Por Programar</P>
+
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="light">
+      <ion-icon name="ios-construct"></ion-icon>
+      Programar
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Por Programar</P>
+
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="light">
+      <ion-icon name="ios-construct"></ion-icon>
+      Programar
+    </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <button ion-item>
+    <h2>Estado</h2>
+    <P>Por Programar</P>
+
+  </button>
+      <ion-item-options side="right">
+        <button ion-button color="light">
+      <ion-icon name="ios-construct"></ion-icon>
+      Programar
+    </button>
+      </ion-item-options>
+    </ion-item-sliding> -->
+
+
+  </ion-list>
+</ion-card>

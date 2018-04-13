@@ -10,4 +10,5 @@ export interface AsociadoInterface{
   insignia:string,
   servicios:Array<number>,
   paquetes:Array<number>
+  nombreCompleto:string
 }

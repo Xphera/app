@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MenuController, App, NavController } from 'ionic-angular';
+
 import { URL_LOGIN } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
@@ -16,16 +18,20 @@ import 'rxjs/add/operator/map';
 export class AutenticacionProvider {
 
   protected token: string;
-  key:string
+  key: string
 
   constructor(
     private http: HttpClient,
     private _almacenamientoPrvdr: AlmacenamientoProvider,
-    private _peticionPrvdr: PeticionProvider) {
+    private _peticionPrvdr: PeticionProvider,
+    private menuCtrl: MenuController,
+    public app: App) {
 
     console.log('Hello AutenticacionProvider Provider');
     this.cargarToken();
+    // this.cargaMenu();
   }
+
 
   public obetenetToken(): string {
     return this.token;
@@ -40,22 +46,22 @@ export class AutenticacionProvider {
   }
 
   public activo() {
-    //return this._almacenamientoPrvdr.obtener('token');
-    if (this.token) {
-      return true;
-    } else {
-      return false;
-    }
+    return this._almacenamientoPrvdr.obtener('token');
+    // if (this.token) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   public login(username: string, password: string) {
     let request = this.http.post(URL_LOGIN, { username, password })
-    return  this._peticionPrvdr.peticion(request,this.key)
-    .map(
-       (respuesta: any) => {
-         this.guardarToken(respuesta.token)
-       },
-   );
+    return this._peticionPrvdr.peticion(request, this.key)
+      .map(
+        (respuesta: any) => {
+          this.guardarToken(respuesta.token)
+        },
+    );
 
     // return this.http.post(BASE_URL_LOGIN, { username, password })
     //   .map(
@@ -69,10 +75,20 @@ export class AutenticacionProvider {
 
   public cerrarSesion() {
     this.token = null;
-    this._almacenamientoPrvdr.eliminar('token');
+    let promesa = new Promise((resolve, reject) => {
+      this._almacenamientoPrvdr.eliminar('token')
+        .then(() => {
+          this.cargaMenu()
+            .then((resp) => {
+              resolve(resp);
+            })
+        })
+
+    })
+    return promesa;
   }
 
-  public guardarToken(token:string){
+  public guardarToken(token: string) {
     this.token = token;
     this._almacenamientoPrvdr.guardar('token', token)
   }
@@ -84,6 +100,32 @@ export class AutenticacionProvider {
     });
     console.log(headers, this.token);
     return headers;
+  }
+
+  cargaMenu() {
+
+    let promesa = new Promise((resolve, reject) => {
+      this._almacenamientoPrvdr.obtener('token')
+        .then((data) => {
+          let pagina: string
+
+          if (data['data'] != null) {
+            this.menuCtrl.enable(false, 'sesionInactiva');
+            this.menuCtrl.enable(true, 'sesionActiva');
+            pagina = "HomeUsuarioPage"
+          } else {
+            this.menuCtrl.enable(true, 'sesionInactiva');
+            this.menuCtrl.enable(false, 'sesionActiva');
+            pagina = "HomePage"
+          }
+          resolve(pagina);
+        }).catch(() => {
+          this.menuCtrl.enable(true, 'sesionInactiva');
+          this.menuCtrl.enable(false, 'sesionActiva');
+          resolve("HomePage");
+        })
+    })
+    return promesa;
   }
 
 }

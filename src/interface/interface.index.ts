@@ -5,3 +5,5 @@ export { AsociadoInterface } from './asociado.interface';
 export { PaqueteInterface } from './paquete.interface';
 export { UbicacionInterface } from './ubicacion.interface';
 export { ClienteInterface } from './cliente.interface';
+export { PaqueteActivoInterface } from './paquete-activo.interface';
+export { SesionInterface } from './sesion.interface';

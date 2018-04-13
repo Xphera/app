@@ -4,6 +4,7 @@ import { PaquetesProvider } from '../paquetes/paquetes';
 import { AsociadosProvider } from '../asociados/asociados';
 import { CategoriasProvider } from '../categorias/categorias';
 import { ServiciosProvider } from '../servicios/servicios';
+import { UsuariosProvider } from '../usuarios/usuarios';
 /*
   Generated class for the InicioProvider provider.
 
@@ -27,7 +28,7 @@ export class InicioProvider {
     this._asociadosPrvdr.grabarAsociados();
     this._paquetesPrvdr.grabarPaquetes();
     this._categoriasPrvdr.grabarCategorias();
-    this._serviciosPrvdr.grabarServicios();
+    this._serviciosPrvdr.grabarServicios()
   }
 
 

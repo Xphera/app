@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav,MenuController } from 'ionic-angular';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AutenticacionProvider } from '../providers/autenticacion/autenticacion';
@@ -10,6 +10,8 @@ import { InicioProvider } from '../providers/inicio/inicio';
 import { ImgCacheService } from 'ng-imgcache';
 import { CacheService } from "ionic-cache";
 
+import { AppState } from './app.global';
+
 
 
 @Component({
@@ -17,32 +19,41 @@ import { CacheService } from "ionic-cache";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = 'HomePage';
+  public rootPage: string = '';
   pages: Array<{ title: string, leftIcon: string, page: string }>;
 
   pages_authenticated: Array<{ title: string, leftIcon: string, page: string }>;
 
   placeholder = 'assets/imgs/avatar/cosima-avatar.jpg';
+
   chosenPicture: any;
   CONFIG = CONFIG;
+
 
   constructor(
     public platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     private _autenticacionPrvdr: AutenticacionProvider,
-    private menuCtrl: MenuController,
     _inicioPrvdr: InicioProvider,
     cache: CacheService,
-    imgCache: ImgCacheService) {
+    imgCache: ImgCacheService,
+    public global: AppState) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
-      splashScreen.hide();
 
-      this.cargaMenu();
+
+      this._autenticacionPrvdr.cargaMenu()
+        .then((resp: string) => {
+          splashScreen.hide();
+          this.rootPage = resp;
+        })
+
+      _inicioPrvdr.cargar();
+      this.global.set('theme', 'custom-theme');
 
       imgCache.init({
         // Pass any options here...
@@ -55,19 +66,14 @@ export class MyApp {
 
     });
 
-
-
-
-    _inicioPrvdr.cargar();
-
-
     // Page navigation component
     this.pages = [
-      { title: "Home", leftIcon: 'home', page: 'HomePage' },
+      { title: "Categorias", leftIcon: 'home', page: 'HomePage' },
     ];
 
     this.pages_authenticated = [
-      { title: "Home", leftIcon: 'home', page: 'HomePage' },
+      { title: "Home", leftIcon: 'home', page: 'HomeUsuarioPage' },
+      { title: "Categorias", leftIcon: 'md-albums', page: 'HomePage' },
       { title: "Ubicaciones", leftIcon: 'pin', page: 'UbicacionesPage' },
       { title: "Perfil", leftIcon: 'contact', page: 'PerfilPage' },
       { title: "Cuenta", leftIcon: 'settings', page: 'CuentaPage' },
@@ -76,28 +82,16 @@ export class MyApp {
 
   }
 
-  cargaMenu() {
-  //  this._autenticacionPrvdr.activo().then((resp:{data:string})=>{
-      if (this._autenticacionPrvdr.activo()) {
-        this.menuCtrl.enable(false, 'sesionInactiva');
-        this.menuCtrl.enable(true, 'sesionActiva');
-      } else {
-        this.menuCtrl.enable(true, 'sesionInactiva');
-        this.menuCtrl.enable(false, 'sesionActiva');
-      }
-    //})
-
-  }
-
-
 
   openPage(page) {
     this.nav.setRoot(page);
   }
 
   cerrarSesion() {
-    this._autenticacionPrvdr.cerrarSesion();
-    this.nav.setRoot(this.rootPage);
+    this._autenticacionPrvdr.cerrarSesion()
+      .then((resp: string) => {
+        this.nav.setRoot(resp)
+      });
   }
 
 }

@@ -73,25 +73,31 @@ export class LoginPage {
 
   login() {
     if (this.myForm.valid) {
-      this._autenticacionPrvdr.login(this.camposLogin.email, this.camposLogin.password).subscribe(
-        data => {
-          this.navCtrl.setRoot('HomePage');
-        },
-        error => {
-          let alert = {
-            subTitle: 'Correo electrónico o la contraseña es incorrecta',
-            buttons: ['OK']
-          }
-          this.alert(alert);
-        }
-      );
-    } else {
-      let alert = {
-        subTitle: 'Escriba Correo electrónico valido.',
-        buttons: ['OK']
-      }
-      this.alert(alert);
+      this._autenticacionPrvdr.login(this.camposLogin.email, this.camposLogin.password)
+        .subscribe(
+          data => {
+            // this.navCtrl.setRoot('HomePage');
+            this._autenticacionPrvdr.cargaMenu()
+              .then((resp:string) => {
+                this.navCtrl.setRoot(resp);
+              })
+          },
+          // error => {
+          //   let alert = {
+          //     subTitle: 'Correo electrónico o la contraseña es incorrecta',
+          //     buttons: ['OK']
+          //   }
+          //   // this.alert(alert);
+          // }
+        );
     }
+     // else {
+    //   let alert = {
+    //     subTitle: 'Escriba Correo electrónico valido.',
+    //     buttons: ['OK']
+    //   }
+    //   // this.alert(alert);
+    // }
 
   }
 
