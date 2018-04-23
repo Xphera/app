@@ -20,7 +20,7 @@
 
   <xph-chart-sesiones *ngIf="_usuariosPrvdr.paqueteActivo.id"
     [paquete] = "_usuariosPrvdr.paqueteActivo"
-    (clickBotonSesiones)="click($event)"
+    (clickBotonSesiones)="sesiones($event)"
   ></xph-chart-sesiones>
 
   <xph-calificar *ngIf="_usuariosPrvdr.sesionesPorCalificar.sesionId"
@@ -32,6 +32,7 @@
   ></xph-calificar>
   <xph-proxima-sesion *ngIf="_usuariosPrvdr.proximaSesion.sesionId"
     [sesion]="_usuariosPrvdr.proximaSesion"
+    (clickDetalleSesion)="detalleSesion()"
   ></xph-proxima-sesion>
 
 </ion-content>

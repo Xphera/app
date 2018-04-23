@@ -4,26 +4,27 @@
     Explore Nearby
   </ion-card-header> -->
 
-  <ion-list class="custom-list" *ngFor="let item of compradetallesesiones" [ngSwitch]="item.estado.id">
+  <ion-list class="custom-list" *ngFor="let item of compradetallesesiones;let i = index" [ngSwitch]="item.estado.id">
 
     <ion-item-sliding *ngSwitchCase="2" #slidingItem>
       <ion-item text-wrap #ionItem (click)="slidingItemOpen(slidingItem,ionItem)">
         <h4 item-start>
-        {{ contadorSesionesProgramadas() }}
+        <!-- {{ contadorSesionesProgramadas() }} -->
+        {{ i+1 }}
       </h4>
       <p>  {{ item.fechaInicio|amCalendar }} en {{ item.titulo }}</p>
         <ion-badge item-end>{{ item.estado.estado }}</ion-badge>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="danger">
-          <ion-icon name="ios-refresh-circle"></ion-icon>
+        <!-- <button ion-button color="danger" (click)="clickBotonCancelarSesion(item)">
+          <ion-icon name="ios-refresh-circle" ></ion-icon>
           Cancelar
-        </button>
-        <button ion-button color="secondary">
+        </button> -->
+        <button ion-button color="secondary" (click)="reprogramarSesion(item)">
           <ion-icon name="ios-refresh-circle"></ion-icon>
           Reprogramar
         </button>
-        <button ion-button color="primary">
+        <button ion-button color="primary" (click)="clickBotonDetalleSesion(item)">
           <ion-icon name="ios-information-circle"></ion-icon>
           Detalle
         </button>
@@ -31,13 +32,14 @@
 
     </ion-item-sliding>
 
+
     <ion-item-sliding class="item-wrapper active-slide active-options-right" #slidingItem *ngSwitchCase="1">
       <ion-item #ionItem (click)="slidingItemOpen(slidingItem,ionItem)" style="transform: translate3d(-199px, 0px, 0px);">
-
+        {{ i+1 }}
         <ion-badge item-end>{{ item.estado.estado }}</ion-badge>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="programarSesion(item)">
+        <button ion-button color="secondary" (click)="clickBotonprogramarSesion(item)">
       <ion-icon name="ios-refresh-circle"></ion-icon>
       Programar
     </button>
@@ -45,6 +47,8 @@
       </ion-item-options>
 
     </ion-item-sliding>
+
+
 
     <!--
     <ion-item-sliding>

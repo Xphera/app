@@ -36,7 +36,7 @@ export class UbicacionesPage {
   }
 
   coordenadas(event): void {
-
+    
     if (event.coordenadas.index >= 0) {
       this.mostrarBorrar = true;
     } else {

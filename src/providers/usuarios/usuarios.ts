@@ -17,7 +17,8 @@ import {
   URL_MIS_PAQUETES,
   URL_PAQUETE_ACTIVO,
   URL_CALIFICAR_SESION,
-  URL_PROXIMA_SESION
+  URL_PROXIMA_SESION,
+  URL_PROGRAMAR_SESION
 } from '../../config/url.confing';
 
 /*
@@ -52,28 +53,6 @@ export class UsuariosProvider {
     public _autenticacionPrvdr: AutenticacionProvider,
   ) {
     console.log('Hello UsuariosProvider Provider');
-
-  }
-
-  //
-  obtenerUbicaciones() {
-    this.ubicaciones = [
-      {
-        titulo: 'Parque urbano el Virrey',
-        latitud: 4.67424,
-        longitud: -74.0563
-      },
-      {
-        titulo: 'Parque Simón Bolívar',
-        latitud: 4.6586709,
-        longitud: -74.0939604,
-      },
-      {
-        titulo: 'Parque Nacional',
-        latitud: 4.6241379,
-        longitud: -74.0651253,
-      }
-    ]
 
   }
 
@@ -146,7 +125,6 @@ export class UsuariosProvider {
 
   public obetenerPaqueteActivos() {
     let headers = this._autenticacionPrvdr.gerHeaders();
-    this.paqueteActivo.prestador.nombres
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp: PaqueteActivo) => {
@@ -162,20 +140,11 @@ export class UsuariosProvider {
     let request = this.http.get(URL_CALIFICAR_SESION, { headers })
     this._peticionPrvdr.peticion(request, 'sesionesPorCalificar')
       .map((resp: any) => {
-        // resp= resp.map((data) => {
-        //   return this.mapSesion(data)
-        // })
-        // console.log(resp, 'resp')
-        // return resp
         return this.mapSesion(resp)
       })
       .subscribe((resp: any) => {
         this.sesionesPorCalificar = resp
         if (resp.length) {
-          // this.sesionesPorCalificar.prestador.nombreCompleto = resp[0].compraDetalle.prestador.nombres + resp[0].compraDetalle.prestador.primerApellido + resp[0].compraDetalle.prestador.segundoApellido
-          // this.sesionesPorCalificar.prestador.imagePath = resp[0].compraDetalle.prestador.imagePath
-          // this.sesionesPorCalificar.fechaInicio = resp[0].fechaInicio
-          // this.sesionesPorCalificar.sesionId = resp[0].id
           this.sesionesPorCalificar = resp
         }
       })
@@ -214,7 +183,7 @@ export class UsuariosProvider {
 
   obtenerProximaSesion() {
     let headers = this._autenticacionPrvdr.gerHeaders();
-    
+
     let request = this.http.get(URL_PROXIMA_SESION, { headers })
     this._peticionPrvdr.peticion(request)
       .map((resp: any) => {
@@ -222,9 +191,59 @@ export class UsuariosProvider {
       })
       .subscribe((resp: any) => {
         this.proximaSesion = resp
-        console.log(this.proximaSesion)
       })
   }
+
+  public programarSesion(
+    complemento,
+    direccion,
+    fecha,
+    latitud,
+    longitud,
+    sesionId,
+    titulo) {
+    console.log(fecha)
+    let headers = this._autenticacionPrvdr.gerHeaders();
+
+    let request = this.http.post(URL_PROGRAMAR_SESION, {
+      complemento,
+      direccion,
+      fecha,
+      latitud,
+      longitud,
+      sesionId,
+      titulo
+    }, { headers })
+
+
+    let observable = new Observable((observer) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp) => {
+          if (resp["estado"] == "ok") {
+            console.log(this.paqueteActivo.sesionPorAgendar, 'uno')
+            this.paqueteActivo.sesionAgendadas ++
+            this.paqueteActivo.sesionPorAgendar --
+            this.paqueteActivo.compradetallesesiones
+              .map((data) => {
+                if (data.id == sesionId) {
+                  data.complemento = complemento
+                  data.direccion = direccion
+                  data.fechaInicio = fecha
+                  data.latitud = latitud
+                  data.titulo = titulo
+                  data.estado.id = 2
+                  data.estado.estado = "programada"
+                }
+              });
+            observer.next(true);
+          }
+        })
+    })
+
+    return observable
+  }
+
+
   protected mapSesion(resp: any) {
     console.log(Object.keys(resp).length)
     let sesion: Sesion = new Sesion()

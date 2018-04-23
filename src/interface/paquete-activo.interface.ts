@@ -8,6 +8,6 @@ export interface PaqueteActivoInterface{
   valor:number,
   sesionAgendadas:number,
   sesionFinalizadas:number,
-  sesionPorAgendadar:number,
+  sesionPorAgendar:number,
   prestador:AsociadoInterface
 }

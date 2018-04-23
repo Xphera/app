@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { URL_ASOCIADOS } from '../../config/url.confing';
+import { URL_ASOCIADOS, URL_DISPONIBILIDAD_MES } from '../../config/url.confing';
 import { Asociado } from "../../models/models.index";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
+import { AutenticacionProvider } from '../autenticacion/autenticacion';
+import { Observable } from "rxjs/Observable"
 
 /*
   Generated class for the AsociadosProvider provider.
@@ -16,40 +18,48 @@ export class AsociadosProvider {
 
   asociados: Array<Asociado> = new Array<Asociado>();
   key: string = 'asociados'
-  agendaasociado: any[] = [];
+  agendaasociado;
 
   constructor(
     public http: HttpClient,
     public _almacenamientoPrvidr: AlmacenamientoProvider,
-    private _peticionPrvdr: PeticionProvider) {
+    private _peticionPrvdr: PeticionProvider,
+    private _autenticacionPrvdr: AutenticacionProvider, ) {
     console.log('Hello AsociadosProvider Provider');
 
   }
 
-  obtenerAgendaAsociado() {
-    let date = new Date();
-    let events = [];
-    for (let i = 0; i < 15; i += 1) {
-      let hora = 5;
-      for (let x = 0; x < 9; x += 1) {
-        let startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hora, 0);
-        let endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hora, 59);
-        hora += 1;
-        events.push({
-          title: '',
-          startTime: startTime,
-          endTime: endTime,
-          allDay: false
-        });
-      }
-      date.setDate(date.getDate() + 1);
-    }
-    this.agendaasociado = events;
-  }
+  obtenerAgendaAsociado(año,mes,sesionId: number) {
+    mes++
+    let events:Array<any> = new Array<any>()
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_DISPONIBILIDAD_MES, { mes,año, sesionId}, { headers })
+
+    return this._peticionPrvdr.peticion(request, this.key)
+      .map((resp: Array<Array<{ dia: Date , horas: Array<boolean> }>>) => {
+       events = new Array<any>()
+        for (let disponibilidad of resp) {
+          let dia = new Date(disponibilidad["dia"]);
+
+          for (let hora = 0; hora < Object.keys(disponibilidad["horas"]).length; hora++) {
+            if (disponibilidad["horas"][hora]) {
+              dia.setHours(hora)
+              events.push({
+                title: '',
+                startTime: new Date(dia.setMinutes(0)),
+                endTime: new Date(dia.setMinutes(59)),
+                allDay: false,
+              });
+            }
+          }
+        }
+        return events
+      });
+}
 
   grabarAsociados() {
     let request = this.http.get<Asociado[]>(URL_ASOCIADOS)
-    
+
     this._peticionPrvdr.peticion(request)
       .map((data: Asociado[]) => {
         data.map((asociado: Asociado) => {

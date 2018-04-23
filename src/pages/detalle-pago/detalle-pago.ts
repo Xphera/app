@@ -60,7 +60,7 @@ export class DetallePagoPage {
     if (this.myForm.valid) {
       this._usuariosPrvdr.pagar(this.myForm.value)
         .subscribe((data) => {
-          this.navCtrl.setRoot('MisPaquetesPage')
+          this.navCtrl.setRoot('HomeUsuarioPage')
         })
     }
   }

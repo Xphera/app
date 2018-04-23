@@ -26,3 +26,5 @@ export const URL_PAQUETE_ACTIVO = BASE_URL_LOCAL + "api/servicios/PaqueteActivo/
 export const URL_PAGAR = BASE_URL_LOCAL + "api/clientes/Pay/"
 export const URL_CALIFICAR_SESION = BASE_URL_LOCAL + "api/servicios/CalificarSesion/"
 export const URL_PROXIMA_SESION = BASE_URL_LOCAL + "api/servicios/ProximaSesion/"
+export const URL_DISPONIBILIDAD_MES = BASE_URL_LOCAL + "api/prestadores/disponibilidadMesSegunSesion/"
+export const URL_PROGRAMAR_SESION = BASE_URL_LOCAL + "api/servicios/ProgramarSesion/"

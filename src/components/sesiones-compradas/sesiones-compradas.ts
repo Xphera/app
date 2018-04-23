@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input,Output,EventEmitter } from '@angular/core';
 import { ItemSliding } from 'ionic-angular';
 
 /**
@@ -13,6 +13,11 @@ import { ItemSliding } from 'ionic-angular';
 })
 export class SesionesCompradasComponent {
 
+  @Output() clickDetalleSesion = new EventEmitter();
+  @Output() clickCancelarSesion = new EventEmitter();
+  @Output() clickReprogramarSesion = new EventEmitter();
+  @Output() clickProgramarSesion = new EventEmitter();
+
   @Input() compradetallesesiones: Array<any>
   activeItemSliding: ItemSliding = null;
   public sesionesProgramadas:number=1
@@ -20,12 +25,31 @@ export class SesionesCompradasComponent {
   constructor() {
     console.log('Hello SesionesCompradasComponent Component');
   }
+// TODO: no envia valor de sesion a pagina
+  clickBotonDetalleSesion(sesion){
+    this.clickDetalleSesion.emit({'sesion':sesion})
+  }
+  // TODO: no envia valor de sesion a pagina
+  clickBotonCancelarSesion(sesion){
+      console.log(sesion)
+    this.clickCancelarSesion.emit('hola!!!!')
+  }
+  // TODO: no envia valor de sesion a pagina
+  reprogramarSesion(sesion:any){
+      console.log(sesion)
+    this.clickReprogramarSesion.emit({'sesion':sesion})
+  }
+  // TODO: no envia valor de sesion a pagina
+  clickBotonprogramarSesion(sesion:any) {
+  console.log(sesion)
+    this.clickProgramarSesion.emit(sesion)
+  }
+
+  // TODO: colocar contador de sesio programadas
   contadorSesionesProgramadas(){
     return this.sesionesProgramadas;
   }
-  programarSesion(item) {
-    console.log(item)
-  }
+
 
 
   slidingItemOpen(itemSlide: ItemSliding, item) {

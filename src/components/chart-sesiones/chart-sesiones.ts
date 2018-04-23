@@ -15,16 +15,10 @@ export class ChartSesionesComponent {
 
   CONFIG = CONFIG;
   @Input() paquete: any;
-  // @Input() nombre: string;
-  // @Input() valor: number;
-  // @Input() sesiones: number = 0;
-  // @Input() sesionPorAgendadar: number = 0;
-  // @Input() sesionAgendadas: number = 0;
-  // @Input() sesionFinalizadas: number = 0;
-  // @Input() detalle: string;
-  // @Input() prestador: any;
+
   @Output() clickBotonSesiones = new EventEmitter();
 
+  objetoPaquete: any
 
   public pieChartLabels: string[];
   public pieChartData: number[];
@@ -36,7 +30,15 @@ export class ChartSesionesComponent {
 
   ngOnChanges() {
     this.pieChartLabels = ['Por Agendar', 'Agendada', 'finalizada']
-    this.pieChartData = [this.paquete.sesionPorAgendadar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
+    this.pieChartData = [this.paquete.sesionPorAgendar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
+    this.objetoPaquete = this.paquete
+  }
+
+  ngDoCheck() {
+    // check for object mutation
+    if (this.objetoPaquete != this.paquete) {
+      this.pieChartData = [this.paquete.sesionPorAgendar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
+    }
   }
 
   onClick() {

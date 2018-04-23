@@ -31,8 +31,11 @@ export class HomeUsuarioPage {
     console.log('ionViewDidLoad HomeUsuarioPage');
   }
 
-  click(event) {
+  sesiones(event) {
     this.navCtrl.push('DetallePaqueteActivoPage', { paquete: event.paquete })
+  }
+  detalleSesion(event){
+    this.navCtrl.push('DetalleSesionPage')
   }
 
   enviarCalificacion(event) {

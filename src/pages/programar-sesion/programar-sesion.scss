@@ -10,14 +10,38 @@ page-programar-sesion {
     padding: 0 16px;
   }
 
-  .calendar-event-inner,
-  .monthview-primary-with-event {
-    background-color: #488aff !important;
-    color: white;
+  // dia evento
+  .calendar-event {
+    background-color: #eeeeee !important;
+    padding: 0 0 1px !important;
   }
 
-  .monthview-current {
-    background-color: #32db64 !important;
-    color: white;
+
+  // dias del calendario
+  .calendar-event-wrap,
+  .monthview-datetable td {
+    background-color: #eeeeee !important;
+    color: #d9d9d9 !important;
   }
+
+// dias con eventos
+  .calendar-event-inner,
+  .monthview-datetable td.monthview-primary-with-event {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+//dia de mes defirente al actual
+  .monthview-datetable td.text-muted {
+    background-color: #f4f4f4 !important;
+    color: #bab6b2 !important;
+  }
+
+// calendario dia actual
+  .monthview-current {
+		background-color:#7ed321 !important;
+		color:#fff !important;
+		font-weight:bold !important;
+	}
+
 }

@@ -14,11 +14,16 @@
 
 
 <ion-content>
+
   <xph-chart-sesiones
     [paquete] = "paqueteActivo"
   ></xph-chart-sesiones>
   <xph-sesiones-compradas
     [compradetallesesiones] = "paqueteActivo.compradetallesesiones"
+    (clickDetalleSesion)="detalleSesion($event)"
+    (clickCancelarSesion)="cancelarSesion($event)"
+    (clickReprogramarSesion)="reprogramarSesion($event)"
+    (clickProgramarSesion)="programarSesion($event)"
   ></xph-sesiones-compradas>
 
 </ion-content>

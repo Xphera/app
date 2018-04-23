@@ -1,7 +1,11 @@
-import { Component, } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { AsociadosProvider } from '../../providers/asociados/asociados';
-import { UsuariosProvider } from '../../providers/usuarios/usuarios';
+import { UbicacionesProvider } from '../../providers/ubicaciones/ubicaciones';
+import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
+
+import * as moment from 'moment';
+
 
 import { CONFIG } from '../../config/comunes.config';
 
@@ -22,6 +26,7 @@ export class ProgramarSesionPage {
   //variables de calendario
   titulocalendario: string = '';
   calendar: any = {};
+  currentDate = new Date()
 
   //variables de navegacion
   paginas = {
@@ -32,19 +37,25 @@ export class ProgramarSesionPage {
   navegacion: string = this.paginas.ubicacion.pagina;
   tituloaccion: string = this.paginas.ubicacion.titulo;
 
-  mapa: any = {}
-  ubicacion: any = {}
-  botonmapa: boolean = false;
+  public mapa: any = {}
+  public ubicacion: any = {}
+  public botonmapa: boolean = false;
+  public sesion
+  public eventSource
+  cambioDemes: boolean
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewCtrl: ViewController,
     public _asociadosPrvdr: AsociadosProvider,
-    public _usuariosPrvdr: UsuariosProvider) {
+    public _ubicacionesPrvdr: UbicacionesProvider,
+    private _ionicComponentPrvdr: IonicComponentProvider) {
 
-    this._asociadosPrvdr.obtenerAgendaAsociado();
-    this._usuariosPrvdr.obtenerUbicaciones();
+    this.sesion = this.navParams.get("sesion")
+    this.loadEvents(this.currentDate, this.sesion.id)
+
+    this._ubicacionesPrvdr.obtenerUbicaciones();
 
     this.mapa = {
       zoom: 17,
@@ -69,23 +80,65 @@ export class ProgramarSesionPage {
     this.titulocalendario = title;
   }
   onEventSelected(event) {
-    this.navegacion = this.paginas.ubicacion.pagina;
-    this.viewCtrl.dismiss({
-      lugar: this.ubicacion.titulo,
-      fecha: event.startTime,
-      estado: CONFIG.ESTADO_SESION.PROGRAMADA,
-      latitud: this.ubicacion.latitud,
-      longitud: this.ubicacion.longitud
-    });
+
+    let myMoment: moment.Moment = moment(event.startTime, "Europe/London")
+
+    this._ionicComponentPrvdr.showAlert({
+      title: 'Programar sesión',
+      message: 'Donde: ' + this.ubicacion.titulo + '<br>Cuando: ' + myMoment.calendar(),
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.navegacion = this.paginas.ubicacion.pagina;
+            this.viewCtrl.dismiss({
+              titulo: this.ubicacion.titulo,
+              fecha: myMoment.format(),
+              direccion: this.ubicacion.direccion,
+              latitud: this.ubicacion.latitud,
+              longitud: this.ubicacion.longitud,
+              complemento: this.ubicacion.complemento,
+              sesionId: this.sesion.id
+            });
+          }
+        }
+      ]
+    })
+
+
   }
 
   onTimeSelected(ev) {
+    console.log("onTimeSelected")
     if (ev.events.length !== 0) {
       this.calendar.mode = "day";
       this.tituloaccion = this.paginas.hora.titulo;
       this.navegacion = this.paginas.hora.pagina;
     }
+
   }
+
+  onCurrentDateChanged(ev: Date) {
+    console.log("onCurrentDateChanged")
+    if (this.currentDate.getMonth() != ev.getMonth()) {
+      this.loadEvents(ev, this.sesion.id)
+    }
+  };
+
+
+  loadEvents(fecha, sesionId) {
+    this._asociadosPrvdr.obtenerAgendaAsociado(fecha.getFullYear(), fecha.getMonth(), sesionId)
+      .subscribe((data) => {
+        this.eventSource = data
+        this.currentDate = fecha
+      })
+  };
 
   markDisabled(date: Date) {
     var current = new Date();
@@ -98,13 +151,17 @@ export class ProgramarSesionPage {
     this.tituloaccion = this.paginas.dia.titulo;
     this.calendar = {
       mode: 'month',
-      currentDate: new Date(),
+      // currentDate: this.currentDate,
       locale: 'es-CO',
-      eventSource: this._asociadosPrvdr.agendaasociado,
+      // eventSource: this._asociadosPrvdr.agendaasociado,
       noEventsLabel: "",
       autoSelect: false
     };
   }
+
+  // loadEvents() {
+  //   this.calendar.eventSource = this._asociadosPrvdr.agendaasociado;
+  // }
 
   //Acciones de navegacion
   cerrarModal() {
@@ -127,9 +184,9 @@ export class ProgramarSesionPage {
     }
   }
 
-  coordenadas(event): void {
+  coordenadas(event) {
+    console.log(event)
     this.ubicacion = event.coordenadas;
-    console.log(event);
     this.botonmapa = true;
   }
 

@@ -1,4 +1,4 @@
-import { Component,Input } from '@angular/core';
+import { Component,Input,Output,EventEmitter } from '@angular/core';
 import { Ionic2RatingModule } from "ionic2-rating";
 import {Sesion} from '../../models/models.index';
 
@@ -15,10 +15,14 @@ import {Sesion} from '../../models/models.index';
 export class ProximaSesionComponent {
 
 @Input() sesion: Sesion;
-
+@Output() clickDetalleSesion = new EventEmitter();
   constructor() {
     console.log('Hello ProximaSesionComponent Component');
 
+  }
+
+  clickBotonDetalleSesion(sesion){
+    this.clickDetalleSesion.emit(sesion)
   }
 
 }

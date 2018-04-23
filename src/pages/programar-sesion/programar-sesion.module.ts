@@ -9,11 +9,15 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs);
 
+import { MomentModule } from 'angular2-moment';
+import 'moment/locale/es';
+
 @NgModule({
   declarations: [
     ProgramarSesionPage,
   ],
   imports: [
+    MomentModule,
     IonicPageModule.forChild(ProgramarSesionPage),
     NgCalendarModule,
     ComponentsModule

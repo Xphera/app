@@ -17,7 +17,7 @@ import { CONFIG } from '../../config/comunes.config';
 export class PaquetesProvider {
 
   paquetes: Array<Paquete> = new Array<Paquete>();
-  key:string = 'paquetes'
+  key: string = 'paquetes'
 
   constructor(
     public http: HttpClient,
@@ -47,13 +47,14 @@ export class PaquetesProvider {
 
   obeternerPaqueteCategoria(ids: Array<number>) {
     this._almacenamientoPrvdr.obtener(this.key)
-    .then((datos) => {
-      this.paquetes = JSON.parse(datos['data']).filter((paquete: Paquete) => {
-        if (ids.indexOf(paquete.id) != -1) {
-          return paquete;
-        }
+      .then((datos) => {
+        this.paquetes = JSON.parse(datos['data'])
+          .filter((paquete: Paquete) => {
+            if (ids.indexOf(paquete.id) != -1) {
+              return paquete;
+            }
+          });
       });
-    });
 
     // this.paquetes = [
     //   {
