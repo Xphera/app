@@ -46,10 +46,13 @@ export class UbicacionesProvider {
   }
 
   obtenerUbicaciones() {
+    let observable = Observable.fromPromise(
     this._peticionPrvdr.almacenamiento(this.key)
       .then((datos) => {
         this.ubicaciones = JSON.parse(datos['data']);
       })
+    )
+    return observable;
   }
 
   /**

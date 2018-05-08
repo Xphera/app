@@ -26,23 +26,32 @@ export class ChartSesionesComponent {
 
   constructor() {
     console.log('Hello ChartSesionesComponent Component');
+    // copia de objeto
+
   }
 
   ngOnChanges() {
     this.pieChartLabels = ['Por Agendar', 'Agendada', 'finalizada']
     this.pieChartData = [this.paquete.sesionPorAgendar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
-    this.objetoPaquete = this.paquete
+    // copiar objeto paquete
+    this.objetoPaquete = Object.assign({}, this.paquete)
   }
 
   ngDoCheck() {
     // check for object mutation
-    if (this.objetoPaquete != this.paquete) {
+    if (this.objetoPaquete.sesionPorAgendar !== this.paquete.sesionPorAgendar ||
+      this.objetoPaquete.sesionAgendadas !== this.paquete.sesionAgendadas ||
+      this.objetoPaquete.sesionFinalizadas !== this.paquete.sesionFinalizadas) {
+
       this.pieChartData = [this.paquete.sesionPorAgendar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
+      // copiar objeto paquete
+      this.objetoPaquete = Object.assign({}, this.paquete)
+      console.log("ngDoCheck = copia")
     }
   }
 
   onClick() {
-    this.clickBotonSesiones.emit({'paquete':this.paquete});
+    this.clickBotonSesiones.emit({ 'paquete': this.paquete });
   }
 
   public chartClicked(e: any): void {

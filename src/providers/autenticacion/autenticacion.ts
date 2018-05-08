@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MenuController, App, NavController } from 'ionic-angular';
+import { MenuController, App } from 'ionic-angular';
 
 import { URL_LOGIN } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';

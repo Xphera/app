@@ -5,7 +5,7 @@ import { Asociado } from "../../models/models.index";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
-import { Observable } from "rxjs/Observable"
+
 
 /*
   Generated class for the AsociadosProvider provider.

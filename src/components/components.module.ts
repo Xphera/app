@@ -11,8 +11,10 @@ import { ChartSesionesComponent } from './chart-sesiones/chart-sesiones';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SesionesCompradasComponent } from './sesiones-compradas/sesiones-compradas';
 import { PipesModule } from '../pipes/pipes.module';
+
 import { MomentModule } from 'angular2-moment';
 import 'moment/locale/es';
+
 
 @NgModule({
 	declarations: [

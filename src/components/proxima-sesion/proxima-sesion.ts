@@ -1,5 +1,5 @@
 import { Component,Input,Output,EventEmitter } from '@angular/core';
-import { Ionic2RatingModule } from "ionic2-rating";
+
 import {Sesion} from '../../models/models.index';
 
 /**

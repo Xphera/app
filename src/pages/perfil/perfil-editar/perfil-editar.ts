@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Cliente } from '../../../models/models.index';
+
 import { ClienteProvider } from '../../../providers/cliente/cliente';
 
 /**

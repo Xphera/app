@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { LoadingController, ToastController, AlertController } from 'ionic-angular';
+
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
 import { Observable } from "rxjs/Observable"
 
-import { PaqueteActivo, Cliente, Sesion } from '../../models/models.index';
+import { PaqueteActivo, Sesion } from '../../models/models.index';
+
+import * as arraySort  from 'array-sort';
 
 import {
   URL_REGISTRO_USUARIO,
@@ -44,9 +46,6 @@ export class UsuariosProvider {
 
   constructor(
     private http: HttpClient,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
     private _almacenamientoPrvdr: AlmacenamientoProvider,
     private _peticionPrvdr: PeticionProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
@@ -220,9 +219,9 @@ export class UsuariosProvider {
       this._peticionPrvdr.peticion(request)
         .subscribe((resp) => {
           if (resp["estado"] == "ok") {
-            console.log(this.paqueteActivo.sesionPorAgendar, 'uno')
-            this.paqueteActivo.sesionAgendadas ++
-            this.paqueteActivo.sesionPorAgendar --
+
+            this.paqueteActivo.sesionAgendadas++
+            this.paqueteActivo.sesionPorAgendar--
             this.paqueteActivo.compradetallesesiones
               .map((data) => {
                 if (data.id == sesionId) {
@@ -234,7 +233,9 @@ export class UsuariosProvider {
                   data.estado.id = 2
                   data.estado.estado = "programada"
                 }
-              });
+              })
+              arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio', {reverse: true})
+
             observer.next(true);
           }
         })

@@ -58,6 +58,7 @@ export class DetallePaqueteActivoPage {
         )
           .subscribe((res) => {
             this.paqueteActivo = this._usuariosPrvdr.paqueteActivo
+            console.log(this.paqueteActivo,'subscribe')
           })
       }
 

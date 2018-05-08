@@ -31,7 +31,7 @@
 [latitud]="_ubicacionesPrvdr.ubicaciones[0].latitud"
 [longitud]="_ubicacionesPrvdr.ubicaciones[0].longitud"
 (getCoordenadas)="coordenadas($event)"
-[ubicaciones]="_ubicacionesPrvdr.ubicaciones"></xph-map-marker-fixed>
+[ubicaciones]="ubicaciones"></xph-map-marker-fixed>
 <button *ngIf="botonmapa" class="boton-mapa" ion-button block (click)="mostrarCalendario()">Siguiente</button>
 </div>
 

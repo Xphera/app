@@ -13,6 +13,6 @@ export class PathImagenPipe implements PipeTransform {
    * Takes a value and makes it lowercase.
    */
   transform(value: string) {
-    return BASE_URL+'media/'+value
+    return BASE_URL+'/'+value
   }
 }

@@ -10,7 +10,6 @@ import {
 } from '../../config/url.confing';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
 
-import { CacheService } from 'ionic-cache';
 import { Cliente } from '../../models/models.index';
 
 import { Observable } from "rxjs/Observable";
@@ -33,7 +32,6 @@ export class ClienteProvider {
 
   constructor(
     public http: HttpClient,
-    private cache: CacheService,
     private _autenticacionPrvdr: AutenticacionProvider,
     private _almacenamientoPrvdr: AlmacenamientoProvider,
     private _peticionPrvdr: PeticionProvider) {

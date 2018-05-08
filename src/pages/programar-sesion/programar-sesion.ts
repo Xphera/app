@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 import { UbicacionesProvider } from '../../providers/ubicaciones/ubicaciones';
@@ -6,8 +6,6 @@ import { IonicComponentProvider } from '../../providers/ionic-component/ionic-co
 
 import * as moment from 'moment';
 
-
-import { CONFIG } from '../../config/comunes.config';
 
 /**
  * Generated class for the ProgramarSesionPage page.
@@ -42,6 +40,7 @@ export class ProgramarSesionPage {
   public botonmapa: boolean = false;
   public sesion
   public eventSource
+  public ubicaciones=[]
   cambioDemes: boolean
 
   constructor(
@@ -55,7 +54,11 @@ export class ProgramarSesionPage {
     this.sesion = this.navParams.get("sesion")
     this.loadEvents(this.currentDate, this.sesion.id)
 
-    this._ubicacionesPrvdr.obtenerUbicaciones();
+    this._ubicacionesPrvdr.obtenerUbicaciones()
+      .subscribe(()=>{
+        this.ubicaciones = this._ubicacionesPrvdr.ubicaciones
+        console.log(this.sesion.compraDetalle.prestador.zona,'zoma')
+      });
 
     this.mapa = {
       zoom: 17,
