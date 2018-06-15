@@ -38,8 +38,6 @@
     "card.io.cordova.mobilesdk": "^2.1.0",
     "chart.js": "^2.7.2",
     "cordova": "8.0.0",
-    "cordova-android": "7.0.0",
-    "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^6.0.1",
@@ -89,9 +87,6 @@
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {}
     },
-    "platforms": [
-      "android",
-      "browser"
-    ]
+    "platforms": []
   }
 }
