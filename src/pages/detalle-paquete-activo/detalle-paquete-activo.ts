@@ -23,14 +23,15 @@ export class DetallePaqueteActivoPage {
     public modalCtrl: ModalController,
     private _usuariosPrvdr: UsuariosProvider) {
     let paquete = this.navParams.get("paquete")
-    console.log(paquete)
+
     if (paquete != undefined) {
       this.paqueteActivo = paquete;
     }
+
   }
 
   detalleSesion(event) {
-    this.navCtrl.push('DetalleSesionPage')
+    this.navCtrl.push('DetalleSesionPage', { sesion: event.sesion })
   }
 
   cancelarSesion(event) {
@@ -38,35 +39,35 @@ export class DetallePaqueteActivoPage {
   }
 
   reprogramarSesion(event) {
-    console.log(event, 'reprogramarSesion')
+    this.programarSesion(event)
   }
 
   programarSesion(event) {
+    this._usuariosPrvdr.programarSesionModalOpen(event)
 
-    let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion: event })
-    modal.present();
-    modal.onDidDismiss(data => {
-      if (data != undefined) {
-        this._usuariosPrvdr.programarSesion(
-          data.complemento,
-          data.direccion,
-          data.fecha,
-          data.latitud,
-          data.longitud,
-          data.sesionId,
-          data.titulo
-        )
-          .subscribe((res) => {
-            this.paqueteActivo = this._usuariosPrvdr.paqueteActivo
-            console.log(this.paqueteActivo,'subscribe')
-          })
-      }
-
-    });
+    // let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion: event })
+    // modal.present();
+    // modal.onDidDismiss(data => {
+    //   if (data != undefined) {
+    //     this._usuariosPrvdr.programarSesion(
+    //       data.complemento,
+    //       data.direccion,
+    //       data.fecha,
+    //       data.latitud,
+    //       data.longitud,
+    //       data.sesionId,
+    //       data.titulo
+    //     )
+    //       .subscribe((res) => {
+    //         this.paqueteActivo = this._usuariosPrvdr.paqueteActivo
+    //       })
+    //   }
+    //
+    // });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetalleSesionesCompradasPage');
   }
-  //
+
 }

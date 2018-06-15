@@ -4,8 +4,8 @@ export const CONFIG = {
   FORMATO_FECHA: "medium",
   FORMATO_MONEDA: "USD",
   FORMATO_MONEDA_DECIMAL: "2.0-0",
-  ESTADO_SESION:{
-      INICIAL:"inical",
-      PROGRAMADA:"programada"
-  }
+  // ESTADO_SESION:{
+  //     INICIAL:"inical",
+  //     PROGRAMADA:"programada"
+  // }
 }

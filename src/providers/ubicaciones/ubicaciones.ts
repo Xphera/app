@@ -13,6 +13,7 @@ import { Observable } from "rxjs/Observable";
 import { PeticionProvider } from '../peticion/peticion';
 
 
+
 /*
   Generated class for the UbicacionesProvider provider.
 
@@ -30,7 +31,7 @@ export class UbicacionesProvider {
     public _autenticacionPrvdr: AutenticacionProvider,
     public _almacenamientoPrvdr: AlmacenamientoProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
-    private _peticionPrvdr: PeticionProvider
+    private _peticionPrvdr: PeticionProvider,
   ) {
     console.log('Hello UbicacionesProvider Provider');
     this.grabarUbicaciones();
@@ -47,10 +48,10 @@ export class UbicacionesProvider {
 
   obtenerUbicaciones() {
     let observable = Observable.fromPromise(
-    this._peticionPrvdr.almacenamiento(this.key)
-      .then((datos) => {
-        this.ubicaciones = JSON.parse(datos['data']);
-      })
+      this._peticionPrvdr.almacenamiento(this.key)
+        .then((datos) => {
+          this.ubicaciones = JSON.parse(datos['data']);
+        })
     )
     return observable;
   }
@@ -168,10 +169,10 @@ export class UbicacionesProvider {
         .subscribe((data: Ubicacion) => {
           this.ubicaciones[ubicacion.index] = ubicacion;
           this._almacenamientoPrvdr.guardar(this.key, JSON.stringify(this.ubicaciones))
-          .then(() => {
-            this._ionicComponentPrvdr.showLongToastMessage('Ubicación Actulizada.')
-            observer.next(true);
-          })
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Ubicación Actulizada.')
+              observer.next(true);
+            })
         })
     })
     return observable;
@@ -213,5 +214,6 @@ export class UbicacionesProvider {
     // });
     // return observable;
   }
+
 
 }

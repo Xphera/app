@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 import { UbicacionesProvider } from '../../providers/ubicaciones/ubicaciones';
 import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
-
+import ol from 'openlayers';
 import * as moment from 'moment';
 
 
@@ -40,7 +40,7 @@ export class ProgramarSesionPage {
   public botonmapa: boolean = false;
   public sesion
   public eventSource
-  public ubicaciones=[]
+  public ubicaciones = []
   cambioDemes: boolean
 
   constructor(
@@ -52,12 +52,30 @@ export class ProgramarSesionPage {
     private _ionicComponentPrvdr: IonicComponentProvider) {
 
     this.sesion = this.navParams.get("sesion")
-    this.loadEvents(this.currentDate, this.sesion.id)
+    this.loadEvents(this.currentDate, this.sesion.sesionId)
 
     this._ubicacionesPrvdr.obtenerUbicaciones()
-      .subscribe(()=>{
-        this.ubicaciones = this._ubicacionesPrvdr.ubicaciones
-        console.log(this.sesion.compraDetalle.prestador.zona,'zoma')
+      .subscribe(() => {
+        let polygonGeometry = (new ol.format.GeoJSON())
+          .readFeature(this.sesion.prestador.zona)
+          .getGeometry();
+
+        for (let i in this._ubicacionesPrvdr.ubicaciones) {
+          let punto = new ol.Feature({
+            geometry: new ol.geom.Point([
+              this._ubicacionesPrvdr.ubicaciones[i].longitud,
+              this._ubicacionesPrvdr.ubicaciones[i].latitud
+            ])
+          })
+
+          let coords = punto.getGeometry().getCoordinates()
+          if (polygonGeometry.intersectsCoordinate(coords) == true) {
+            this.ubicaciones.push(this._ubicacionesPrvdr.ubicaciones[i])
+          }
+        }
+
+
+
       });
 
     this.mapa = {
@@ -107,7 +125,7 @@ export class ProgramarSesionPage {
               latitud: this.ubicacion.latitud,
               longitud: this.ubicacion.longitud,
               complemento: this.ubicacion.complemento,
-              sesionId: this.sesion.id
+              sesionId: this.sesion.sesionId
             });
           }
         }

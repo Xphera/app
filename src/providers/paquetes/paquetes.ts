@@ -5,8 +5,6 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { Paquete } from '../../models/models.index';
 
-import { CONFIG } from '../../config/comunes.config';
-
 /*
   Generated class for the PaquetesProvider provider.
 
@@ -27,21 +25,22 @@ export class PaquetesProvider {
   }
 
   grabarPaquetes() {
-    let sesion: object = { 'fecha': '', 'ubicacion': '', estado: CONFIG.ESTADO_SESION.INICIAL, latitud: '', longitud: '' };
+    let sesion: object = { 'fecha': '', 'ubicacion': '', latitud: '', longitud: '' };
     let request = this.http.get<Paquete[]>(URL_PAQUETES)
 
-    this._peticionPrvdr.peticion(request).map((data: Paquete[]) => {
-      data.map((data: Paquete) => {
-        let sesiones = new Array();
-        for (let i = 1; i <= parseInt(data.cantidadDeSesiones); i++) {
-          sesiones.push(sesion)
-        }
-        data.sesiones = sesiones;
+    this._peticionPrvdr.peticion(request)
+      .map((data: Paquete[]) => {
+        data.map((data: Paquete) => {
+          let sesiones = new Array();
+          for (let i = 1; i <= parseInt(data.cantidadDeSesiones); i++) {
+            sesiones.push(sesion)
+          }
+          data.sesiones = sesiones;
+        });
+        return data;
+      }).subscribe((data: Paquete[]) => {
+        this._almacenamientoPrvdr.guardar(this.key, JSON.stringify(data));
       });
-      return data;
-    }).subscribe((data: Paquete[]) => {
-      this._almacenamientoPrvdr.guardar(this.key, JSON.stringify(data));
-    });
   }
 
 

@@ -26,7 +26,7 @@ export class PeticionProvider {
   peticion(request, key?: string) {
 
     if (this.peticionId == 0) {
-      this.showloaderOpen()
+      //this.showloaderOpen()
     }
     this.peticionId++
     let observable = new Observable((observer) => {
@@ -40,7 +40,7 @@ export class PeticionProvider {
 
         this.peticionId--
         if (this.peticionId == 0) {
-          this.showloaderClose()
+        //  this.showloaderClose()
         }
 
       },

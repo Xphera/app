@@ -17,7 +17,8 @@ export class Asociado implements AsociadoInterface {
   servicios: Array<number>;
   paquetes: Array<number>;
   nombreCompleto:string;
-
+  // TODO: inluir en interface
+  zona:any
   // nombreCompleto():string{
   //   return  this.nombres + ' ' + this.primerApellido + ' ' + this.segundoApellido;
   // }

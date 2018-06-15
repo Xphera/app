@@ -18,11 +18,10 @@ export class ProximaSesionComponent {
 @Output() clickDetalleSesion = new EventEmitter();
   constructor() {
     console.log('Hello ProximaSesionComponent Component');
-
   }
 
-  clickBotonDetalleSesion(sesion){
-    this.clickDetalleSesion.emit(sesion)
+  clickBotonDetalleSesion(){
+    this.clickDetalleSesion.emit({ 'sesion': this.sesion })
   }
 
 }

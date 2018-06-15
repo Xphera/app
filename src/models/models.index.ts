@@ -7,3 +7,4 @@ export { Ubicacion } from './ubicacion.model';
 export { Cliente } from './cliente.model';
 export { PaqueteActivo } from './paquete-activo.model';
 export { Sesion } from './sesion.model';
+export { EstadoSesion } from './estado-sesion.model';

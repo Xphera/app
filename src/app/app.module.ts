@@ -28,7 +28,8 @@ import { UbicacionesProvider } from '../providers/ubicaciones/ubicaciones';
 import { IonicComponentProvider } from '../providers/ionic-component/ionic-component';
 import { ClienteProvider } from '../providers/cliente/cliente';
 import { PeticionProvider } from '../providers/peticion/peticion';
-
+import { Geolocation } from '@ionic-native/geolocation';
+import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/localizar-ubicacion';
 
 
 @NgModule({
@@ -65,7 +66,9 @@ import { PeticionProvider } from '../providers/peticion/peticion';
     UbicacionesProvider,
     IonicComponentProvider,
     ClienteProvider,
-    PeticionProvider
+    PeticionProvider,
+    Geolocation,
+    LocalizarUbicacionProvider
   ]
 })
 export class AppModule {}

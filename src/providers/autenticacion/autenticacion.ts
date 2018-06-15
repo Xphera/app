@@ -98,7 +98,7 @@ export class AutenticacionProvider {
     let headers = new HttpHeaders({
       'Authorization': 'Token ' + this.token
     });
-    console.log(headers, this.token);
+    // console.log(headers, this.token);
     return headers;
   }
 

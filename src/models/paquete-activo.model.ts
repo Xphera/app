@@ -1,5 +1,5 @@
 import { PaqueteActivoInterface } from '../interface/interface.index';
-import { Asociado } from './models.index';
+import { Asociado,Sesion } from './models.index';
 
 /**
 * Representa un paquete activo
@@ -16,18 +16,19 @@ export class PaqueteActivo implements PaqueteActivoInterface {
   sesionAgendadas: number;
   sesionFinalizadas: number;
   sesionPorAgendar: number;
-  compradetallesesiones: Array<{
-    calificacion: number,
-    complemento: string,
-    direccion: string,
-    latitud: number,
-    longitud: number,
-    titulo: number
-    fechaInicio: string,
-    id: number
-    estado: {
-      estado: string,
-      id: number
-    }
-  }>
+  compradetallesesiones:Array<Sesion> = new Array<Sesion>();
+  // Array<{
+  //   calificacion: number,
+  //   complemento: string,
+  //   direccion: string,
+  //   latitud: number,
+  //   longitud: number,
+  //   titulo: number
+  //   fechaInicio: string,
+  //   id: number
+  //   estado: {
+  //     estado: string,
+  //     id: number
+  //   }
+  // }>
 }

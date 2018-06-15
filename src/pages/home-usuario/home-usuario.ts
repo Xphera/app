@@ -22,10 +22,11 @@ export class HomeUsuarioPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public _usuariosPrvdr: UsuariosProvider) {
-    this._usuariosPrvdr.obetenerPaqueteActivos()
-    this._usuariosPrvdr.obtenerSesionesPorCalificar()
-    this._usuariosPrvdr.obtenerProximaSesion()
+      this._usuariosPrvdr.obetenerPaqueteActivos()
+      this._usuariosPrvdr.obtenerSesionesPorCalificar()
+      this._usuariosPrvdr.obtenerProximaSesion()
   }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomeUsuarioPage');
@@ -34,8 +35,8 @@ export class HomeUsuarioPage {
   sesiones(event) {
     this.navCtrl.push('DetallePaqueteActivoPage', { paquete: event.paquete })
   }
-  detalleSesion(event){
-    this.navCtrl.push('DetalleSesionPage')
+  detalleSesion(event) {
+    this.navCtrl.push('DetalleSesionPage', { sesion: event.sesion })
   }
 
   enviarCalificacion(event) {

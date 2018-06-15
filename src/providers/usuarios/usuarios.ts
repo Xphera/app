@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { ModalController } from 'ionic-angular';
 
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
@@ -10,7 +10,8 @@ import { Observable } from "rxjs/Observable"
 
 import { PaqueteActivo, Sesion } from '../../models/models.index';
 
-import * as arraySort  from 'array-sort';
+import * as arraySort from 'array-sort';
+
 
 import {
   URL_REGISTRO_USUARIO,
@@ -50,6 +51,7 @@ export class UsuariosProvider {
     private _peticionPrvdr: PeticionProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
     public _autenticacionPrvdr: AutenticacionProvider,
+    public modalCtrl: ModalController,
   ) {
     console.log('Hello UsuariosProvider Provider');
 
@@ -126,6 +128,14 @@ export class UsuariosProvider {
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
     this._peticionPrvdr.peticion(request)
+      .map((resp: PaqueteActivo) => {
+        // resp.compradetallesesiones[0] = this.mapSesion(resp.compradetallesesiones[0])
+        for (let i = 0; i < resp.compradetallesesiones.length; i++) {
+          resp.compradetallesesiones[i] = this.mapSesion(resp.compradetallesesiones[i])
+        }
+        // console.log(resp.compradetallesesiones)
+        return resp
+      })
       .subscribe((resp: PaqueteActivo) => {
         if (Object.keys(resp).length) {
           this.paqueteActivo = resp;
@@ -193,6 +203,40 @@ export class UsuariosProvider {
       })
   }
 
+  public programarSesionModalOpen(sesion) {
+
+    if (this.diferenciaHora(sesion.fechaInicio)) {
+      let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion })
+      modal.present();
+      modal.onDidDismiss(data => {
+        if (data != undefined) {
+          this.programarSesion(
+            data.complemento,
+            data.direccion,
+            data.fecha,
+            data.latitud,
+            data.longitud,
+            data.sesionId,
+            data.titulo
+          )
+            .subscribe((res) => {
+              //   this.paqueteActivo = this.paqueteActivo
+            })
+        }
+      });
+
+    } else {
+      this._ionicComponentPrvdr.showAlert({
+        title: 'Reprogramar Sesión',
+        subTitle: 'Solo se puede reprogramar sesión  una hora antes de la fecha de inicio.',
+        buttons: ['OK']
+      })
+    }
+
+
+
+  }
+
   public programarSesion(
     complemento,
     direccion,
@@ -201,7 +245,7 @@ export class UsuariosProvider {
     longitud,
     sesionId,
     titulo) {
-    console.log(fecha)
+
     let headers = this._autenticacionPrvdr.gerHeaders();
 
     let request = this.http.post(URL_PROGRAMAR_SESION, {
@@ -220,22 +264,30 @@ export class UsuariosProvider {
         .subscribe((resp) => {
           if (resp["estado"] == "ok") {
 
-            this.paqueteActivo.sesionAgendadas++
-            this.paqueteActivo.sesionPorAgendar--
+
             this.paqueteActivo.compradetallesesiones
               .map((data) => {
-                if (data.id == sesionId) {
-                  data.complemento = complemento
-                  data.direccion = direccion
+                if (data.sesionId == sesionId) {
+                  data.ubicacion.complemento = complemento
+                  data.ubicacion.direccion = direccion
                   data.fechaInicio = fecha
-                  data.latitud = latitud
-                  data.titulo = titulo
-                  data.estado.id = 2
-                  data.estado.estado = "programada"
+                  data.ubicacion.latitud = latitud
+                  data.ubicacion.title = titulo
+                  if (data.estado.id == 1) {
+                    data.estado.id = 2
+                    data.estado.estado = "Programada"
+                    this.paqueteActivo.sesionAgendadas++
+                    this.paqueteActivo.sesionPorAgendar--
+                  }
+                  else if (data.estado.id = 2) {
+                    data.estado.id = 4
+                    data.estado.estado = "Reprogramada"
+                  }
+
                 }
               })
-              arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio', {reverse: true})
-
+            arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio')
+            this._ionicComponentPrvdr.showLongToastMessage('Programación realizada.')
             observer.next(true);
           }
         })
@@ -246,20 +298,87 @@ export class UsuariosProvider {
 
 
   protected mapSesion(resp: any) {
-    console.log(Object.keys(resp).length)
     let sesion: Sesion = new Sesion()
     if (Object.keys(resp).length) {
       sesion.calificacion = resp.calificacion
       sesion.sesionId = resp.id
       sesion.prestador.nombreCompleto = resp.compraDetalle.prestador.nombres + resp.compraDetalle.prestador.primerApellido + resp.compraDetalle.prestador.segundoApellido
       sesion.prestador.imagePath = resp.compraDetalle.prestador.imagePath;
+      sesion.prestador.zona = resp.compraDetalle.prestador.zona
       sesion.fechaInicio = resp.fechaInicio
       sesion.ubicacion.title = resp.titulo
       sesion.ubicacion.complemento = resp.complemento
       sesion.ubicacion.direccion = resp.direccion
       sesion.ubicacion.longitud = resp.longitud
       sesion.ubicacion.latitud = resp.latitud
+      sesion.estado.id = resp.estado.id
+      sesion.estado.estado = resp.estado.estado
+      sesion.paquete.nombre = resp.compraDetalle.nombre
+      sesion.paquete.valor = resp.compraDetalle.valor
+      sesion.paquete.detalle = resp.compraDetalle.detalle
+      sesion.fin= resp.fin
+      sesion.inicio = resp.inicio
+      sesion.duracion = this.diff(sesion.inicio,sesion.fin)["minuto"]*-1
     }
     return sesion
   }
+
+  //toda sesion con hora de inicio con diferencia de una 1 hora a hora actual
+  public sesionPorIniciar(fechaInicio){
+    let now = new Date()
+    let diff = this.diff(fechaInicio,now)["hora"]
+    if (diff >= 0 &&  diff <= 1) {
+      return true
+    } else {
+      return false
+    }
+  }
+//
+  public localizar(sesion){
+    let now = new Date()
+    let diferencia = this.diff(sesion.fechaInicio,now)["minuto"]
+    if (diferencia <= 15 && (sesion.estado.id == 2 || sesion.estado.id == 4) ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+// valida si se ha iniciado sesion
+  public sesionnoIniciada(sesion) {
+    let now = new Date()
+    let diff = this.diff(sesion.fechaInicio,now)["hora"]
+
+    if (diff < 0 && sesion.estado != 5) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+// calcula si se puede maodificar sesion
+  public diferenciaHora(fechaInicio) {
+    let now = new Date()
+    let diff = this.diff(fechaInicio,now)["hora"]
+    if (diff < 1) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  public diff(fechaInicio,fechaFin) {
+    if (fechaInicio == null || fechaFin == null) {
+      return  {hora:0,minuto:0,dia:0}
+    }
+    let fi = new Date(fechaInicio).getTime()
+    let ff = new Date(fechaFin).getTime()
+    let diff = fi - ff ;
+    let hora = diff / (1000 * 60 * 60)// (1000*60*60*24) --> milisegundos -> segundos -> minutos -> horas -> días
+    let minuto = diff / (1000 * 60)
+    let dia = diff / (1000 * 60 * 60 * 24)
+    return  {hora:hora,minuto:minuto,dia:dia}
+  }
+
+
 }

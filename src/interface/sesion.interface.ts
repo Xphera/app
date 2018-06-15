@@ -6,6 +6,6 @@ export interface SesionInterface{
   prestador:AsociadoInterface,
   calificacion:number,
   ubicacion:UbicacionInterface
-  estadoId:number
-  estadoNombre:string
+  // estadoId:number
+  // estadoNombre:string
 }

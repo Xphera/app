@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AsociadosProvider } from '../../providers/asociados/asociados';
-import { Servicio,Asociado } from '../../models/models.index';
+import { Asociado } from '../../models/models.index';
 
 /**
  * Generated class for the AsociadosPage page.
@@ -19,20 +18,12 @@ export class AsociadosPage {
 
   paquetespage: string = 'PaquetesPage'
   perfilasociadopage: string = 'PerfilAsociadoPage';
-  servicio: Servicio = new Servicio();
+  public asociados:Array<Asociado>
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
-    private _asociadosPrvr: AsociadosProvider) {
-
-    this.servicio = this.navParams.get('servicio');
-
-    this._asociadosPrvr.obtenerAsociadosServicios(this.servicio.id);
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AsociadosPage');
+    public navParams: NavParams) {
+    this.asociados = this.navParams.get('asociados')
   }
 
   verPaquetes(asociado:Asociado) {
@@ -42,5 +33,6 @@ export class AsociadosPage {
   perfilAsociado(asociado:Asociado) {
     this.navCtrl.push(this.perfilasociadopage, { asociado });
   }
+
 
 }

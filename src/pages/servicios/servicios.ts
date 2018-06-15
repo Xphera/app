@@ -39,9 +39,12 @@ export class ServiciosPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ServiciosPage');
   }
-  
+
   iraAsociados(){
-    this.navCtrl.push(this.asociadosPage,{servicio:this._serviciosPrvdr.servicios[this.slideIndex]});
+    this.navCtrl.push('ServicioUbicacionPrestadorPage',{servicio:this._serviciosPrvdr.servicios[this.slideIndex]});
+    // let profileModal = this.modalCtrl.create('ModalUbicacionesPage');
+    // profileModal.present();
+    // console.log('ubicacion')
   }
 
   nextSlide() {

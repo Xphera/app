@@ -1,6 +1,7 @@
-import { Component, Input,Output,EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ItemSliding } from 'ionic-angular';
 
+import {Sesion} from '../../models/models.index';
 /**
  * Generated class for the SesionesCompradasComponent component.
  *
@@ -18,35 +19,43 @@ export class SesionesCompradasComponent {
   @Output() clickReprogramarSesion = new EventEmitter();
   @Output() clickProgramarSesion = new EventEmitter();
 
-  @Input() compradetallesesiones: Array<any>
+  @Input() compradetallesesiones: Array<Sesion>
   activeItemSliding: ItemSliding = null;
-  public sesionesProgramadas:number=1
+  public sesionesProgramadas: number = 1
 
   constructor() {
     console.log('Hello SesionesCompradasComponent Component');
   }
-// TODO: no envia valor de sesion a pagina
-  clickBotonDetalleSesion(sesion){
-    this.clickDetalleSesion.emit({'sesion':sesion})
+  // TODO: no envia valor de sesion a pagina
+  clickBotonDetalleSesion(sesion:Sesion) {
+    this.clickDetalleSesion.emit({ 'sesion': sesion })
   }
   // TODO: no envia valor de sesion a pagina
-  clickBotonCancelarSesion(sesion){
-      console.log(sesion)
-    this.clickCancelarSesion.emit('hola!!!!')
+  clickBotonCancelarSesion(sesion) {
+    this.clickCancelarSesion.emit('clickBotonCancelarSesion')
   }
   // TODO: no envia valor de sesion a pagina
-  reprogramarSesion(sesion:any){
-      console.log(sesion)
-    this.clickReprogramarSesion.emit({'sesion':sesion})
+  clickBotonReprogramarSesion(sesion: any) {
+    this.clickReprogramarSesion.emit(sesion)
+
+    // if (this.diferenciaHora(sesion.fechaInicio)) {
+    //   this.clickReprogramarSesion.emit(sesion)
+    // } else {
+    //   this._ionicComponentPrvdr.showAlert({
+    //     title: 'Reprogramar Sesión',
+    //     subTitle: 'Solo se puede reprogramar sesión  una hora antes de la fecha de inicio.',
+    //     buttons: ['OK']
+    //   })
+    // }
+
   }
   // TODO: no envia valor de sesion a pagina
-  clickBotonprogramarSesion(sesion:any) {
-  console.log(sesion)
+  clickBotonprogramarSesion(sesion: any) {
     this.clickProgramarSesion.emit(sesion)
   }
 
   // TODO: colocar contador de sesio programadas
-  contadorSesionesProgramadas(){
+  contadorSesionesProgramadas() {
     return this.sesionesProgramadas;
   }
 
@@ -78,5 +87,7 @@ export class SesionesCompradasComponent {
       this.activeItemSliding = null;
     }
   }
+
+
 
 }

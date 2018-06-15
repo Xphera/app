@@ -14,7 +14,8 @@ import { PipesModule } from '../pipes/pipes.module';
 
 import { MomentModule } from 'angular2-moment';
 import 'moment/locale/es';
-
+import { ContentDrawerComponent } from './content-drawer/content-drawer';
+// import { IonicComponentProvider } from '../providers/ionic-component/ionic-component';
 
 @NgModule({
 	declarations: [
@@ -22,7 +23,8 @@ import 'moment/locale/es';
     CalificarComponent,
     ProximaSesionComponent,
     ChartSesionesComponent,
-    SesionesCompradasComponent
+    SesionesCompradasComponent,
+    ContentDrawerComponent
 	],
 	imports: [
 						MomentModule,
@@ -40,6 +42,7 @@ import 'moment/locale/es';
     ProximaSesionComponent,
     ChartSesionesComponent,
     SesionesCompradasComponent,
+    ContentDrawerComponent,
     ],
 	providers: [Geolocation]
 })

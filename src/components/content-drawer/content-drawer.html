@@ -1,0 +1,19 @@
+<!-- Generated template for the ContentDrawerComponent component -->
+<ion-header>
+  <ion-navbar class="custom">
+    <ion-buttons left>
+    <button ion-button icon-only>
+            <ion-icon name="reorder"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title *ngIf="!title">
+      {{options.showTitle}}
+    </ion-title>
+    <ion-title *ngIf="title">
+      {{options.hideTitle}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ng-content></ng-content>
+</ion-content>
