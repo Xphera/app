@@ -14,7 +14,8 @@ import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 export class PeticionProvider {
 
   peticionId: number = 0;
-  showloader:any;
+  showloader: any;
+  protected loading: boolean = true
 
   constructor(
     public http: HttpClient,
@@ -23,10 +24,13 @@ export class PeticionProvider {
     console.log('Hello PeticionProvider Provider');
   }
 
-  peticion(request, key?: string) {
+  peticion(request, key?: string, loading?: boolean) {
 
+    this.loading =  loading == undefined ? true : false
+    
+    console.log(this.loading )
     if (this.peticionId == 0) {
-      //this.showloaderOpen()
+      this.showloaderOpen()
     }
     this.peticionId++
     let observable = new Observable((observer) => {
@@ -40,7 +44,7 @@ export class PeticionProvider {
 
         this.peticionId--
         if (this.peticionId == 0) {
-        //  this.showloaderClose()
+          this.showloaderClose()
         }
 
       },
@@ -64,8 +68,9 @@ export class PeticionProvider {
   }
 
   protected showloaderOpen() {
+
+    if(this.loading)
     this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
-    console.log('abrir')
   }
 
   protected showloaderClose() {

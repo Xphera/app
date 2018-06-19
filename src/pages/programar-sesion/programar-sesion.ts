@@ -106,7 +106,7 @@ export class ProgramarSesionPage {
 
     this._ionicComponentPrvdr.showAlert({
       title: 'Programar sesión',
-      message: 'Donde: ' + this.ubicacion.titulo + '<br>Cuando: ' + myMoment.calendar(),
+      message: 'Donde: ' + this.ubicacion.coordenadas.titulo + '<br>Cuando: ' + myMoment.calendar(),
       buttons: [
         {
           text: 'Cancelar',
@@ -119,12 +119,12 @@ export class ProgramarSesionPage {
           handler: () => {
             this.navegacion = this.paginas.ubicacion.pagina;
             this.viewCtrl.dismiss({
-              titulo: this.ubicacion.titulo,
+              titulo: this.ubicacion.coordenadas.titulo,
               fecha: myMoment.format(),
-              direccion: this.ubicacion.direccion,
-              latitud: this.ubicacion.latitud,
-              longitud: this.ubicacion.longitud,
-              complemento: this.ubicacion.complemento,
+              direccion: this.ubicacion.coordenadas.direccion,
+              latitud: this.ubicacion.coordenadas.latitud,
+              longitud: this.ubicacion.coordenadas.longitud,
+              complemento: this.ubicacion.coordenadas.complemento,
               sesionId: this.sesion.sesionId
             });
           }
@@ -206,10 +206,68 @@ export class ProgramarSesionPage {
   }
 
   coordenadas(event) {
-    console.log(event)
-    this.ubicacion = event.coordenadas;
+    this.ubicacion = event;
     this.botonmapa = true;
   }
 
+  complementoDireccion() {
+    if (this.ubicacion.coordenadas.index == -1 || this.ubicacion.recalculada == true) {
+      let message = ""
+      if (this.ubicacion.recalculada == -1) {
+        message = "Ingresa lo siguiente"
+      } else {
+        message = "Comfirma lo siguiente"
+      }
+      this._ionicComponentPrvdr.showAlert({
+        title: 'Complemento de dirección',
+        message: message,
+        inputs: [
+          {
+            name: 'titulo',
+            placeholder: 'Titulo',
+            value: this.ubicacion.coordenadas.titulo
+          },
+          {
+            name: 'direccion',
+            placeholder: 'Drirección',
+            value: this.ubicacion.coordenadas.direccion
+          },
+          {
+            name: 'complemento',
+            placeholder: 'Complemento',
+            value: this.ubicacion.coordenadas.complemento
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Continuar',
+            handler: data => {
+              this.ubicacion.coordenadas.titulo = data.titulo
+              this.ubicacion.coordenadas.direccion = data.direccion
+              this.ubicacion.coordenadas.complemento = data.complemento
+              if (
+                this.ubicacion.coordenadas.titulo.length > 0
+                &&
+                this.ubicacion.coordenadas.direccion.length > 0
+              ) {
+                this.mostrarCalendario()
+              }else{
+                this.complementoDireccion()
+              }
+            }
+          }
+        ]
+      })
+      console.log('complemento direccion')
+    } else {
+      this.mostrarCalendario()
+    }
+  }
 
 }

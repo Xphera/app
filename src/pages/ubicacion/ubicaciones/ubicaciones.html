@@ -21,7 +21,10 @@
 
 <ion-content>
 
-  <xph-map-marker-fixed *ngIf="mostrarmapa" [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
+  <xph-map-marker-fixed
+  *ngIf="mostrarmapa"
+  [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
+  (getCoordenadas)="coordenadas($event)">
   </xph-map-marker-fixed>
 
   <div class="boton-mapa">

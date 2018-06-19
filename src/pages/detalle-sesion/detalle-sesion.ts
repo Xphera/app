@@ -59,7 +59,7 @@ export class DetalleSesionPage {
     public modalCtrl: ModalController) {
     this.sesion = this.navParams.get('sesion');
     this.drawerOptions = {
-      handleHeight: 50,
+      handleHeight: 0,
       thresholdFromBottom: 200,
       thresholdFromTop: 200,
       bounceBack: true,
@@ -166,7 +166,6 @@ export class DetalleSesionPage {
 
   ubicarPuntos() {
     this.vectorLayerLocalizacion.getSource().clear()
-    console.log(this._localizarUbicacionPrvdr.usuario)
     this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
     this.addPoint(this._localizarUbicacionPrvdr.prestador.lng, this._localizarUbicacionPrvdr.prestador.lat, this.vectorSourceLocalizacion, 'expert.png');
     this._localizarUbicacionPrvdr.prestador

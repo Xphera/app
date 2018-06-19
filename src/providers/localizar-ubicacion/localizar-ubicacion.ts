@@ -14,8 +14,8 @@ import { Subscription } from 'rxjs/Subscription';
 @Injectable()
 export class LocalizarUbicacionProvider {
 
-  protected lat = 4.6899024
-  protected lng = -74.0682359
+  protected lat = 4.6502275
+  protected lng = -74.0575201
 
   private watch: Subscription;
   public usuario: { lat: number, lng: number }

@@ -127,13 +127,13 @@ export class UsuariosProvider {
   public obetenerPaqueteActivos() {
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
-    this._peticionPrvdr.peticion(request)
+    this._peticionPrvdr.peticion(request,'', true)
       .map((resp: PaqueteActivo) => {
-        // resp.compradetallesesiones[0] = this.mapSesion(resp.compradetallesesiones[0])
-        for (let i = 0; i < resp.compradetallesesiones.length; i++) {
-          resp.compradetallesesiones[i] = this.mapSesion(resp.compradetallesesiones[i])
+        if (resp.compradetallesesiones) {
+          for (let i = 0; i < resp.compradetallesesiones.length; i++) {
+            resp.compradetallesesiones[i] = this.mapSesion(resp.compradetallesesiones[i])
+          }
         }
-        // console.log(resp.compradetallesesiones)
         return resp
       })
       .subscribe((resp: PaqueteActivo) => {
@@ -206,7 +206,8 @@ export class UsuariosProvider {
   public programarSesionModalOpen(sesion) {
 
     if (this.diferenciaHora(sesion.fechaInicio)) {
-      let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion })
+
+      let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion:sesion })
       modal.present();
       modal.onDidDismiss(data => {
         if (data != undefined) {
@@ -316,38 +317,38 @@ export class UsuariosProvider {
       sesion.paquete.nombre = resp.compraDetalle.nombre
       sesion.paquete.valor = resp.compraDetalle.valor
       sesion.paquete.detalle = resp.compraDetalle.detalle
-      sesion.fin= resp.fin
+      sesion.fin = resp.fin
       sesion.inicio = resp.inicio
-      sesion.duracion = this.diff(sesion.inicio,sesion.fin)["minuto"]*-1
+      sesion.duracion = this.diff(sesion.inicio, sesion.fin)["minuto"] * -1
     }
     return sesion
   }
 
   //toda sesion con hora de inicio con diferencia de una 1 hora a hora actual
-  public sesionPorIniciar(fechaInicio){
+  public sesionPorIniciar(fechaInicio) {
     let now = new Date()
-    let diff = this.diff(fechaInicio,now)["hora"]
-    if (diff >= 0 &&  diff <= 1) {
+    let diff = this.diff(fechaInicio, now)["hora"]
+    if (diff >= 0 && diff <= 1) {
       return true
     } else {
       return false
     }
   }
-//
-  public localizar(sesion){
+  //
+  public localizar(sesion) {
     let now = new Date()
-    let diferencia = this.diff(sesion.fechaInicio,now)["minuto"]
-    if (diferencia <= 15 && (sesion.estado.id == 2 || sesion.estado.id == 4) ) {
+    let diferencia = this.diff(sesion.fechaInicio, now)["minuto"]
+    if (diferencia <= 15 && (sesion.estado.id == 2 || sesion.estado.id == 4)) {
       return true
     } else {
       return false
     }
   }
 
-// valida si se ha iniciado sesion
+  // valida si se ha iniciado sesion
   public sesionnoIniciada(sesion) {
     let now = new Date()
-    let diff = this.diff(sesion.fechaInicio,now)["hora"]
+    let diff = this.diff(sesion.fechaInicio, now)["hora"]
 
     if (diff < 0 && sesion.estado != 5) {
       return true
@@ -356,28 +357,28 @@ export class UsuariosProvider {
     }
   }
 
-// calcula si se puede maodificar sesion
+  // calcula si se puede maodificar sesion
   public diferenciaHora(fechaInicio) {
     let now = new Date()
-    let diff = this.diff(fechaInicio,now)["hora"]
-    if (diff < 1) {
+    let diff = this.diff(fechaInicio, now)["hora"]
+    if (diff < 1 && diff!= null) {
       return false
     } else {
       return true
     }
   }
 
-  public diff(fechaInicio,fechaFin) {
+  public diff(fechaInicio, fechaFin) {
     if (fechaInicio == null || fechaFin == null) {
-      return  {hora:0,minuto:0,dia:0}
+      return { hora: null, minuto: null, dia: null }
     }
     let fi = new Date(fechaInicio).getTime()
     let ff = new Date(fechaFin).getTime()
-    let diff = fi - ff ;
+    let diff = fi - ff;
     let hora = diff / (1000 * 60 * 60)// (1000*60*60*24) --> milisegundos -> segundos -> minutos -> horas -> días
     let minuto = diff / (1000 * 60)
     let dia = diff / (1000 * 60 * 60 * 24)
-    return  {hora:hora,minuto:minuto,dia:dia}
+    return { hora: hora, minuto: minuto, dia: dia }
   }
 
 

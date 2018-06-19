@@ -1,5 +1,5 @@
 // export const BASE_URL = "http://appservicios.danielgranados.net/";
-export const BASE_URL = "http://127.0.0.1:9090/";
+export const BASE_URL = "http://192.168.137.1:9090/";
 // export const BASE_URL_LOCAL = "http://192.168.226.77:9090/";
 
 export const URL_CATEGORIA = BASE_URL + "api/nav/categorias/";

@@ -25,14 +25,17 @@
 
 <ion-content>
 
+<!-- (click)="mostrarCalendario()" -->
 <div *ngIf="navegacion=='ubicacion'">
 <xph-map-marker-fixed
 [zoom]="mapa.zoom"
-[latitud]="_ubicacionesPrvdr.ubicaciones[0].latitud"
-[longitud]="_ubicacionesPrvdr.ubicaciones[0].longitud"
+[ubicaciones]="_ubicacionesPrvdr.ubicaciones"
 (getCoordenadas)="coordenadas($event)"
 [ubicaciones]="ubicaciones"></xph-map-marker-fixed>
-<button *ngIf="botonmapa" class="boton-mapa" ion-button block (click)="mostrarCalendario()">Siguiente</button>
+<button *ngIf="botonmapa" class="boton-mapa" ion-button block
+
+(click)="complementoDireccion()"
+>Siguiente</button>
 </div>
 
 

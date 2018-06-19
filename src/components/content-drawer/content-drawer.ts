@@ -72,7 +72,7 @@ export class ContentDrawerComponent {
 
     handlePan(ev){
 
-      let newTop = ev.center.y;
+      let newTop = ev.center.y - 100;
 
       let bounceToBottom = false;
       let bounceToTop = false;
@@ -114,6 +114,7 @@ export class ContentDrawerComponent {
 
             this.domCtrl.write(() => {
               this.renderer.setElementStyle(this.element.nativeElement, 'top', newTop + 'px');
+              console.log(newTop)
             });
 
           }
