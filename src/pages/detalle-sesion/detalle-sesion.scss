@@ -1,4 +1,18 @@
 page-detalle-sesion {
+
+  rating{
+    font-size: 1.5em;
+    color: orange;
+  }
+
+  rating ul{
+    padding-left: 0px;
+    margin: 0px;
+  }
+  rating ul li{
+  padding: 1px !important;
+  }
+
   .custom {
     .toolbar-background {
       background-color: #000 !important;

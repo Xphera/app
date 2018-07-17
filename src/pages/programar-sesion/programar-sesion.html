@@ -29,10 +29,9 @@
 <div *ngIf="navegacion=='ubicacion'">
 <xph-map-marker-fixed
 [zoom]="mapa.zoom"
-[ubicaciones]="_ubicacionesPrvdr.ubicaciones"
 (getCoordenadas)="coordenadas($event)"
 [ubicaciones]="ubicaciones"></xph-map-marker-fixed>
-<button *ngIf="botonmapa" class="boton-mapa" ion-button block
+<button *ngIf="botonmapa" class="boton-mapa" ion-button large full
 
 (click)="complementoDireccion()"
 >Siguiente</button>
@@ -46,6 +45,7 @@
 [markDisabled]="markDisabled"
 [locale]="calendar.locale"
 [eventSource]="eventSource"
+[formatHourColumn]="calendar.formatHourColumn"
 [calendarMode]="calendar.mode"
 [currentDate]="currentDate"
 (onEventSelected)="onEventSelected($event)"

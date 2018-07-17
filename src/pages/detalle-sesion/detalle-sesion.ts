@@ -86,7 +86,7 @@ export class DetalleSesionPage {
           }
         });
 
-      this.sesionPorIniciar = this._usuariosPrvdr.sesionPorIniciar(this.sesion.fechaInicio)
+      this.sesionPorIniciar = this._usuariosPrvdr.sesionPorIniciar(this.sesion)
       this.diferenciaHora = this._usuariosPrvdr.diferenciaHora(this.sesion.fechaInicio)
       this.sesionnoIniciada = this._usuariosPrvdr.sesionnoIniciada(this.sesion) && (this.sesion.estado.id == 2 || this.sesion.estado.id == 4)
 
@@ -168,7 +168,6 @@ export class DetalleSesionPage {
     this.vectorLayerLocalizacion.getSource().clear()
     this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
     this.addPoint(this._localizarUbicacionPrvdr.prestador.lng, this._localizarUbicacionPrvdr.prestador.lat, this.vectorSourceLocalizacion, 'expert.png');
-    this._localizarUbicacionPrvdr.prestador
   }
 
   calificarSesion(){

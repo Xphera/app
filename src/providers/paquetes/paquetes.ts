@@ -44,16 +44,16 @@ export class PaquetesProvider {
   }
 
 
-  obeternerPaqueteCategoria(ids: Array<number>) {
-    this._almacenamientoPrvdr.obtener(this.key)
-      .then((datos) => {
-        this.paquetes = JSON.parse(datos['data'])
-          .filter((paquete: Paquete) => {
-            if (ids.indexOf(paquete.id) != -1) {
-              return paquete;
-            }
-          });
-      });
+  // obeternerPaqueteCategoria(ids: Array<number>) {
+    // this._almacenamientoPrvdr.obtener(this.key)
+    //   .then((datos) => {
+    //     this.paquetes = JSON.parse(datos['data'])
+    //       .filter((paquete: Paquete) => {
+    //         if (ids.indexOf(paquete.id) != -1) {
+    //           return paquete;
+    //         }
+    //       });
+    //   });
 
     // this.paquetes = [
     //   {
@@ -110,6 +110,6 @@ export class PaquetesProvider {
     //     ]
     //   }
     // ]
-  }
+  // }
 
 }

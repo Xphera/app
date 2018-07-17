@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content padding>
-  
+
 <form [formGroup]="myForm" (ngSubmit)="guardar()">
   <ion-item>
     <ion-label floating>Nuevo usuario (email)</ion-label>
@@ -23,9 +23,7 @@
     <ion-label floating>Contraseña</ion-label>
     <ion-input formControlName="password" type="password"></ion-input>
   </ion-item>
-
-  <!-- <button ion-button type="button" color="themeColor1" block type="submit" (click)="cambiarPagina('CambiarUsuarioActivarPage')" > -->
-  <button [disabled]="!myForm.valid" ion-button type="button" color="themeColor1" block type="submit">
+  <button [disabled]="!myForm.valid" ion-button color="themeColor1" block type="submit">
        Guardar
     </button>
 </form>

@@ -114,7 +114,7 @@
       <ion-item>
         <ion-icon color="primary" large item-start name='calendar'></ion-icon>
         <h2>Cuando</h2>
-        <p>{{sesion.fechaInicio|amCalendar}}</p>
+        <p>{{sesion.fechaInicio| amLocal| amLocale:'es-CO'| amDateFormat:'LLLL'}}</p>
       </ion-item>
       <ion-item *ngIf="sesion.estado.id==3">
         <ion-icon color="primary" large item-start name='timer'></ion-icon>

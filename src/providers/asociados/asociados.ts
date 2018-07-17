@@ -45,7 +45,7 @@ export class AsociadosProvider {
             if (disponibilidad["horas"][hora]) {
               dia.setHours(hora)
               events.push({
-                title: '',
+                title: 'Disponible',
                 startTime: new Date(dia.setMinutes(0)),
                 endTime: new Date(dia.setMinutes(59)),
                 allDay: false,
@@ -75,13 +75,13 @@ export class AsociadosProvider {
 
     let request = this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
     return this._peticionPrvdr.peticion(request)
-      .map((data: Asociado[]) => {
-        data.map((asociado: Asociado) => {
-          asociado.nombreCompleto = asociado.nombres + ' ' + asociado.primerApellido + ' ' + asociado.segundoApellido;
-          return asociado;
-        });
-        return data;
-      })
+      // .map((data: Asociado[]) => {
+      //   // data.map((asociado: Asociado) => {
+      //   //   asociado.nombreCompleto = asociado.nombres + ' ' + asociado.primerApellido + ' ' + asociado.segundoApellido;
+      //   //   return asociado;
+      //   // });
+      //   return data;
+      // })
     // .subscribe((data: Asociado[]) => {
     //   this.asociados = data
     // });

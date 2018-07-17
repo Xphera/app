@@ -8,9 +8,10 @@ import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
 import { Observable } from "rxjs/Observable"
 
-import { PaqueteActivo, Sesion } from '../../models/models.index';
+import { PaqueteActivo, Sesion,Bolsa,MisPaquetes } from '../../models/models.index';
 
 import * as arraySort from 'array-sort';
+import * as moment from 'moment';
 
 
 import {
@@ -21,7 +22,12 @@ import {
   URL_PAQUETE_ACTIVO,
   URL_CALIFICAR_SESION,
   URL_PROXIMA_SESION,
-  URL_PROGRAMAR_SESION
+  URL_PROGRAMAR_SESION,
+  URL_CANCELAR_SESION,
+  URL_CANCELAR_PAQUETE,
+  URL_SALDO_BOLSA,
+  URL_BOLSA,
+  URL_CANCELAR_RENOVAR
 } from '../../config/url.confing';
 
 /*
@@ -36,14 +42,11 @@ export class UsuariosProvider {
   public infoRegistro: string;
   public key: string = ''
   public misPaquetes;
+  public bolsa: Bolsa = new Bolsa()
+
   public paqueteActivo: PaqueteActivo = new PaqueteActivo();
   public sesionesPorCalificar: Sesion = new Sesion()
   public proximaSesion: Sesion = new Sesion()
-  // public sesionFinalizda: {
-  //   fecha: string,
-  //   sesonId: number,
-  //   prestador: { nombre: string, 'imgPath': string }
-  // } = { fecha: '', sesonId: 0, prestador: { nombre: '', imgPath: '' } }
 
   constructor(
     private http: HttpClient,
@@ -54,7 +57,7 @@ export class UsuariosProvider {
     public modalCtrl: ModalController,
   ) {
     console.log('Hello UsuariosProvider Provider');
-
+    console.log(this.paqueteActivo, Object.keys(this.paqueteActivo.compradetallesesiones).length, 'paqueteActivo')
   }
 
   public activarCuenta(email: string, codigoValidacion: string) {
@@ -116,18 +119,24 @@ export class UsuariosProvider {
 
   public obtenerMisPaquetes() {
     let headers = this._autenticacionPrvdr.gerHeaders();
-    let request = this.http.get(URL_MIS_PAQUETES, { headers })
+    let request = this.http.get<MisPaquetes>(URL_MIS_PAQUETES, { headers })
     this._peticionPrvdr.peticion(request)
-      .subscribe((resp) => {
-        console.log(resp)
+      .subscribe((resp:MisPaquetes[]) => {
         this.misPaquetes = resp
       })
+  }
+
+  public renovarPaquete(compraDetalleId){
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_CANCELAR_RENOVAR,{compraDetalleId:compraDetalleId},{ headers })
+    return this._peticionPrvdr.peticion(request)
+      
   }
 
   public obetenerPaqueteActivos() {
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
-    this._peticionPrvdr.peticion(request,'', true)
+    this._peticionPrvdr.peticion(request, '', true)
       .map((resp: PaqueteActivo) => {
         if (resp.compradetallesesiones) {
           for (let i = 0; i < resp.compradetallesesiones.length; i++) {
@@ -206,20 +215,11 @@ export class UsuariosProvider {
   public programarSesionModalOpen(sesion) {
 
     if (this.diferenciaHora(sesion.fechaInicio)) {
-
-      let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion:sesion })
+      let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion: sesion })
       modal.present();
       modal.onDidDismiss(data => {
         if (data != undefined) {
-          this.programarSesion(
-            data.complemento,
-            data.direccion,
-            data.fecha,
-            data.latitud,
-            data.longitud,
-            data.sesionId,
-            data.titulo
-          )
+          this.programarSesion(data)
             .subscribe((res) => {
               //   this.paqueteActivo = this.paqueteActivo
             })
@@ -233,70 +233,100 @@ export class UsuariosProvider {
         buttons: ['OK']
       })
     }
-
-
-
   }
 
-  public programarSesion(
-    complemento,
-    direccion,
-    fecha,
-    latitud,
-    longitud,
-    sesionId,
-    titulo) {
-
+  public programarSesion(data) {
+    // complemento,
+    // direccion,
+    // fecha,
+    // latitud,
+    // longitud,
+    // sesionId,
+    // titulo
     let headers = this._autenticacionPrvdr.gerHeaders();
 
-    let request = this.http.post(URL_PROGRAMAR_SESION, {
-      complemento,
-      direccion,
-      fecha,
-      latitud,
-      longitud,
-      sesionId,
-      titulo
-    }, { headers })
+    let request = this.http.post(URL_PROGRAMAR_SESION, data, { headers })
 
 
     let observable = new Observable((observer) => {
       this._peticionPrvdr.peticion(request)
         .subscribe((resp) => {
-          if (resp["estado"] == "ok") {
-
-
-            this.paqueteActivo.compradetallesesiones
-              .map((data) => {
-                if (data.sesionId == sesionId) {
-                  data.ubicacion.complemento = complemento
-                  data.ubicacion.direccion = direccion
-                  data.fechaInicio = fecha
-                  data.ubicacion.latitud = latitud
-                  data.ubicacion.title = titulo
-                  if (data.estado.id == 1) {
-                    data.estado.id = 2
-                    data.estado.estado = "Programada"
-                    this.paqueteActivo.sesionAgendadas++
-                    this.paqueteActivo.sesionPorAgendar--
-                  }
-                  else if (data.estado.id = 2) {
-                    data.estado.id = 4
-                    data.estado.estado = "Reprogramada"
-                  }
-
-                }
-              })
-            arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio')
-            this._ionicComponentPrvdr.showLongToastMessage('Programación realizada.')
-            observer.next(true);
-          }
+          this.actulizarDetalleSesion(resp)
+          this._ionicComponentPrvdr.showLongToastMessage('Programación realizada.')
+          observer.next(true);
         })
     })
 
     return observable
   }
 
+  public saldoBolsa() {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.get(URL_SALDO_BOLSA, { headers })
+    return this._peticionPrvdr.peticion(request)
+    // .subscribe((resp:any) => {
+    //   this.saldo = resp["saldo"]
+    // })
+  }
+
+  public getbolsa() {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.get<Bolsa>(URL_BOLSA, { headers })
+    return this._peticionPrvdr.peticion(request)
+      .subscribe((resp: Bolsa) => {
+        this.bolsa = resp
+      })
+  }
+
+  public cancelarSesionAlert(sesion) {
+
+    if (this.diferenciaHora(sesion.fechaInicio)) {
+
+      let myMoment: moment.Moment = moment(new Date(sesion.fechaInicio), "America/Bogota").locale('es-CO')
+      this._ionicComponentPrvdr.showAlert({
+        title: '¿Cancelar sesión?',
+        message: '¿Esta seguro de cancelar sesión del ' + myMoment.format('LLLL') + ' en ' + sesion.ubicacion.title + ' ?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => {
+
+            }
+          },
+          {
+            text: 'Aceptar',
+            handler: () => {
+              this.cancelarSesion(sesion)
+            }
+          }
+        ]
+      })
+
+    } else {
+      this._ionicComponentPrvdr.showAlert({
+        title: 'Cancelar Sesión',
+        subTitle: 'Solo se puede cancelar sesión  una hora antes de la fecha de inicio.',
+        buttons: ['OK']
+      })
+    }
+  }
+
+  public cancelarSesion(sesion) {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_CANCELAR_SESION, { sesionId: sesion.sesionId }, { headers })
+    this._peticionPrvdr.peticion(request)
+      .subscribe((resp) => {
+        this.actulizarDetalleSesion(resp)
+        this._ionicComponentPrvdr.showLongToastMessage('Sesion cancelada.')
+      })
+  }
+
+  public cancelarPaquete(data) {
+    let headers = this._autenticacionPrvdr.gerHeaders();
+    let request = this.http.post(URL_CANCELAR_PAQUETE, data, { headers })
+    return this._peticionPrvdr.peticion(request)
+
+  }
 
   protected mapSesion(resp: any) {
     let sesion: Sesion = new Sesion()
@@ -324,17 +354,53 @@ export class UsuariosProvider {
     return sesion
   }
 
+
+  protected actulizarDetalleSesion(data) {
+
+    this.paqueteActivo.compradetallesesiones
+      .map((resp) => {
+        if (resp.sesionId == data.sesionId) {
+          resp.ubicacion.complemento = data.complemento
+          resp.ubicacion.direccion = data.direccion
+          resp.fechaInicio = data.fechaInicio
+          resp.ubicacion.latitud = data.latitud
+          resp.ubicacion.title = data.titulo
+
+          if (data.estado.id == 2) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+            this.paqueteActivo.sesionAgendadas++
+            this.paqueteActivo.sesionPorAgendar--
+          }
+          else if (data.estado.id == 4) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+          }
+          else if (data.estado.id == 1) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+            this.paqueteActivo.sesionAgendadas--
+            this.paqueteActivo.sesionPorAgendar++
+          }
+
+        }
+      })
+
+    arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio')
+  }
+
   //toda sesion con hora de inicio con diferencia de una 1 hora a hora actual
-  public sesionPorIniciar(fechaInicio) {
+
+  public sesionPorIniciar(sesion) {
     let now = new Date()
-    let diff = this.diff(fechaInicio, now)["hora"]
-    if (diff >= 0 && diff <= 1) {
+    let diff = this.diff(sesion.fechaInicio, now)["hora"]
+    if (diff >= 0 && diff <= 1 && (sesion.estado.id == 2 || sesion.estado.id == 4)) {
       return true
     } else {
       return false
     }
   }
-  //
+
   public localizar(sesion) {
     let now = new Date()
     let diferencia = this.diff(sesion.fechaInicio, now)["minuto"]
@@ -346,6 +412,7 @@ export class UsuariosProvider {
   }
 
   // valida si se ha iniciado sesion
+
   public sesionnoIniciada(sesion) {
     let now = new Date()
     let diff = this.diff(sesion.fechaInicio, now)["hora"]
@@ -358,10 +425,11 @@ export class UsuariosProvider {
   }
 
   // calcula si se puede maodificar sesion
+
   public diferenciaHora(fechaInicio) {
     let now = new Date()
     let diff = this.diff(fechaInicio, now)["hora"]
-    if (diff < 1 && diff!= null) {
+    if (diff < 1 && diff != null) {
       return false
     } else {
       return true

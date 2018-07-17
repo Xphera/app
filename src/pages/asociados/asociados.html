@@ -9,7 +9,7 @@
     <button ion-button menuToggle color="color1">
         <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title> Asociados </ion-title>
+    <ion-title> Prestadores </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -19,7 +19,7 @@
 
     <ion-item style="border-bottom: 1px solid #e7e7e7;">
       <ion-avatar item-start>
-        <img src="{{ asociado.imagePath }}">
+        <img src="{{ asociado.imagePath|pathImagen }}">
       </ion-avatar>
       <h2>{{ asociado.nombreCompleto }}</h2>
       <p>{{ asociado.titulo }}</p>
@@ -39,15 +39,15 @@
 
     <ion-row style="border-top: 1px solid #e7e7e7;">
       <ion-col>
-        <button ion-button icon-left clear small (click)="verPaquetes(asociado)">
+        <button ion-button icon-left  small (click)="verPaquetes(asociado)" >
           <ion-icon name="redo"></ion-icon>
-          <div>Paquetes</div>
+          <div> Ver paquetes</div>
         </button>
       </ion-col>
-      <ion-col>
-        <button ion-button icon-left clear small (click)="perfilAsociado(asociado)">
+      <ion-col text-right>
+        <button ion-button icon-left small (click)="perfilAsociado(asociado)">
           <ion-icon name="contact"></ion-icon>
-          <div>Peril</div>
+          <div>Ver perfil</div>
         </button>
       </ion-col>
     </ion-row>

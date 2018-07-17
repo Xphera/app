@@ -45,7 +45,6 @@ export class CambiarContraseñaPage {
     if (this.myForm.valid) {
       this._clientePrvdr.cambioContraseña(this.myForm.value);
     }
-    console.log(this.myForm.value);
   }
 
 }

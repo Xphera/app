@@ -81,7 +81,7 @@ export class PeticionProvider {
   private httpErrores(errores) {
     const isBoolean = val => 'boolean' === typeof val;
     let listaerrores: string = '';
-
+	console.log(errores)
     for (let e of Object.keys(errores.error)) {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {

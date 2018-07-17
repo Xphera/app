@@ -5,6 +5,7 @@ import { CONFIG } from '../../config/comunes.config';
 import { Asociado } from '../../models/models.index';
 import { Paquete } from '../../models/models.index';
 
+
 /**
  * Generated class for the PaquetesPage page.
  *
@@ -26,10 +27,10 @@ export class PaquetesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private _paquetesPrvdr: PaquetesProvider
+    private _paquetesPrvdr: PaquetesProvider,
   ) {
     this.asociado = this.navParams.get('asociado');
-    this._paquetesPrvdr.obeternerPaqueteCategoria(  this.asociado.servicios );
+    // this._paquetesPrvdr.obeternerPaqueteCategoria(this.asociado.servicios);
   }
 
 
@@ -37,8 +38,8 @@ export class PaquetesPage {
     console.log('ionViewDidLoad PaquetesPage');
   }
 
-  detallePago(paquete:Paquete){
-      this.navCtrl.push('DetallePagoPage',{paquete})
+  detallePago(paquete: Paquete) {
+    this.navCtrl.push('DetallePagoPage', { paquete })
   }
 
 }

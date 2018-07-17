@@ -51,7 +51,10 @@ export class ProgramarSesionPage {
     public _ubicacionesPrvdr: UbicacionesProvider,
     private _ionicComponentPrvdr: IonicComponentProvider) {
 
+
+
     this.sesion = this.navParams.get("sesion")
+
     this.loadEvents(this.currentDate, this.sesion.sesionId)
 
     this._ubicacionesPrvdr.obtenerUbicaciones()
@@ -102,11 +105,11 @@ export class ProgramarSesionPage {
   }
   onEventSelected(event) {
 
-    let myMoment: moment.Moment = moment(event.startTime, "Europe/London")
-
+    let myMoment: moment.Moment = moment(event.startTime, "America/Bogota").locale('es-CO')
+    console.log(event.startTime,myMoment)
     this._ionicComponentPrvdr.showAlert({
       title: 'Programar sesión',
-      message: 'Donde: ' + this.ubicacion.coordenadas.titulo + '<br>Cuando: ' + myMoment.calendar(),
+      message: 'Donde: ' + this.ubicacion.coordenadas.titulo + '<br>Cuando: ' + myMoment.format('LLLL'),
       buttons: [
         {
           text: 'Cancelar',
@@ -148,7 +151,7 @@ export class ProgramarSesionPage {
   onCurrentDateChanged(ev: Date) {
     console.log("onCurrentDateChanged")
     if (this.currentDate.getMonth() != ev.getMonth()) {
-      this.loadEvents(ev, this.sesion.id)
+      this.loadEvents(ev, this.sesion.sesionId)
     }
   };
 
@@ -176,7 +179,8 @@ export class ProgramarSesionPage {
       locale: 'es-CO',
       // eventSource: this._asociadosPrvdr.agendaasociado,
       noEventsLabel: "",
-      autoSelect: false
+      autoSelect: false,
+      formatHourColumn: "HH:mm"
     };
   }
 
@@ -257,12 +261,14 @@ export class ProgramarSesionPage {
                 this.ubicacion.coordenadas.direccion.length > 0
               ) {
                 this.mostrarCalendario()
-              }else{
+                this.ubicaciones.push(this.ubicacion.coordenadas)
+              } else {
                 this.complementoDireccion()
               }
             }
           }
-        ]
+        ],
+        cssClass: 'alertCustomCss'
       })
       console.log('complemento direccion')
     } else {

@@ -32,7 +32,7 @@
           <ion-row>
             <ion-col col-6>
               <ion-card-title ion-text color="tomato">
-                sesiones {{ paquete.sesiones.length }}
+                sesiones {{ paquete.cantidadDeSesiones }}
               </ion-card-title>
             </ion-col>
             <ion-col col-6>
@@ -49,41 +49,96 @@
 
 
     <ion-card>
-      <ion-item-group>
-        <ion-item-divider color="light">
-          Tarjetas de crédito
-          <div ion-button icon-only clear (click)="modalAgregar()" item-right>
-            <ion-icon name="md-add"></ion-icon>
-          </div>
-        </ion-item-divider>
-        <!-- <ion-list radio-group> -->
-        <ion-list radio-group formControlName="tokenId">
-          <ion-item *ngIf="_metodoPagoPrvdr.td.length == 0">
-            <ion-label>Sin medio de pagos registrado ... </ion-label>
+
+      <div *ngIf="metodoPago=='tarjeta' || metodoPago=='mixto'">
+
+        <ion-item-group>
+          <ion-item-divider color="light">
+            Tarjetas de crédito
+            <div ion-button icon-only clear (click)="modalAgregar()" item-right>
+              <ion-icon name="md-add"></ion-icon>
+            </div>
+          </ion-item-divider>
+          <!-- <ion-list radio-group> -->
+          <ion-list radio-group formControlName="tokenId">
+            <ion-item *ngIf="_metodoPagoPrvdr.td.length == 0">
+              <ion-label>Sin medio de pagos registrado ... </ion-label>
+            </ion-item>
+
+            <ion-item *ngFor="let card of _metodoPagoPrvdr.td">
+              <ion-icon name="custom-{{ card.paymentMethod }}" item-left></ion-icon>
+              <ion-label>{{ card.maskedNumber }}</ion-label>
+              <ion-radio [value]="card.creditCardTokenId"></ion-radio>
+            </ion-item>
+          </ion-list>
+        </ion-item-group>
+
+        <ion-item-group *ngIf="myForm.controls.tokenId.valid">
+          <ion-item-divider color="light">Coutas
+            <ion-badge item-end>{{ myForm.controls.cuotas.value }}</ion-badge>
+          </ion-item-divider>
+          <ion-item>
+            <ion-range min="1" max="12" pin="true" formControlName="cuotas">
+              <ion-label range-left>1</ion-label>
+              <ion-label range-right>12</ion-label>
+            </ion-range>
           </ion-item>
-
-          <ion-item *ngFor="let card of _metodoPagoPrvdr.td">
-            <ion-icon name="custom-{{ card.paymentMethod }}" item-left></ion-icon>
-            <ion-label>{{ card.maskedNumber }}</ion-label>
-            <ion-radio [value]="card.creditCardTokenId"></ion-radio>
-          </ion-item>
+        </ion-item-group>
+      </div>
 
 
-        </ion-list>
-      </ion-item-group>
 
-      <ion-item-group *ngIf="myForm.controls.tokenId.valid">
-        <ion-item-divider color="light">Coutas
-          <ion-badge item-end>{{ myForm.controls.cuotas.value }}</ion-badge>
-        </ion-item-divider>
-        <ion-item>
-          <ion-range min="1" max="12" pin="true" formControlName="cuotas">
-            <ion-label range-left>1</ion-label>
-            <ion-label range-right>12</ion-label>
-          </ion-range>
-        </ion-item>
-      </ion-item-group>
+      <div *ngIf="metodoPago=='bolsa' || metodoPago=='mixto'">
+        <ion-item-group>
+          <ion-item-divider color="light">
+            Cobro a saldo en bolsa
+          </ion-item-divider>
+        </ion-item-group>
 
+        <ion-item-group>
+          <ion-list>
+            <ion-item>
+              Saldo en bolsa
+              <div item-end>
+                {{ bolsa.saldo |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}
+              </div>
+            </ion-item>
+            <ion-item>
+              Valor a descontar
+              <div item-end>
+                {{ bolsa.valorDescontar |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}
+              </div>
+            </ion-item>
+            <ion-item>
+              Nuevo saldo en bolsa
+              <div item-end>
+                {{ bolsa.NuevoSaldo |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-item-group>
+
+      </div>
+
+      <div *ngIf="metodoPago=='tarjeta' || metodoPago=='mixto'">
+        <ion-item-group>
+          <ion-item-divider color="light">
+            Cobro a Tarjetas de crédito
+          </ion-item-divider>
+        </ion-item-group>
+
+        <ion-item-group>
+          <ion-list>
+            <ion-item>
+              Valor
+              <div item-end>
+                {{ valorCobroTC |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-item-group>
+
+      </div>
 
       <ion-row no-padding class="linea">
         <ion-col>
@@ -92,6 +147,7 @@
         </button>
         </ion-col>
       </ion-row>
+
     </ion-card>
   </form>
 

@@ -17,27 +17,16 @@
   <xph-map-marker-fixed [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
   </xph-map-marker-fixed>
   <div class="boton-mapa">
-    <ion-grid class="reset">
-      <ion-row class="reset">
-        <!-- <ion-col col-12 class="reset"> -->
-          <ion-item class="reset">
-            <ion-buttons class="reset">
-              <button ion-button icon-only large  full (click)="continuar(asociados)" *ngIf="asociados.length > 0">
+    <button ion-button icon-only large full (click)="continuar(asociados)" *ngIf="asociados.length > 0">
               <ion-icon name="body"></ion-icon>
             {{asociados[0].zona.properties.name}}  ({{asociados.length}})
                &nbsp;&nbsp;
             </button>
-              <button ion-button full icon-only large color="danger" *ngIf="asociados.length <= 0">
+    <button ion-button full icon-only large color="danger" *ngIf="asociados.length <= 0">
               <ion-icon ios="ios-sad" md="md-sad" ></ion-icon>
               ({{asociados.length}})
                &nbsp;&nbsp;
             </button>
-            </ion-buttons>
-          </ion-item>
-        <!-- </ion-col> -->
-      </ion-row>
-
-    </ion-grid>
 
   </div>
 </ion-content>

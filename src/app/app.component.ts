@@ -78,6 +78,8 @@ export class MyApp {
       { title: "Perfil", leftIcon: 'contact', page: 'PerfilPage' },
       { title: "Cuenta", leftIcon: 'settings', page: 'CuentaPage' },
       { title: "Tarjetas de Credito", leftIcon: 'card', page: 'TarjetasListarPage' },
+      { title: "Bolsa", leftIcon: 'md-cash', page: 'BolsaPage' },
+      { title: "Mis Paquetes", leftIcon: 'md-list-box', page: 'MisPaquetesPage' },
     ];
 
   }

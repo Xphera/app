@@ -1,7 +1,7 @@
 import { UbicacionInterface } from '../interface/interface.index';
 /**
 * Representa una categoria de servicios.
-* @class Categoria
+* @class Ubicacion
 */
 export class Ubicacion implements UbicacionInterface{
   public id:number;

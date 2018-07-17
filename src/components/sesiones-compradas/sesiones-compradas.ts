@@ -26,35 +26,23 @@ export class SesionesCompradasComponent {
   constructor() {
     console.log('Hello SesionesCompradasComponent Component');
   }
-  // TODO: no envia valor de sesion a pagina
+
   clickBotonDetalleSesion(sesion:Sesion) {
     this.clickDetalleSesion.emit({ 'sesion': sesion })
   }
-  // TODO: no envia valor de sesion a pagina
+
   clickBotonCancelarSesion(sesion) {
-    this.clickCancelarSesion.emit('clickBotonCancelarSesion')
+    this.clickCancelarSesion.emit(sesion)
   }
-  // TODO: no envia valor de sesion a pagina
+
   clickBotonReprogramarSesion(sesion: any) {
     this.clickReprogramarSesion.emit(sesion)
-
-    // if (this.diferenciaHora(sesion.fechaInicio)) {
-    //   this.clickReprogramarSesion.emit(sesion)
-    // } else {
-    //   this._ionicComponentPrvdr.showAlert({
-    //     title: 'Reprogramar Sesión',
-    //     subTitle: 'Solo se puede reprogramar sesión  una hora antes de la fecha de inicio.',
-    //     buttons: ['OK']
-    //   })
-    // }
-
   }
-  // TODO: no envia valor de sesion a pagina
+
   clickBotonprogramarSesion(sesion: any) {
     this.clickProgramarSesion.emit(sesion)
   }
 
-  // TODO: colocar contador de sesio programadas
   contadorSesionesProgramadas() {
     return this.sesionesProgramadas;
   }

@@ -8,3 +8,5 @@ export { Cliente } from './cliente.model';
 export { PaqueteActivo } from './paquete-activo.model';
 export { Sesion } from './sesion.model';
 export { EstadoSesion } from './estado-sesion.model';
+export { Bolsa } from './bolsa.model';
+export { MisPaquetes } from './mis-paquetes.model';

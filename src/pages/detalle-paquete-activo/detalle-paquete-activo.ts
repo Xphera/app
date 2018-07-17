@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { PaqueteActivo } from '../../models/models.index';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
+import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 /**
  * Generated class for the DetallePaqueteActivoPage page.
@@ -17,17 +19,54 @@ import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 })
 export class DetallePaqueteActivoPage {
   public paqueteActivo: PaqueteActivo = new PaqueteActivo()
+  public accionPaquete = 'activo';
+  public myForm: FormGroup;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public modalCtrl: ModalController,
-    private _usuariosPrvdr: UsuariosProvider) {
+    private _usuariosPrvdr: UsuariosProvider,
+    public _ionicComponentPrvdr: IonicComponentProvider,
+    private formBuilder: FormBuilder,
+  ) {
+
+    this.myForm = this.createMyForm();
+
     let paquete = this.navParams.get("paquete")
 
     if (paquete != undefined) {
       this.paqueteActivo = paquete;
     }
+  }
 
+
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad DetalleSesionesCompradasPage');
+  }
+
+  ionViewDidEnter(){
+    console.log('ionViewDidEnter');
+  }
+
+  guardar() {
+    if (this.myForm.valid) {
+      this._usuariosPrvdr.cancelarPaquete({'motivoCancelacion':this.myForm.value["motivoCancelacion"],'paqueteId':this.paqueteActivo.id})
+      .subscribe((resp)=>{
+        if(resp == 'ok'){
+          this._usuariosPrvdr.paqueteActivo = new PaqueteActivo()
+          this._ionicComponentPrvdr.showLongToastMessage('Paquete cancelado.')
+          this.navCtrl.popToRoot()
+        }
+      })
+    }
+  }
+
+  createMyForm() {
+    return this.formBuilder.group({
+      motivoCancelacion: ['', [Validators.minLength(10), Validators.maxLength(200),Validators.required]]
+    });
   }
 
   detalleSesion(event) {
@@ -35,7 +74,7 @@ export class DetallePaqueteActivoPage {
   }
 
   cancelarSesion(event) {
-    console.log(event, 'cancelarSesion')
+    this._usuariosPrvdr.cancelarSesionAlert(event)
   }
 
   reprogramarSesion(event) {
@@ -44,30 +83,6 @@ export class DetallePaqueteActivoPage {
 
   programarSesion(event) {
     this._usuariosPrvdr.programarSesionModalOpen(event)
-
-    // let modal = this.modalCtrl.create('ProgramarSesionPage', { sesion: event })
-    // modal.present();
-    // modal.onDidDismiss(data => {
-    //   if (data != undefined) {
-    //     this._usuariosPrvdr.programarSesion(
-    //       data.complemento,
-    //       data.direccion,
-    //       data.fecha,
-    //       data.latitud,
-    //       data.longitud,
-    //       data.sesionId,
-    //       data.titulo
-    //     )
-    //       .subscribe((res) => {
-    //         this.paqueteActivo = this._usuariosPrvdr.paqueteActivo
-    //       })
-    //   }
-    //
-    // });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DetalleSesionesCompradasPage');
   }
 
 }

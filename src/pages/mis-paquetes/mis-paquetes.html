@@ -19,43 +19,42 @@
 
 
 <ion-content>
-  <ion-card *ngFor="let paquete of _usuariosPrvdr.misPaquetes">
+    <ion-card *ngFor="let paquete of _usuariosPrvdr.misPaquetes">
     <ion-card-header>
-      <ion-item>
-       {{ paquete.nombre }}
-       <button ion-button item-end icon-only clear>
-          <ion-icon name="close"></ion-icon>
-      </button>
-     </ion-item>
+      <h1>{{paquete.paquete}}</h1>
+
     </ion-card-header>
     <ion-card-content>
-      {{ paquete.detalle }}
+      {{paquete.detalle}}
     </ion-card-content>
 
     <ion-list>
       <ion-item>
         <ion-avatar item-start>
-          <img src="http://appservicios.danielgranados.net/media/media/prestadores/marty-avatar.png">
+          <img src="{{paquete.prestador.imagePath|pathImagen}} ">
         </ion-avatar>
-        <h2>Prestador</h2>
-        <p>I've had a pretty messed up day. If we just...</p>
+        <h2>{{paquete.prestador.nombreCompleto}}</h2>
       </ion-item>
       <ion-item>
         Sesiones
-        <ion-badge item-end>{{ paquete.sesionEjecutada }} de {{ paquete.cantidadDeSesiones }}</ion-badge>
+        <div item-end>{{paquete.sesiones}}</div>
       </ion-item>
       <ion-item>
         Estado
-        <ion-badge item-end>Por Programar</ion-badge>
+        <div item-end>{{paquete.estado.estado}}</div>
+      </ion-item>
+      <ion-item>
+        Valor
+        <div item-end>{{paquete.valor|currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}</div>
       </ion-item>
     </ion-list>
 
-    <ion-item>
-      <button ion-button block large icon-start>
-      <ion-icon name="md-calendar"></ion-icon>
-      <div>Programar</div>
+
+      <button ion-button block  icon-start color="secondary" style="margin:0px;padding:0px" (click)="renovar(paquete.id)">
+      <ion-icon name="md-refresh-circle"></ion-icon>
+      <div>Renovar</div>
     </button>
-    </ion-item>
+
 
   </ion-card>
 </ion-content>
