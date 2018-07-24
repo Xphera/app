@@ -57,50 +57,8 @@ export class UsuariosProvider {
     public modalCtrl: ModalController,
   ) {
     console.log('Hello UsuariosProvider Provider');
-    console.log(this.paqueteActivo, Object.keys(this.paqueteActivo.compradetallesesiones).length, 'paqueteActivo')
   }
 
-  public activarCuenta(email: string, codigoValidacion: string) {
-
-    let request = this.http.post(URL_ACTIVAR_USUARIO, { email, codigoValidacion })
-    let promesa = new Promise((resolve, reject) => {
-      this._peticionPrvdr.peticion(request)
-        .subscribe((resp) => {
-          this._almacenamientoPrvdr.eliminar(this.key)
-            .then(() => {
-              this._ionicComponentPrvdr.showLongToastMessage('Cuenta activada con éxito.')
-              // this._almacenamientoPrvdr.guardar('usuario',JSON.stringify(resp))
-              this._autenticacionPrvdr.guardarUsuario(resp)
-              resolve(true);
-            })
-        })
-    })
-    return promesa;
-  }
-
-  public crearUsario(email: string, passw: string, repassw: string) {
-    let request = this.http.post(URL_REGISTRO_USUARIO, { email, passw, repassw })
-    let promesa = new Promise((resolve, reject) => {
-      this._peticionPrvdr.peticion(request)
-        .subscribe((data) => {
-          //guardar infomarmacion de registroUsuario.
-          this._almacenamientoPrvdr.guardar(this.key, email)
-            .then(() => {
-              this._ionicComponentPrvdr.showLongToastMessage('Cuenta creada, se ha enviado correo electrónico con código para activar cuenta.')
-              resolve(true);
-            })
-        })
-    })
-    return promesa;
-  }
-
-  public datosRegistro() {
-    this._almacenamientoPrvdr.obtener(this.key).then(
-      (respuesta: any) => {
-        this.infoRegistro = respuesta.data;
-      }
-    );
-  }
 
   public pagar(datos) {
     let headers = this._autenticacionPrvdr.gerHeaders();
@@ -179,24 +137,6 @@ export class UsuariosProvider {
         if (resp.estado == "ok") {
           this.sesionesPorCalificar.sesionId = 0
           this._ionicComponentPrvdr.showLongToastMessage('Calificacion realizada.')
-          // traer otra sesion por calificar
-          // let sesiones:any = []
-          // this._almacenamientoPrvdr.obtener('sesionesPorCalificar')
-          //   .then((data) => {
-          //     sesiones = JSON.parse(data['data']).filter((item) => {
-          //       if (item.id != calificacion.sesionId) {
-          //         return true;
-          //       }
-          //     })
-          //     this._almacenamientoPrvdr.guardar('sesionesPorCalificar', JSON.stringify(sesiones))
-          //     if (sesiones.length) {
-          //       this.sesionFinalizda.prestador.nombre =
-          //       sesiones[0].compraDetalle.prestador.nombres + sesiones[0].compraDetalle.prestador.primerApellido + sesiones[0].compraDetalle.prestador.segundoApellido
-          //       this.sesionFinalizda.prestador.imgPath =sesiones[0].compraDetalle.prestador.imagePath
-          //       this.sesionFinalizda.fecha = sesiones[0].fechaInicio
-          //       this.sesionFinalizda.sesonId = sesiones[0].id
-          //     }
-          //   })
         }
       })
   }

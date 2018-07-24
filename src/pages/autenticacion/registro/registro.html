@@ -25,7 +25,7 @@
           <ion-label>
             <ion-icon name="md-mail"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="email" placeholder="Correo Electrónico" name="email" formControlName="email" [(ngModel)]="camposForm.email"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="email" placeholder="Correo Electrónico" name="email" formControlName="email"></ion-input>
         </ion-item>
         <div class="error-box" *ngIf="myForm.controls.email.hasError('email') && myForm.controls.email.touched">
           <p>Correo electrónico inválido</p>
@@ -36,7 +36,7 @@
           <ion-label>
             <ion-icon name="md-eye"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Contraseña" name="passw" formControlName="passw" [(ngModel)]="camposForm.passw"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Contraseña" name="passw" formControlName="passw"></ion-input>
         </ion-item>
         <div class="error-box" *ngIf="myForm.controls.passw.hasError('required') && myForm.controls.passw.touched">
           <p>Contraseña es obligatorio</p>
@@ -46,7 +46,7 @@
           <ion-label>
             <ion-icon name="md-eye"></ion-icon>
           </ion-label>
-          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Repita Contraseña" name="repassw" formControlName="repassw" [(ngModel)]="camposForm.repassw"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="password" placeholder="Repita Contraseña" name="repassw" formControlName="repassw"></ion-input>
         </ion-item>
         <div class="error-box" *ngIf="myForm.errors?.mismatchedPasswords && myForm.controls.repassw.touched">
           <p>Contraseña y Repita contraseña no coinciden</p>

@@ -18,13 +18,13 @@
     <form [formGroup]="myForm" (ngSubmit)="activarUsuario(formulario)">
       <ion-list>
         <ion-item>
-          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Correo electrónico" formControlName="email" [value]="_usuariosPrvdr.infoRegistro" [(ngModel)]="camposForm.email"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Correo electrónico" formControlName="email" ></ion-input>
         </ion-item>
         <div class="error-box" *ngIf="myForm.controls.email.hasError('email') && myForm.controls.email.touched">
           <p>Correo electrónico inválido</p>
         </div>
         <ion-item>
-          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Código de Activación" formControlName="codigo" [(ngModel)]="camposForm.codigo"></ion-input>
+          <ion-input class="ion-ios-locked-outline" type="text" placeholder="Código de Activación" formControlName="codigo"></ion-input>
         </ion-item>
         <div class="error-box" *ngIf="myForm.controls.codigo.hasError('required') && myForm.controls.codigo.touched">
           <p>Correo electrónico inválido</p>

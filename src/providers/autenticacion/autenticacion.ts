@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MenuController, App } from 'ionic-angular';
 
-import { URL_LOGIN } from '../../config/url.confing';
+import { URL_LOGIN,RESTABLECER_PASSWORD,URL_REGISTRO_USUARIO,URL_ACTIVAR_USUARIO } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
@@ -18,7 +18,6 @@ import 'rxjs/add/operator/map';
 export class AutenticacionProvider {
 
   protected token: string;
-  key: string
 
   constructor(
     private http: HttpClient,
@@ -30,13 +29,9 @@ export class AutenticacionProvider {
 
     console.log('Hello AutenticacionProvider Provider');
     this.cargarToken();
-    // this.cargaMenu();
   }
 
 
-  public obetenetToken(): string {
-    return this.token;
-  }
 
   protected cargarToken(): void {
     this._almacenamientoPrvdr.obtener('usuario')
@@ -49,18 +44,37 @@ export class AutenticacionProvider {
       )
   }
 
+  protected crearSesion(resp){
+    this._almacenamientoPrvdr.eliminar('restablcerUsuario')
+    this.guardarUsuario(resp)
+    this.cargaMenu()
+      .then((resp: string) => {
+        this.app.getRootNavs()[0].setRoot(resp)
+        this._almacenamientoPrvdr.obtener('ir')
+          .then((data) => {
+            if (data["data"] != null) {
+              data = JSON.parse(data["data"])
+              this.app.getRootNavs()[0].push(data["pagina"], data["param"]);
+              this._almacenamientoPrvdr.eliminar('ir')
+            }
+          })
+      })
+  }
+
+  public obetenetToken(): string {
+    return this.token;
+  }
+
   public activo() {
     return this._almacenamientoPrvdr.obtener('usuario');
   }
 
   public login(username: string, password: string) {
     let request = this.http.post(URL_LOGIN, { username, password })
-    return this._peticionPrvdr.peticion(request, this.key)
-      .map(
-        (respuesta: any) => {
-          this.guardarUsuario(respuesta)
-        },
-    );
+     this._peticionPrvdr.peticion(request)
+      .subscribe((resp)=>{
+       this.crearSesion(resp)
+     })
   }
 
   public cerrarSesion() {
@@ -91,7 +105,7 @@ export class AutenticacionProvider {
     return headers;
   }
 
-  cargaMenu() {
+  protected cargaMenu() {
 
     let promesa = new Promise((resolve, reject) => {
       this.activo()
@@ -115,6 +129,59 @@ export class AutenticacionProvider {
         })
     })
     return promesa;
+  }
+
+  public restablecerPasswordUsuario(usuario){
+    let request = this.http.post(RESTABLECER_PASSWORD, { usuario })
+    let promesa = new Promise((resolve, reject) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          this._almacenamientoPrvdr.guardar('restablcerUsuario', usuario)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Se ha enviado correo electrónico con código para continuar con proceso.')
+              resolve(true);
+            })
+        })
+    })
+    return promesa;
+  }
+
+  public restablecerPasswordCodigo(data){
+    let request = this.http.put(RESTABLECER_PASSWORD, data)
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp) => {
+          this._almacenamientoPrvdr.eliminar('restablcerUsuario')
+          this.crearSesion(resp)
+    })
+
+  }
+
+  public crearUsario(email: string, passw: string, repassw: string) {
+    let request = this.http.post(URL_REGISTRO_USUARIO, { email, passw, repassw })
+    let promesa = new Promise((resolve, reject) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          //guardar infomarmacion de registroUsuario.
+          this._almacenamientoPrvdr.guardar('registroUsuario', email)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Cuenta creada, se ha enviado correo electrónico con código para activar cuenta.')
+              resolve(true);
+            })
+        })
+    })
+    return promesa;
+  }
+
+  public activarCuenta(email: string, codigoValidacion: string) {
+
+    let request = this.http.post(URL_ACTIVAR_USUARIO, { email, codigoValidacion })
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp) => {
+          this._almacenamientoPrvdr.eliminar('registroUsuario')
+          this._ionicComponentPrvdr.showLongToastMessage('Cuenta activada con éxito.')
+          this.crearSesion(resp)
+        })
+
   }
 
   public guardian(pagina, param) {
@@ -144,10 +211,6 @@ export class AutenticacionProvider {
           resolve(false);
         });
     })
-
-
   }
-
-
 
 }

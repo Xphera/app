@@ -24,7 +24,7 @@
           <ion-label>
             <ion-icon name="md-mail"></ion-icon>
           </ion-label>
-          <ion-input formControlName="email" [(ngModel)]="camposLogin.email" class="ion-ios-locked-outline" type="email" placeholder="Correo electrónico" name="email"></ion-input>
+          <ion-input formControlName="email" class="ion-ios-locked-outline" type="email" placeholder="Correo electrónico" name="email"></ion-input>
         </ion-item>
 
         <div class="error-box" *ngIf="myForm.controls.email.hasError('email') && myForm.controls.email.touched">
@@ -36,7 +36,7 @@
           <ion-label>
             <ion-icon name="md-eye"></ion-icon>
           </ion-label>
-          <ion-input formControlName="password" [(ngModel)]="camposLogin.password" class="ion-ios-locked-outline" type="password" placeholder="Contraseña" name="password"></ion-input>
+          <ion-input formControlName="password" class="ion-ios-locked-outline" type="password" placeholder="Contraseña" name="password"></ion-input>
         </ion-item>
 
         <div class="error-box" *ngIf="myForm.controls.password.hasError('required') && myForm.controls.password.touched">

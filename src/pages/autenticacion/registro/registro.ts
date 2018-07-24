@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { NgForm } from '@angular/forms';
 
-import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
+import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
+import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
+import { IonicComponentProvider } from '../../../providers/ionic-component/ionic-component';
 
 import { CONFIG } from '../../../config/comunes.config';
 
@@ -26,27 +28,24 @@ export class RegistroPage {
   activapage: any = 'ActivarPage';
   CONFIG = CONFIG;
   myForm: FormGroup;
-  camposForm = {
-    email: '',
-    passw: '',
-    repassw: ''
-  }
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public _usuariosPrvdr: UsuariosProvider,
+    public _autenticacionPrvdr:AutenticacionProvider,
+    private _almacenamientoPrvdr:AlmacenamientoProvider,
+    private _ionicComponentPrvdr:IonicComponentProvider,
     private formBuilder: FormBuilder,
   ) {
     this.myForm = this.createMyForm();
-
+    this.recuperarProceso()
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RegistroPage');
   }
 
-  private createMyForm() {
+  createMyForm() {
     return this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       passw: ['', Validators.compose([Validators.required])],
@@ -56,10 +55,10 @@ export class RegistroPage {
 
   registroUsuario(form: NgForm) {
       if (this.myForm.valid) {
-        this._usuariosPrvdr.crearUsario(this.camposForm.email, this.camposForm.passw, this.camposForm.repassw)
+        this._autenticacionPrvdr.crearUsario(this.myForm.value["email"], this.myForm.value["passw"], this.myForm.value["repassw"])
           .then((resp) => {
             if (resp) {
-              this.navCtrl.push('ActivarPage');
+              this.navCtrl.push('ActivarPage',{usuario:this.myForm.value["email"]});
             }
           });
       }else{
@@ -67,8 +66,34 @@ export class RegistroPage {
       }
   }
 
+
+  recuperarProceso() {
+    this._almacenamientoPrvdr.obtener('registroUsuario')
+      .then((data) => {
+        if (data["data"] != null) {
+          this._ionicComponentPrvdr.showAlert({
+            title: '',
+            message: '¿Desea continuar con el proceo de crear usuario '+data["data"] +'?',
+            buttons: [
+              {
+                text: 'No',
+                handler: () => {
+                    this._almacenamientoPrvdr.eliminar('restablcerUsuario')
+                }
+              },
+              {
+                text: 'Si',
+                handler: () => {
+                  this.navCtrl.push('ActivarPage',{usuario:data["data"]});
+                }
+              }
+            ]
+          })
+        }
+      })
+  }
+
   matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
-    // TODO maybe use this https://github.com/yuyang041060120/ng2-validation#notequalto-1
     return (group: FormGroup): { [key: string]: any } => {
       let password = group.controls[passwordKey];
       let confirmPassword = group.controls[confirmPasswordKey];
