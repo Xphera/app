@@ -42,9 +42,6 @@ export class ServiciosPage {
 
   iraAsociados(){
     this.navCtrl.push('ServicioUbicacionPrestadorPage',{servicio:this._serviciosPrvdr.servicios[this.slideIndex]});
-    // let profileModal = this.modalCtrl.create('ModalUbicacionesPage');
-    // profileModal.present();
-    // console.log('ubicacion')
   }
 
   nextSlide() {

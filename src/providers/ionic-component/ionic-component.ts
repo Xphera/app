@@ -22,7 +22,7 @@ export class IonicComponentProvider {
   showLongToastMessage(mensaje: string) {
     this.showLongToast({
       message: mensaje,
-      duration: 3000,
+      duration: 6000,
       position: 'top'
     })
   }

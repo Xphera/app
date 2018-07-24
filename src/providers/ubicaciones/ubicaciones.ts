@@ -34,7 +34,7 @@ export class UbicacionesProvider {
     private _peticionPrvdr: PeticionProvider,
   ) {
     console.log('Hello UbicacionesProvider Provider');
-    this.grabarUbicaciones();
+    // this.grabarUbicaciones();
   }
 
   grabarUbicaciones() {
@@ -47,6 +47,7 @@ export class UbicacionesProvider {
   }
 
   obtenerUbicaciones() {
+    this.grabarUbicaciones()
     let observable = Observable.fromPromise(
       this._peticionPrvdr.almacenamiento(this.key)
         .then((datos) => {

@@ -65,10 +65,12 @@ export class UsuariosProvider {
     let request = this.http.post(URL_ACTIVAR_USUARIO, { email, codigoValidacion })
     let promesa = new Promise((resolve, reject) => {
       this._peticionPrvdr.peticion(request)
-        .subscribe((data) => {
+        .subscribe((resp) => {
           this._almacenamientoPrvdr.eliminar(this.key)
             .then(() => {
               this._ionicComponentPrvdr.showLongToastMessage('Cuenta activada con éxito.')
+              // this._almacenamientoPrvdr.guardar('usuario',JSON.stringify(resp))
+              this._autenticacionPrvdr.guardarUsuario(resp)
               resolve(true);
             })
         })
@@ -130,7 +132,7 @@ export class UsuariosProvider {
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.post(URL_CANCELAR_RENOVAR,{compraDetalleId:compraDetalleId},{ headers })
     return this._peticionPrvdr.peticion(request)
-      
+
   }
 
   public obetenerPaqueteActivos() {

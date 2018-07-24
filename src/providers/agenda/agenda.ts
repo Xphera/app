@@ -25,7 +25,7 @@ export class AgendaProvider {
   }
 
   obtenerPorAgendar() {
-    this._almacenamientoPrvdr.obtener('agendar').then((datos: { satatus: string, data: string }) => {
+    this._almacenamientoPrvdr.obtener('agendar').then((datos: { status: string, data: string }) => {
       this.porAgendar = JSON.parse(datos.data);
     })
   }

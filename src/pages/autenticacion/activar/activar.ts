@@ -45,9 +45,8 @@ export class ActivarPage {
     if (this.myForm.valid) {
       this._usuariosPrvdr.activarCuenta(this.camposForm.email, this.camposForm.codigo)
         .then((resp: any) => {
-          console.log(resp);
           if (resp) {
-            this.navCtrl.setRoot('LoginPage');
+          this.navCtrl.setRoot('HomeUsuarioPage');
           }
         });
     }

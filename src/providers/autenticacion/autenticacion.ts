@@ -5,7 +5,7 @@ import { MenuController, App } from 'ionic-angular';
 import { URL_LOGIN } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
-
+import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import 'rxjs/add/operator/map';
 
 /*
@@ -25,6 +25,7 @@ export class AutenticacionProvider {
     private _almacenamientoPrvdr: AlmacenamientoProvider,
     private _peticionPrvdr: PeticionProvider,
     private menuCtrl: MenuController,
+    public _ionicComponentPrvdr: IonicComponentProvider,
     public app: App) {
 
     console.log('Hello AutenticacionProvider Provider');
@@ -38,20 +39,18 @@ export class AutenticacionProvider {
   }
 
   protected cargarToken(): void {
-    this._almacenamientoPrvdr.obtener('token')
+    this._almacenamientoPrvdr.obtener('usuario')
       .then((almacenamiento: any) => {
-        this.token = almacenamiento.data;
+        if (almacenamiento.data !== null) {
+          let data = JSON.parse(almacenamiento.data)
+          this.token = data.token;
+        }
       }
       )
   }
 
   public activo() {
-    return this._almacenamientoPrvdr.obtener('token');
-    // if (this.token) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
+    return this._almacenamientoPrvdr.obtener('usuario');
   }
 
   public login(username: string, password: string) {
@@ -59,24 +58,15 @@ export class AutenticacionProvider {
     return this._peticionPrvdr.peticion(request, this.key)
       .map(
         (respuesta: any) => {
-          this.guardarToken(respuesta.token)
+          this.guardarUsuario(respuesta)
         },
     );
-
-    // return this.http.post(BASE_URL_LOGIN, { username, password })
-    //   .map(
-    //     (respuesta: any) => {
-    //       // this.token = respuesta.token;
-    //       // this._almacenamientoPrvdr.guardar('token', respuesta.token)
-    //       this.guardarToken(respuesta.token)
-    //     },
-    // );
   }
 
   public cerrarSesion() {
     this.token = null;
     let promesa = new Promise((resolve, reject) => {
-      this._almacenamientoPrvdr.eliminar('token')
+      this._almacenamientoPrvdr.eliminar('usuario')
         .then(() => {
           this.cargaMenu()
             .then((resp) => {
@@ -88,11 +78,10 @@ export class AutenticacionProvider {
     return promesa;
   }
 
-  public guardarToken(token: string) {
-    this.token = token;
-    this._almacenamientoPrvdr.guardar('token', token)
+  public guardarUsuario(usuario) {
+    this.token = usuario.token;
+    this._almacenamientoPrvdr.guardar('usuario', JSON.stringify(usuario))
   }
-
 
   public gerHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
@@ -105,7 +94,7 @@ export class AutenticacionProvider {
   cargaMenu() {
 
     let promesa = new Promise((resolve, reject) => {
-      this._almacenamientoPrvdr.obtener('token')
+      this.activo()
         .then((data) => {
           let pagina: string
 
@@ -127,5 +116,38 @@ export class AutenticacionProvider {
     })
     return promesa;
   }
+
+  public guardian(pagina, param) {
+    return new Promise((resolve, reject) => {
+      this.activo()
+        .then((data) => {
+          if (data['data'] == null) {
+            setTimeout(() => {
+              this.app.getActiveNavs()[0].push('LoginPage');
+              this._ionicComponentPrvdr.showLongToastMessage("para continuar inicia sesión")
+
+              let data = {
+                'pagina': pagina,
+                'param': param
+              }
+              this._almacenamientoPrvdr.guardar('ir', JSON.stringify(data))
+            }, 0);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        }).catch(() => {
+          setTimeout(() => {
+            this.app.getActiveNavs()[0].push('LoginPage');
+            this._ionicComponentPrvdr.showLongToastMessage("para continuar inicia sesión")
+          }, 0);
+          resolve(false);
+        });
+    })
+
+
+  }
+
+
 
 }

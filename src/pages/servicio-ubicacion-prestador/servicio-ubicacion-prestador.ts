@@ -5,6 +5,8 @@ import { Servicio, Asociado } from '../../models/models.index';
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 
 import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
+import { AutenticacionProvider } from '../../providers/autenticacion/autenticacion';
+
 /**
  * Generated class for the ServicioUbicacionPrestadorPage page.
  *
@@ -29,15 +31,17 @@ export class ServicioUbicacionPrestadorPage {
     public navParams: NavParams,
     private _ubicacionesPrvdr: UbicacionesProvider,
     private _asociadosPrvr: AsociadosProvider,
-    public _ionicComponentPrvdr: IonicComponentProvider) {
+    public _ionicComponentPrvdr: IonicComponentProvider,
+    public _autenticacionPrvdr: AutenticacionProvider) {
+  }
 
-    this.servicio = this.navParams.get('servicio');
-    this._ubicacionesPrvdr.obtenerUbicaciones()
-
+  ionViewCanEnter() {
+    return this._autenticacionPrvdr.guardian('ServicioUbicacionPrestadorPage',this.navParams.data)
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ModalUbicacionesPage');
+    this.servicio = this.navParams.get('servicio');
+    this._ubicacionesPrvdr.obtenerUbicaciones()
     this._ionicComponentPrvdr.showAlert({
       title: '',
       subTitle: 'Selecciona el lugar en el cual quieres ver los prestadores disponibles',
@@ -47,13 +51,6 @@ export class ServicioUbicacionPrestadorPage {
 
   continuar(asociados) {
     this.navCtrl.push('AsociadosPage', { asociados });
-    // let data = {
-    //   servicio: this.servicio.id,
-    //   longitud: this.coordendas.longitud,
-    //   latitud: this.coordendas.latitud
-    // }
-    // this._asociadosPrvr.obtenerAsociadosServicios(data)
-    // console.log(this._asociadosPrvr.asociados)
   }
 
   coordenadas(event): void {

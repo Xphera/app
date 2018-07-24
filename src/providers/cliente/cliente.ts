@@ -13,7 +13,6 @@ import { AutenticacionProvider } from '../autenticacion/autenticacion';
 import { Cliente } from '../../models/models.index';
 
 import { Observable } from "rxjs/Observable";
-
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 
@@ -67,7 +66,7 @@ export class ClienteProvider {
     let request = this.http.put<Cliente>(URL_CAMBIAR_PASSWORD, passwords, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp: any) => {
-        this._autenticacionPrvdr.guardarToken(resp.token)
+        this._autenticacionPrvdr.guardarUsuario(resp)
       })
   }
 
@@ -98,7 +97,7 @@ export class ClienteProvider {
         .subscribe((resp: any) => {
           this._almacenamientoPrvdr.eliminar('nuevo_usuario').then(
             () => {
-              this._autenticacionPrvdr.guardarToken(resp.token)
+              this._autenticacionPrvdr.guardarUsuario(resp)
               observer.next(true);
             })
         })

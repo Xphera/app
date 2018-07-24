@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable"
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
-
+import { App } from 'ionic-angular';
 /*
   Generated class for the PeticionProvider provider.
 
@@ -20,47 +20,61 @@ export class PeticionProvider {
   constructor(
     public http: HttpClient,
     private _ionicComponentPrvdr: IonicComponentProvider,
-    public _almacenamientoPrvdr: AlmacenamientoProvider) {
+    public _almacenamientoPrvdr: AlmacenamientoProvider,
+    public app: App) {
     console.log('Hello PeticionProvider Provider');
   }
 
   peticion(request, key?: string, loading?: boolean) {
 
-    this.loading =  loading == undefined ? true : false
-    
-    console.log(this.loading )
-    if (this.peticionId == 0) {
-      this.showloaderOpen()
+    if (loading == undefined || loading == true) {
+      loading = true
     }
-    this.peticionId++
+
     let observable = new Observable((observer) => {
+
+      if (loading) {
+        if (this.peticionId == 0) {
+          this.showloaderOpen()
+        }
+        ++this.peticionId
+      }
+
       request.subscribe((resp) => {
-        //si existe almacena valor por key
+      //si existe almacena valor por key
         if (key) {
           this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
         }
-
         observer.next(resp);
 
-        this.peticionId--
-        if (this.peticionId == 0) {
-          this.showloaderClose()
+        if (loading) {
+          --this.peticionId
+          if (this.peticionId == 0) {
+            this.showloaderClose()
+          }
         }
 
       },
         (errores) => {
-          this.peticionId--
+          --this.peticionId
           if (this.peticionId == 0) {
             this.showloaderClose()
           }
-          let listaerrores: string = this.httpErrores(errores);
-          this._ionicComponentPrvdr.showAlert({
-            title: 'Error!',
-            subTitle: listaerrores,
-            buttons: ['OK']
-          });
-          observer.error(errores);
-          //
+
+          if (errores.status == 401) {
+            this.app.getRootNavs()[0].push('LoginPage')
+          }
+          else if (errores.status == 500 || errores.status == 0) {
+            this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
+          } else {
+            let listaerrores: string = this.httpErrores(errores);
+            this._ionicComponentPrvdr.showAlert({
+              title: 'Error!',
+              subTitle: listaerrores,
+              buttons: ['OK']
+            });
+            observer.error(errores);
+          }
         }
       )
     })
@@ -69,19 +83,25 @@ export class PeticionProvider {
 
   protected showloaderOpen() {
 
-    if(this.loading)
-    this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
+    if (this.loading) {
+      this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
+      console.log('abrir')
+    }
+
   }
 
   protected showloaderClose() {
-    this.showloader.dismiss()
-    console.log('cerrar')
+    if (this.loading && this.showloader) {
+      this.showloader.dismiss()
+      console.log('cerrar')
+    }
+
   }
 
   private httpErrores(errores) {
     const isBoolean = val => 'boolean' === typeof val;
     let listaerrores: string = '';
-	console.log(errores)
+
     for (let e of Object.keys(errores.error)) {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {
@@ -97,6 +117,8 @@ export class PeticionProvider {
       }
     }
     return listaerrores;
+
+
   }
 
   almacenamiento(key) {
@@ -106,7 +128,7 @@ export class PeticionProvider {
           resolve(datos);
         },
           error => {
-            reject({ satatus: 'false' });
+            reject({ status: 'false' });
           });
     })
     return promesa;

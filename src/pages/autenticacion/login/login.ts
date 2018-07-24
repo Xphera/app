@@ -4,6 +4,7 @@ import { UsuariosProvider } from '../../../providers/usuarios/usuarios';
 import { CONFIG } from '../../../config/comunes.config';
 
 import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
+import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -37,6 +38,7 @@ export class LoginPage {
     public _usuariosPrvdr: UsuariosProvider,
     private _autenticacionPrvdr: AutenticacionProvider,
     private formBuilder: FormBuilder,
+    private _almacenamientoPrvdr: AlmacenamientoProvider
   ) {
     this.myForm = this.createMyForm();
   }
@@ -76,33 +78,31 @@ export class LoginPage {
       this._autenticacionPrvdr.login(this.camposLogin.email, this.camposLogin.password)
         .subscribe(
           data => {
-            // this.navCtrl.setRoot('HomePage');
             this._autenticacionPrvdr.cargaMenu()
-              .then((resp:string) => {
+              .then((resp: string) => {
                 this.navCtrl.setRoot(resp);
+                this._almacenamientoPrvdr.obtener('ir')
+                  .then((data) => {
+                    if (data["data"] != null) {
+                      data = JSON.parse(data["data"])
+                      this.navCtrl.push(data["pagina"], data["param"]);
+                      this._almacenamientoPrvdr.eliminar('ir')
+                    }
+                  })
               })
           },
-          // error => {
-          //   let alert = {
-          //     subTitle: 'Correo electrónico o la contraseña es incorrecta',
-          //     buttons: ['OK']
-          //   }
-          //   // this.alert(alert);
-          // }
-        );
+      );
     }
-     // else {
-    //   let alert = {
-    //     subTitle: 'Escriba Correo electrónico valido.',
-    //     buttons: ['OK']
-    //   }
-    //   // this.alert(alert);
-    // }
-
   }
 
   cerrarLogin() {
-    this.navCtrl.setRoot('HomePage');
+    this.navCtrl.pop()
+    this._almacenamientoPrvdr.obtener('ir')
+      .then((data) => {
+        if (data["data"] != null) {
+          this._almacenamientoPrvdr.eliminar('ir')
+        }
+      })
   }
 
   ionViewDidLoad() {

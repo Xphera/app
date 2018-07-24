@@ -89,6 +89,10 @@ export class MyApp {
     this.nav.setRoot(page);
   }
 
+  openPagePush(page) {
+    this.nav.push(page);
+  }
+
   cerrarSesion() {
     this._autenticacionPrvdr.cerrarSesion()
       .then((resp: string) => {
