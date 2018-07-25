@@ -69,7 +69,7 @@ export class PeticionProvider {
           } else {
             let listaerrores: string = this.httpErrores(errores);
             this._ionicComponentPrvdr.showAlert({
-              title: 'Error!',
+              title: '',
               subTitle: listaerrores,
               buttons: ['OK']
             });
@@ -106,7 +106,8 @@ export class PeticionProvider {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {
           if (!isBoolean(errores)) {
-            listaerrores += e + ' ' + error + "<br>"
+            listaerrores += error + "<br>"
+            // listaerrores += e + ' ' + error + "<br>"
           }
 
         }

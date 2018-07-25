@@ -204,6 +204,8 @@ export class MapMarkerFixedComponent {
   * obtiene coordendas de un punto seleccionado.
   */
   obtenerUbicacion(selectedValue: any, tipo?: string) {
+    // zoom mapa
+    this.zoom = 17
     let promesa = new Promise((resolve, reject) => {
       let ubicacion: coordenadasInterfaces = {};
       if (tipo == 'navegacion') {
@@ -219,6 +221,7 @@ export class MapMarkerFixedComponent {
             ubicacion.latitud = place.geometry.location.lat();
             ubicacion.direccion = selectedValue.description;
             ubicacion.index = -1;
+            this.zoom = 17
             // ubicacion.titulo = place.formatted_address;
             resolve(ubicacion);
           }
@@ -241,12 +244,22 @@ export class MapMarkerFixedComponent {
   fijarUbicacion() {
     this.inputsearchbar[0].disabled = true;
     this.listadoubicaciones = false;
-    let loader = this.showloader('Buscando ubicación...');
+    let toast = this.toastCtrl.create({
+      message: 'Buscando ubicación...',
+      cssClass: "toast",
+      duration: 10000,
+      dismissOnPageChange: true,
+    })
 
-    loader.present();
-    this.geolocation.getCurrentPosition({ timeout: 3000 })
+    toast.present();
+
+    // let loader = this.showloader('Buscando ubicación...');
+
+    // loader.present();
+    this.geolocation.getCurrentPosition({ timeout: 10000 })
       .then(
         location => {
+          toast.dismiss()
           this.coordenadas.longitud = location.coords.longitude;
           this.coordenadas.latitud = location.coords.latitude;
           this.coordenadas.index = -1;
@@ -257,17 +270,31 @@ export class MapMarkerFixedComponent {
             this.coordenadas.direccion = direccion;
             this.direccion = this.coordenadas.direccion;
             this.pintarMapa();
-            loader.dismiss();
+            // loader.dismiss();
           })
         }
       )
       .catch(error => {
-
-        loader.dismiss();
-        this.showLongToast({
-          message: 'No se pudo encontrar la ubicación.',
-          duration: 2000
-        });
+        // coordenas por defecto bogota.
+        this.coordenadas.longitud = -73.9091178;
+        this.coordenadas.latitud = 5.2235772;
+        this.coordenadas.index = -1;
+        this.coordenadas.titulo = '';
+        this.coordenadas.complemento = '';
+        this.zoom = 8
+        this.geocoder().then((direccion: string) => {
+          this.coordenadas.direccion = direccion;
+          this.direccion = this.coordenadas.direccion;
+          this.pintarMapa();
+          // loader.dismiss();
+          toast.dismiss()
+          this.showLongToast({
+            message: 'No se pudo encontrar la ubicación.',
+            closeButtonText:'X',
+            showCloseButton:true,
+            dismissOnPageChange: true,
+          });
+        })
       });
   }
 
@@ -319,6 +346,7 @@ export class MapMarkerFixedComponent {
             loader.dismiss();
             this.lanzarCorrdenadas();
           }).catch(error => {
+            this.direccion = '';
             this.pintarMapa();
             loader.dismiss();
             this.showLongToast({
@@ -326,56 +354,16 @@ export class MapMarkerFixedComponent {
               duration: 2000
             });
           });
-          //console.log(result, 'subscribe', distanciaCoordenadas);
+
         } else {
           this.lanzarCorrdenadas();
           loader.dismiss();
-          //console.log(result, 'no subscribe', distanciaCoordenadas);
+
         }
       }
 
     });
-    /**------------------    -------------------------*/
-    // google.maps.event.addListener(this.map, 'center_changed', () => {
-    //   if (this.listadoubicaciones === false) {
-    //     cantidadMovimientos += 1;
-    //     console.log(cantidadMovimientos);
-    //     let loader = this.showloader('Buscando ubicación...');
-    //
-    //     let distanciaCoordenadas: number = this.getDistanciaMetros(this.map.getCenter().lat(), this.map.getCenter().lng(), this.coordenadas.latitud, this.coordenadas.longitud);
-    //
-    //     this.coordenadas.latitud = this.map.getCenter().lat();
-    //     this.coordenadas.longitud = this.map.getCenter().lng();
-    //
-    //     if (cantidadMovimientos == 5) {
-    //         mapProp.draggable = false;
-    //         loader.dismiss();
-    //         this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    //     }
-    //     else if (distanciaCoordenadas >= 100) {
-    //       this.titulo = 'Ubicando....';
-    //       this.geocoder().then((titulo: string) => {
-    //         this.coordenadas.titulo = titulo;
-    //         this.titulo = this.coordenadas.titulo;
-    //         this.recalculada = true;
-    //         loader.dismiss();
-    //         this.lanzarCorrdenadas();
-    //       }).catch(error => {
-    //         this.pintarMapa();
-    //         loader.dismiss();
-    //         this.showLongToast({
-    //           message: 'No se pudo encontrar la ubicación.',
-    //           duration: 2000
-    //         });
-    //       });
-    //
-    //     } else {
-    //       this.lanzarCorrdenadas();
-    //       loader.dismiss();
-    //       console.log(distanciaCoordenadas);
-    //     }
-    //   }
-    // });
+
   }
 
 
@@ -383,8 +371,6 @@ export class MapMarkerFixedComponent {
     return new Observable(observer => {
       google.maps.event.addListener(map, 'center_changed', () => {
         observer.next({ latitud: map.getCenter().lat(), longitud: map.getCenter().lng() });
-        //console.log({ latitud: map.getCenter().lat(), longitud: map.getCenter().lng() });
-        //observer.complete();
       })
     })
   }

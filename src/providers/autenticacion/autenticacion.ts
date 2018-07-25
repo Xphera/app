@@ -105,7 +105,7 @@ export class AutenticacionProvider {
     return headers;
   }
 
-  protected cargaMenu() {
+  public cargaMenu() {
 
     let promesa = new Promise((resolve, reject) => {
       this.activo()
