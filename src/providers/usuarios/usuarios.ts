@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ModalController } from 'ionic-angular';
 
-import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
@@ -15,8 +14,6 @@ import * as moment from 'moment';
 
 
 import {
-  URL_REGISTRO_USUARIO,
-  URL_ACTIVAR_USUARIO,
   URL_PAGAR,
   URL_MIS_PAQUETES,
   URL_PAQUETE_ACTIVO,
@@ -50,7 +47,6 @@ export class UsuariosProvider {
 
   constructor(
     private http: HttpClient,
-    private _almacenamientoPrvdr: AlmacenamientoProvider,
     private _peticionPrvdr: PeticionProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
     public _autenticacionPrvdr: AutenticacionProvider,
@@ -96,7 +92,7 @@ export class UsuariosProvider {
   public obetenerPaqueteActivos() {
     let headers = this._autenticacionPrvdr.gerHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
-    this._peticionPrvdr.peticion(request, '', true)
+    this._peticionPrvdr.peticion(request, '', false)
       .map((resp: PaqueteActivo) => {
         if (resp.compradetallesesiones) {
           for (let i = 0; i < resp.compradetallesesiones.length; i++) {
@@ -116,7 +112,7 @@ export class UsuariosProvider {
     let headers = this._autenticacionPrvdr.gerHeaders();
 
     let request = this.http.get(URL_CALIFICAR_SESION, { headers })
-    this._peticionPrvdr.peticion(request, 'sesionesPorCalificar')
+    this._peticionPrvdr.peticion(request, '',false)
       .map((resp: any) => {
         return this.mapSesion(resp)
       })
@@ -145,7 +141,7 @@ export class UsuariosProvider {
     let headers = this._autenticacionPrvdr.gerHeaders();
 
     let request = this.http.get(URL_PROXIMA_SESION, { headers })
-    this._peticionPrvdr.peticion(request)
+    this._peticionPrvdr.peticion(request,'',false)
       .map((resp: any) => {
         return this.mapSesion(resp)
       })

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { PaquetesProvider } from '../../providers/paquetes/paquetes';
+
 import { CONFIG } from '../../config/comunes.config';
 import { Asociado } from '../../models/models.index';
 import { Paquete } from '../../models/models.index';
@@ -27,10 +27,9 @@ export class PaquetesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private _paquetesPrvdr: PaquetesProvider,
   ) {
     this.asociado = this.navParams.get('asociado');
-    // this._paquetesPrvdr.obeternerPaqueteCategoria(this.asociado.servicios);
+
   }
 
 

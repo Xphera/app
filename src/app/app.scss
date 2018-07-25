@@ -14,6 +14,9 @@
 // automatically applied to the <body> element in the app.
 
 @import '../theme/custom.theme';
+@import '../theme/splash';
+
+
 
 
 ion-icon {
@@ -152,7 +155,6 @@ ion-icon {
     height: 12vh;
   }
 
-  ,
   .label,
   h3 {
     color: #999;

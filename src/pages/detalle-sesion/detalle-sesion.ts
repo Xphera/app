@@ -4,7 +4,6 @@ import { Sesion } from '../../models/models.index';
 import { CONFIG } from '../../config/comunes.config';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 import ol from 'openlayers';
-import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
 import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
 
 import { Observable } from 'Rxjs/rx';
@@ -55,7 +54,6 @@ export class DetalleSesionPage {
     public navParams: NavParams,
     private _usuariosPrvdr: UsuariosProvider,
     private _localizarUbicacionPrvdr: LocalizarUbicacionProvider,
-    private _ionicComponentPrvdr: IonicComponentProvider,
     public modalCtrl: ModalController) {
     this.sesion = this.navParams.get('sesion');
     this.drawerOptions = {

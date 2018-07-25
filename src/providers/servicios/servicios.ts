@@ -25,7 +25,7 @@ export class ServiciosProvider {
 
   public grabarServicios() {
     let request = this.http.get<Servicio[]>(URL_SERVICIO)
-    this._peticionPrvdr.peticion(request, this.key)
+    this._peticionPrvdr.peticion(request, this.key,false)
       .subscribe((resp: Servicio[]) => {
         this.servicios = resp;
       })

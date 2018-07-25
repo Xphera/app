@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CONFIG } from '../../../config/comunes.config';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
 import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
 import { IonicComponentProvider } from '../../../providers/ionic-component/ionic-component';
@@ -104,7 +104,7 @@ export class OlvidoCuentaPage {
 
 
   // validacion de contraseña
-  
+
   matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
     return (group: FormGroup): { [key: string]: any } => {
       let password = group.controls[passwordKey];

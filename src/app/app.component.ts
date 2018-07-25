@@ -12,7 +12,7 @@ import { CacheService } from "ionic-cache";
 
 import { AppState } from './app.global';
 
-
+import { timer } from 'rxjs/observable/timer';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,6 +29,7 @@ export class MyApp {
   chosenPicture: any;
   CONFIG = CONFIG;
 
+  showSplash = true; // <-- show animation
 
   constructor(
     public platform: Platform,
@@ -40,6 +41,9 @@ export class MyApp {
     imgCache: ImgCacheService,
     public global: AppState) {
 
+
+
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -49,6 +53,7 @@ export class MyApp {
       this._autenticacionPrvdr.cargaMenu()
         .then((resp: string) => {
           splashScreen.hide();
+          timer(3000).subscribe(() => this.showSplash = false) // <-- hide animation after 3s
           this.rootPage = resp;
         })
 

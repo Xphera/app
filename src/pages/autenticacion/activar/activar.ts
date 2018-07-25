@@ -3,8 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
 import { CONFIG } from '../../../config/comunes.config';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
-import { IonicComponentProvider } from '../../../providers/ionic-component/ionic-component';
 /**
  * Generated class for the ActivarPage page.
  *
@@ -26,8 +24,6 @@ export class ActivarPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private _autenticacionPrvdr: AutenticacionProvider,
-    private _almacenamientoPrvdr:AlmacenamientoProvider,
-    private _ionicComponentPrvdr:IonicComponentProvider,
     private formBuilder: FormBuilder) {
     this.usuario = this.navParams.get('usuario')
     this.myForm = this.createMyForm();

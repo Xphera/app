@@ -23,6 +23,7 @@ export class ServicioUbicacionPrestadorPage {
 
   public coordendas;
   public mostrarmapa: boolean = true;
+  public mosatarBotonMapa:boolean = false
   servicio: Servicio = new Servicio();
   asociados: Array<Asociado> = new Array<Asociado>()
 
@@ -36,7 +37,7 @@ export class ServicioUbicacionPrestadorPage {
   }
 
   ionViewCanEnter() {
-    return this._autenticacionPrvdr.guardian('ServicioUbicacionPrestadorPage',this.navParams.data)
+    return this._autenticacionPrvdr.guardian('ServicioUbicacionPrestadorPage', this.navParams.data)
   }
 
   ionViewDidLoad() {
@@ -54,17 +55,22 @@ export class ServicioUbicacionPrestadorPage {
   }
 
   coordenadas(event): void {
-    this.coordendas = event.coordenadas;
-    let data = {
-      servicio: this.servicio.id,
-      longitud: this.coordendas.longitud,
-      latitud: this.coordendas.latitud
-    }
-    this._asociadosPrvr.obtenerAsociadosServicios(data)
-      .subscribe((data: Asociado[]) => {
-        this.asociados = data
+    this.mosatarBotonMapa = false
+    if (event.coordenadas.error == false) {
+      this.mosatarBotonMapa = true
+      this.coordendas = event.coordenadas;
+      let data = {
+        servicio: this.servicio.id,
+        longitud: this.coordendas.longitud,
+        latitud: this.coordendas.latitud
+      }
+      this._asociadosPrvr.obtenerAsociadosServicios(data)
+        .subscribe((data: Asociado[]) => {
+          this.asociados = data
 
-      })
+        })
+    }
+
   }
 
 }

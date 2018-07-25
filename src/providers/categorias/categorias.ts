@@ -33,7 +33,7 @@ export class CategoriasProvider {
 
   grabarCategorias() {
     let request = this.http.get<Categoria[]>(URL_CATEGORIA)
-    this._peticionPrvdr.peticion(request,this.key)
+    this._peticionPrvdr.peticion(request,this.key,false)
       .subscribe((resp: Categoria[]) => {
         this.categorias = resp;
       })
