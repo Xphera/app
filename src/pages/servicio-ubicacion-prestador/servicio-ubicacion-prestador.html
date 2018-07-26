@@ -16,7 +16,7 @@
 <ion-content>
   <xph-map-marker-fixed [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
   </xph-map-marker-fixed>
-  <div class="boton-mapa">
+  <div class="boton-mapa" *ngIf="mosatarBotonMapa == true">
     <button ion-button icon-only large full (click)="continuar(asociados)" *ngIf="asociados.length > 0">
               <ion-icon name="body"></ion-icon>
             {{asociados[0].zona.properties.name}}  ({{asociados.length}})

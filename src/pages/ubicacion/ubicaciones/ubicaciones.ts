@@ -19,8 +19,9 @@ import { IonicComponentProvider } from '../../../providers/ionic-component/ionic
 export class UbicacionesPage {
 
   mostrarBorrar: boolean = false;
-  coordendas;
   mostrarmapa: boolean = true;
+  mostrarbotonmapa: boolean = true;
+  coordendas;
 
   constructor(
     public navCtrl: NavController,
@@ -36,17 +37,21 @@ export class UbicacionesPage {
   }
 
   coordenadas(event): void {
-    
-    if (event.coordenadas.index >= 0) {
-      this.mostrarBorrar = true;
-    } else {
-      this.mostrarBorrar = false;
+    this.mostrarbotonmapa = false
+    if (event.coordenadas.error == false) {
+      this.mostrarbotonmapa = true
+      if (event.coordenadas.index >= 0) {
+        this.mostrarBorrar = true;
+      } else {
+        this.mostrarBorrar = false;
+      }
+
+      if (this.mostrarmapa) {
+        this.coordendas = event.coordenadas;
+      }
     }
 
-    if (this.mostrarmapa) {
-      this.coordendas = event.coordenadas;
-    }
-    console.log(this.coordendas,this.mostrarmapa);
+
   }
 
   eliminar() {

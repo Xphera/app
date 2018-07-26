@@ -27,8 +27,8 @@ export class MapMarkerFixedComponent {
   @Input() fullscreenControl: boolean = false;
   @Input() mapTypeControl: boolean = false;
   @Input() zoom: number = 17;
-  @Input() latitud: number = 5.2235772;
-  @Input() longitud: number = -73.9091178;
+  @Input() latitud: number = 0;
+  @Input() longitud: number = 0;
   @Input() direccion: string = '';
   @Input() ubicaciones: coordenadasInterfaces[] = [];
 
@@ -279,30 +279,17 @@ export class MapMarkerFixedComponent {
       )
       .catch(error => {
         // coordenas por defecto bogota.
-        this.coordenadas.longitud = -73.9091178;
-        this.coordenadas.latitud = 5.2235772;
-        this.coordenadas.index = -1;
-        this.coordenadas.titulo = '';
-        this.coordenadas.complemento = '';
+        this.coordenadas.longitud = 0;
+        this.coordenadas.latitud = 0;
         this.coordenadas.error = true;
-        this.zoom = 8
+        this.direccion = ''
         this.pintarMapa();
         loader.dismiss();
-        // toast.dismiss()
-        this.direccion = ''
-        this.showLongToast({
-          message: 'No se pudo encontrar la ubicación.',
-          closeButtonText:'X',
-          showCloseButton:true,
-          dismissOnPageChange: true,
-          duration: 10000,
-        });
-
       });
   }
 
   /**
-  * pinta mapa mapa a partir de coorde e implmenta evento al cambiar centro de mapa.
+  * pinta mapa mapa a partir de coordenas e implmenta evento al cambiar centro de mapa.
   */
   pintarMapa(): void {
     this.recalculada = false;

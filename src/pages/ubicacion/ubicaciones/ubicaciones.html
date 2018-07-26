@@ -27,7 +27,7 @@
   (getCoordenadas)="coordenadas($event)">
   </xph-map-marker-fixed>
 
-  <div class="boton-mapa">
+  <div class="boton-mapa" *ngIf="mostrarbotonmapa==true">
     <ion-grid class="reset">
       <ion-row *ngIf="!mostrarBorrar">
         <ion-col col-12 class="reset">

@@ -27,6 +27,7 @@ export class IonicComponentProvider {
       closeButtonText:'X',
       showCloseButton:true,
       position: 'top',
+      duration: 10000,
     })
   }
 

@@ -59,25 +59,15 @@ export class ProgramarSesionPage {
 
     this._ubicacionesPrvdr.obtenerUbicaciones()
       .subscribe(() => {
-        let polygonGeometry = (new ol.format.GeoJSON())
-          .readFeature(this.sesion.prestador.zona)
-          .getGeometry();
+
 
         for (let i in this._ubicacionesPrvdr.ubicaciones) {
-          let punto = new ol.Feature({
-            geometry: new ol.geom.Point([
-              this._ubicacionesPrvdr.ubicaciones[i].longitud,
-              this._ubicacionesPrvdr.ubicaciones[i].latitud
-            ])
-          })
-
-          let coords = punto.getGeometry().getCoordinates()
-          if (polygonGeometry.intersectsCoordinate(coords) == true) {
+          let ubicacionValida = this.ubicacionEnZona(this._ubicacionesPrvdr.ubicaciones[i].longitud,
+            this._ubicacionesPrvdr.ubicaciones[i].latitud)
+          if (ubicacionValida) {
             this.ubicaciones.push(this._ubicacionesPrvdr.ubicaciones[i])
           }
         }
-
-
 
       });
 
@@ -100,13 +90,14 @@ export class ProgramarSesionPage {
 
 
   // Acciones sobre el calendario.
+
   onViewTitleChanged(title) {
     this.titulocalendario = title;
   }
   onEventSelected(event) {
 
     let myMoment: moment.Moment = moment(event.startTime, "America/Bogota").locale('es-CO')
-    console.log(event.startTime,myMoment)
+    console.log(event.startTime, myMoment)
     this._ionicComponentPrvdr.showAlert({
       title: 'Programar sesión',
       message: 'Donde: ' + this.ubicacion.coordenadas.titulo + '<br>Cuando: ' + myMoment.format('LLLL'),
@@ -184,11 +175,8 @@ export class ProgramarSesionPage {
     };
   }
 
-  // loadEvents() {
-  //   this.calendar.eventSource = this._asociadosPrvdr.agendaasociado;
-  // }
-
   //Acciones de navegacion
+
   cerrarModal() {
     this.navegacion = this.paginas.ubicacion.pagina;
     this.viewCtrl.dismiss();
@@ -210,8 +198,18 @@ export class ProgramarSesionPage {
   }
 
   coordenadas(event) {
-    this.ubicacion = event;
-    this.botonmapa = true;
+    this.botonmapa = false;
+    if (event.coordenadas.error == false) {
+      let ubicacionValida = this.ubicacionEnZona(event.coordenadas.longitud, event.coordenadas.latitud)
+      if (ubicacionValida || (event.coordenadas.longitud == 0 && event.coordenadas.latitud == 0)) {
+        this.ubicacion = event;
+        this.botonmapa = true;
+      }else{
+        this._ionicComponentPrvdr.showLongToastMessage("Ubicación fuera del área de cobertura del prestador.")
+      }
+
+    }
+
   }
 
   complementoDireccion() {
@@ -270,10 +268,32 @@ export class ProgramarSesionPage {
         ],
         cssClass: 'alertCustomCss'
       })
-      console.log('complemento direccion')
+
     } else {
       this.mostrarCalendario()
     }
   }
+
+
+  ubicacionEnZona(longitud, latitud) {
+    let polygonGeometry = (new ol.format.GeoJSON())
+      .readFeature(this.sesion.prestador.zona)
+      .getGeometry();
+
+    let punto = new ol.Feature({
+      geometry: new ol.geom.Point([
+        longitud,
+        latitud
+      ])
+    })
+
+    let coords = punto.getGeometry().getCoordinates()
+    if (polygonGeometry.intersectsCoordinate(coords) == true) {
+      return true
+    } else {
+      return false
+    }
+  }
+
 
 }
