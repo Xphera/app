@@ -7,130 +7,99 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title> {{sesion.ubicacion.title}}</ion-title>
+    <ion-title>Detalle de sesión</ion-title>
   </ion-navbar>
 
 </ion-header>
-<ion-content class="cards-bg">
 
-  <div class="sesionInfo">
-    <ion-card *ngIf="sesionPorIniciar">
-      <ion-card-content>
-        <p>
-          Esta sesión iniciara en :
-          <countdown-timer [end]="sesion.fechaInicio"></countdown-timer>
-        </p>
-      </ion-card-content>
-    </ion-card>
 
-    <ion-card *ngIf="sesion.estado.id == 5">
-      <ion-card-content>
-        <p>
-          Duración de sesión :
-          <countdown-timer [start]="sesion.inicio"></countdown-timer>
-        </p>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card *ngIf="sesionnoIniciada">
-      <ion-card-content class="sesionnoIniciada">
-        <p>
-          Debió iniciar hace :
-          <countdown-timer [start]="sesion.fechaInicio"></countdown-timer>
-        </p>
-      </ion-card-content>
-    </ion-card>
-
+<ion-content>
+  <div class="map-image">
+    <div id="map" data-tap-disabled="true" class="map"></div>
+    <ion-fab right top *ngIf="tipoSesion=='porIniciar'">
+      <button ion-fab class="fab-map pop-in" (click)="seeInMap(card)">
+      <ion-icon name='pin'></ion-icon>
+    </button>
+    </ion-fab>
   </div>
+  <ion-card class="adv-map">
 
-  <div id="map" data-tap-disabled="true" class="map"></div>
-
-  <div id="popup" class="ol-popup">
-    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-    <div id="popup-content"></div>
-  </div>
-
-  <ion-fab bottom right>
-    <button ion-fab>
-          <ion-icon name="settings"></ion-icon>
-        </button>
-    <ion-fab-list side="top">
-
-      <button ion-fab color="danger" *ngIf="diferenciaHora">
-              <ion-icon name="close"></ion-icon>
-              <div class="label">Cancelar</div>
-          </button>
-
-      <button ion-fab color="secondary" (click)="reprogramarSesion(sesion)" *ngIf="diferenciaHora">
-            <ion-icon name="ios-refresh-circle"></ion-icon>
-            <div  class="label">ReProgramar</div>
-          </button>
-
-      <button ion-fab color="primary">
-            <ion-icon name="ios-mail"></ion-icon>
-            <div  class="label">Comentar</div>
-          </button>
-
-    </ion-fab-list>
-  </ion-fab>
-  <content-drawer [options]="drawerOptions">
-
-    <ion-card class="adv-map">
-
+    <ion-card-content>
       <ion-item>
-        <ion-icon color="primary" large item-start name='pin'></ion-icon>
+        <ion-icon name="md-person" item-start large color="primary"></ion-icon>
+        <h2>Cliente</h2>
+        <p> {{ sesion.cliente.nombreCompleto }}</p>
+      </ion-item>
+      <ion-item *ngIf="sesion.ubicacion.direccion!=null">
+        <ion-icon name="pin" item-start large color="primary"></ion-icon>
         <h2>Donde</h2>
-        <p>{{sesion.ubicacion.title}}</p>
-        <p>{{sesion.ubicacion.direccion}}</p>
-        <p>{{sesion.ubicacion.complemento}}</p>
+        <p text-wrap>{{ sesion.ubicacion.direccion }} {{ sesion.ubicacion.complemento }}</p>
       </ion-item>
-      <ion-item>
-        <ion-icon color="primary" large item-start ios="ios-albums" md="md-albums"></ion-icon>
-        <h2>Paquete</h2>
-        <p>{{ sesion.paquete.nombre}}</p>
-        <p>{{sesion.paquete.valor |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}</p>
-        <p>{{sesion.paquete.detalle}}</p>
-      </ion-item>
-
-      <!-- <ion-item>
-        <h2 text-center>{{ sesion.paquete.nombre}}</h2>
-        <p text-center>{{sesion.paquete.valor |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}</p>
-        <p>{{sesion.paquete.detalle}}</p>
-
-      </ion-item> -->
-      <ion-item>
-        <ion-avatar item-start>
-          <img [src]="sesion.prestador.imagePath|pathImagen">
-        </ion-avatar>
-        <h2>Prestador</h2>
-        <p>{{sesion.prestador.nombreCompleto}}</p>
-      </ion-item>
-
-      <ion-item>
-        <ion-icon color="primary" large item-start name='information-circle'></ion-icon>
-        <h2>Estado</h2>
-        <p>{{sesion.estado.estado}}</p>
-      </ion-item>
-      <ion-item>
-        <ion-icon color="primary" large item-start name='calendar'></ion-icon>
+      <ion-item *ngIf="sesion.fechaInicio != null">
+        <ion-icon name="md-calendar" item-start large color="primary"></ion-icon>
         <h2>Cuando</h2>
-        <p>{{sesion.fechaInicio| amLocal| amLocale:'es-CO'| amDateFormat:'LLLL'}}</p>
+        <p>{{ sesion.fechaInicio|amLocale:'es-CO'|amDateFormat:'LLLL' }}</p>
       </ion-item>
-      <ion-item *ngIf="sesion.estado.id==3">
-        <ion-icon color="primary" large item-start name='timer'></ion-icon>
-        <h2>Duracion</h2>
-        <p>{{sesion.duracion}} Minutos</p>
-        <p>{{sesion.inicio| amLocale:'es-CO'| amDateFormat:'LLLL'}}</p>
-        <p>{{sesion.fin| amLocal| amLocale:'es-CO'| amDateFormat:'LLLL'}}</p>
+      <ion-item>
+        <ion-icon name="md-alert" item-start large color="primary"></ion-icon>
+        <h2>Estado</h2>
+        <p>{{ sesion.estado.estado }}</p>
       </ion-item>
-      <ion-item *ngIf="sesion.estado.id==3" (click)="calificarSesion()">
-        <ion-icon color="primary" large item-start name='star-outline'></ion-icon>
-        <h2>Calificación</h2>
-        <p><rating [(ngModel)]="sesion.calificacion" readOnly="true"></rating></p>
-
+      <ion-item *ngIf="sesion.estado.id == 3">
+        <ion-icon name="md-timer" item-start large color="primary"></ion-icon>
+        <h2>Duración</h2>
+        <p>{{ sesion.duracion| number:'1.1-2' }} Minutos</p>
+        <p>{{ sesion.inicio|amLocale:'es-CO'| amDateFormat:'LLLL' }}</p>
+        <p>{{ sesion.fin |amLocale:'es-CO'|amDateFormat:'LLLL' }}</p>
       </ion-item>
-    </ion-card>
+      <ion-item>
+        <ion-icon name="ios-browsers" item-start large color="primary"></ion-icon>
+        <h2>Paquete</h2>
+        <p>{{ sesion.paquete.nombre }}</p>
+        <p text-wrap>{{ sesion.paquete.detalle }}</p>
+      </ion-item>
+    </ion-card-content>
 
-  </content-drawer>
+    <div class="popup-menu">
+      <div class="popup-menu-overlay" [ngClass]="{'in': openMenu}" (click)="togglePopupMenu()"></div>
+      <div class="popup-menu-toggle" (click)="togglePopupMenu()" [ngClass]="{'out': openMenu}"></div>
+      <div class="popup-menu-panel" [ngClass]="{'in': openMenu}">
+        <!-- sesion no iniciada  -->
 
+        <div class="popup-menu-item" (click)="comentar()" *ngIf="sesion.estado.id != 5">
+          <ion-icon name="ios-mail"></ion-icon>
+          <span>Comentar </span>
+        </div>
+
+        <div class="popup-menu-item" (click)="cancelar()" *ngIf="sesion.estado.id ==2 || sesion.estado.id ==4 ">
+          <ion-icon name="close"></ion-icon>
+          <span>Cancelar </span>
+        </div>
+
+        <div class="popup-menu-item" (click)="iniciar(sesion)" *ngIf="tipoSesion =='porIniciar' && (sesion.estado.id == 4 || sesion.estado.id == 2 )">
+          <ion-icon name="md-play"></ion-icon>
+          <span>Iniciar </span>
+        </div>
+
+
+
+        <!-- sesion iniciada -->
+
+        <div class="popup-menu-item countdown" *ngIf="sesion.estado.id == 5">
+          <span> Duracion de sesión <countdown-timer [start]="sesion.inicio"></countdown-timer></span>
+        </div>
+
+        <div class="popup-menu-item" *ngIf="sesion.estado.id == 5 " (click)="finalizar()">
+          <ion-icon name="md-square" ></ion-icon>
+          <span>Finalizar</span>
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </ion-card>
 </ion-content>

@@ -1,29 +1,14 @@
-<ion-header no-border>
-  <ion-navbar transparent>
-    <ion-buttons left>
-      <button ion-button color="light" menuToggle icon-only>
-              <ion-icon name="menu"></ion-icon>
-            </button>
-    </ion-buttons>
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content fullscreen="true" class="no-padding-top">
-  <ion-slides #slider pager="true" (ionSlideWillChange)="onSlideChanged()">
-    <ion-slide *ngFor="let categoria of _categoriasPrvdr.categorias"
-    class="slide-background"
-    [ngStyle]="{'background-image': 'url(' + categoria.imagePath +')'}">
-      <div class="text-wrapper">
-        <div class="slide-text">
-          <h2 class="slide-title" [innerHTML]="categoria.nombre"></h2><br>
-          <p [innerHTML]="categoria.detalle"></p>
-        </div>
-      </div>
-      <!-- Add Pagination -->
-      <div *ngIf="slideIndex > 0" class="swiper-button-prev swiper-button-white" (click)="previousSlide()"></div>
-      <div *ngIf="slideIndex < _categoriasPrvdr.categorias.length-1" class="swiper-button-next swiper-button-white" (click)="nextSlide()"></div>
-    </ion-slide>
-  </ion-slides>
-  <div class="floating-buttons pop-in">
-    <button ion-button clear large full (click)="irServicios()">Ver Servicio </button>
-  </div>
+
+<ion-content padding>
+  The world is your oyster.
+  <p>
+    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+  </p>
 </ion-content>

@@ -1,4 +1,15 @@
-<ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Mi Cuenta" tabIcon="contact"></ion-tab>
-</ion-tabs>
+<!--
+  Generated template for the TabsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-content>
+
+  <ion-tabs class="tabs-icon-text" mode="ios" #myTabs>
+    <ion-tab tabIcon="md-home" tabTitle="Seiones" [root]="tab1Root"></ion-tab>
+    <ion-tab [color]="danger" [enabled]="_sesionPrvdr.sesionInicida.estado.id == 5"   [tabBadge]="_sesionPrvdr.sesionInicida.estado.id == 5? 1:0" tabBadgeStyle="danger" tabIcon="md-timer" tabTitle="Sesion Iniciada" [root]="tab2Root" [rootParams]="{sesion:_sesionPrvdr.sesionInicida}"></ion-tab>
+    <ion-tab tabIcon="md-contact" tabTitle="Mi cuenta" [root]="tab3Root"></ion-tab>
+  </ion-tabs>
+</ion-content>

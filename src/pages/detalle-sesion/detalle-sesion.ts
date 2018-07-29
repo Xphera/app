@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angular';
-import { Sesion } from '../../models/models.index';
-import { CONFIG } from '../../config/comunes.config';
-import { UsuariosProvider } from '../../providers/usuarios/usuarios';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { SesionProvider } from '../../providers/sesion/sesion';
+import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
+import { ModalController } from 'ionic-angular';
 import ol from 'openlayers';
-import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
-
-import { Observable } from 'Rxjs/rx';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the DetalleSesionPage page.
@@ -22,129 +18,78 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: 'detalle-sesion.html',
 })
 export class DetalleSesionPage {
-  public sesion: Sesion
-  CONFIG = CONFIG;
-  private map: ol.Map
+  public sesion
+  public tipoSesion
+  public openMenu = false;
+  private map: ol.Map;
+
+  public vectorSource = new ol.source.Vector();
+  public vectorLayer = new ol.layer.Vector({
+    source: this.vectorSource,
+    style: ((feature, resolution) => {
+      let style = new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: '#ffcc33',
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#ffcc33',
+          width: 2
+        }),
+        text: new ol.style.Text({
+          font: '15px Calibri,sans-serif',
+          // overflow: 'true',
+          text: feature.get('name'),
+          fill: new ol.style.Fill({
+            color: '#000'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fff',
+            width: 3
+          })
+        }),
+      })
+      return style
+    })
+  });
   private raster = new ol.layer.Tile({
     source: new ol.source.OSM()
   });
 
-  public vectorSource = new ol.source.Vector();
-
-  public vectorLayer = new ol.layer.Vector({
-    source: this.vectorSource,
-  });
-
-  public vectorSourceLocalizacion = new ol.source.Vector();
-
-  public vectorLayerLocalizacion = new ol.layer.Vector({
-    source: this.vectorSourceLocalizacion,
-  });
-
-  public sesionPorIniciar: boolean
-  public diferenciaHora: boolean
-  public sesionnoIniciada: boolean
-
-  drawerOptions: any;
-
-  private watch: Subscription;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private _usuariosPrvdr: UsuariosProvider,
-    private _localizarUbicacionPrvdr: LocalizarUbicacionProvider,
+    public _sesionPrvdr: SesionProvider,
+    public ionicComponentPrvdr: IonicComponentProvider,
     public modalCtrl: ModalController) {
-    this.sesion = this.navParams.get('sesion');
-    this.drawerOptions = {
-      handleHeight: 0,
-      thresholdFromBottom: 200,
-      thresholdFromTop: 200,
-      bounceBack: true,
-      showTitle: "Detalle sesión",
-      hideTitle: "Detalle sesión",
-    };
 
-
-
-
-
-
-
+    this.sesion = this.navParams.get('sesion')
+    this.tipoSesion = this.navParams.get('tipoSesion')
 
   }
-
-  inicio(){
-    this.watch = Observable.interval(1000).subscribe(() => {
-      this._usuariosPrvdr.obetenerPaqueteActivos()
-      this.sesion = this._usuariosPrvdr.paqueteActivo.compradetallesesiones.find(
-        (data) => {
-          if (data.sesionId == this.sesion.sesionId) {
-            return true
-          }
-        });
-
-      this.sesionPorIniciar = this._usuariosPrvdr.sesionPorIniciar(this.sesion)
-      this.diferenciaHora = this._usuariosPrvdr.diferenciaHora(this.sesion.fechaInicio)
-      this.sesionnoIniciada = this._usuariosPrvdr.sesionnoIniciada(this.sesion) && (this.sesion.estado.id == 2 || this.sesion.estado.id == 4)
-
-
-      if (this._usuariosPrvdr.localizar(this.sesion)) {
-        this._localizarUbicacionPrvdr.localizar();
-        this.ubicarPuntos();
-      }
-
-      if (this.sesion.estado.id == 5) {
-        this._localizarUbicacionPrvdr.deterner()
-        //limpiar puntos en mapa
-        this.vectorLayerLocalizacion.getSource().clear()
-      }
-
-
-    });
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetalleSesionPage');
-    this.inicio();
-    this.loadMap();
+    this.loadMap()
   }
 
-  ionViewWillLeave() {
-    this._localizarUbicacionPrvdr.deterner()
-    this.watch.unsubscribe()
-  }
-
-
-  reprogramarSesion(sesion) {
-    this._usuariosPrvdr.programarSesionModalOpen(sesion)
+  ionViewDidEnter() {
+    //abrir menu
+    if (this.sesion.estado.id == 5) {
+      this.openMenu = true
+    }
   }
 
   loadMap() {
-
+    parseFloat
     this.map = new ol.Map({
-      controls: [],
-      layers: [this.raster, this.vectorLayer, this.vectorLayerLocalizacion],
+      layers: [this.raster, this.vectorLayer],
       target: 'map',
       view: new ol.View({
         projection: 'EPSG:4326',
-        center: [this.sesion.ubicacion.longitud, this.sesion.ubicacion.latitud],
+        center: [parseFloat(this.sesion.ubicacion.longitud), parseFloat(this.sesion.ubicacion.latitud)],
         zoom: 17
-      }),
-      interactions: ol.interaction.defaults({
-        dragPan: false,
-        pinchRotate: false,
-        keyboardPan: false,
-        doubleClickZoom: false,
-        pinchZoom: false,
-        keyboardZoom: false,
-        mouseWheelZoom: false,
-        dragZoom: false,
-      }),
+      })
     });
-
-    this.addPoint(this.sesion.ubicacion.longitud, this.sesion.ubicacion.latitud, this.vectorSource, 'pin-export.png')
-
+      this.ubicarPuntos()
   }
 
   addPoint(longitud, latitud, vector, icono) {
@@ -163,15 +108,85 @@ export class DetalleSesionPage {
   }
 
   ubicarPuntos() {
-    this.vectorLayerLocalizacion.getSource().clear()
-    this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
-    this.addPoint(this._localizarUbicacionPrvdr.prestador.lng, this._localizarUbicacionPrvdr.prestador.lat, this.vectorSourceLocalizacion, 'expert.png');
+    // this.vectorLayerLocalizacion.getSource().clear()
+    // this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
+    this.addPoint(this.sesion.ubicacion.longitud, this.sesion.ubicacion.latitud, this.vectorSource, 'pin-export.png');
+
   }
 
-  calificarSesion(){
-    if (this.sesion.estado.id == 3 && this.sesion.calificacion == 0) {
-      this.navCtrl.push('ModalCalificacionPage', { sesion: this.sesion })
-    }
+  togglePopupMenu() {
+    return this.openMenu = !this.openMenu;
   }
 
+  comentar() {
+    this.navCtrl.push('FeedbackPage', { sesion: this.sesion })
+  }
+
+  cancelar() {
+    this.ionicComponentPrvdr.showAlert({
+      title: '',
+      message: '¿Cancelar sesión?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Si',
+          handler: () => {
+            this._sesionPrvdr.cancelar(this.sesion).subscribe(
+              (resp: any) => {
+                this.ionicComponentPrvdr.showLongToastMessage('Sesión cancelada.')
+                this.togglePopupMenu()
+              })
+          }
+        }
+      ]
+    })
+  }
+
+
+  finalizar() {
+    let modal = this.modalCtrl.create('ModalFinalizarSesionPage');
+    modal.onDidDismiss(data => {
+      if (data != undefined) {
+        this._sesionPrvdr.finalizar(this.sesion, data.tipo, data.novedad).subscribe(
+          (resp: any) => {
+            this.ionicComponentPrvdr.showLongToastMessage('Sesión finalizada.')
+            this.togglePopupMenu()
+          })
+      }
+    });
+    modal.present();
+  }
+
+  iniciar() {
+    this.ionicComponentPrvdr.showAlert({
+      title: '',
+      message: '¿Iniciar sesión?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Si',
+          handler: () => {
+            this._sesionPrvdr.iniciar(this.sesion).subscribe(
+              (resp: any) => {
+                this.ionicComponentPrvdr.showLongToastMessage('Sesión iniciada.')
+              })
+          }
+        }
+      ]
+    })
+
+
+  }
 }

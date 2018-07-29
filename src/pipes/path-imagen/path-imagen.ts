@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BASE_URL } from '../../config/url.confing';
+import {BASE_URL} from '../../config/url.config';
 /**
  * Generated class for the PathImagenPipe pipe.
  *
@@ -12,7 +12,7 @@ export class PathImagenPipe implements PipeTransform {
   /**
    * Takes a value and makes it lowercase.
    */
-  transform(value: string) {
-    return BASE_URL+value
-  }
+   transform(value: string) {
+     return BASE_URL+value
+   }
 }

@@ -26,15 +26,15 @@ export class AlmacenamientoProvider {
       if (this.platform.is("cordova")) {
         this.storage.setItem(llave, datos).then(
           () => {
-            resolve({ status: 'ok' })
+            resolve({ satatus: 'ok' })
           },
           error => {
-            reject({ status: 'false' })
+            reject({ satatus: 'false' })
           }
         )
       } else {
         localStorage.setItem(llave, datos);
-        resolve({ status: 'ok' });
+        resolve({ satatus: 'ok' });
       }
     });
     return promesa;
@@ -48,15 +48,15 @@ export class AlmacenamientoProvider {
       if (this.platform.is("cordova")) {
         this.storage.getItem(llave).then(
           (data) => {
-            resolve({ status: 'ok', data: data });
+            resolve({ satatus: 'ok', data: data });
           },
           error => {
-            reject({ status: 'false' });
+            reject({ satatus: 'false' });
           }
         )
       } else {
         let data = localStorage.getItem(llave);
-        resolve({ status: 'ok', data: data })
+        resolve({ satatus: 'ok', data: data })
       }
     })
     return promesa;
@@ -70,15 +70,15 @@ export class AlmacenamientoProvider {
       if (this.platform.is("cordova")) {
         this.storage.remove(llave).then(
           () => {
-            resolve({ status: 'ok' })
+            resolve({ satatus: 'ok' })
           },
           error => {
-            reject({ status: 'false' })
+            reject({ satatus: 'false' })
           }
         )
       } else {
         localStorage.removeItem(llave);
-        resolve({ status: 'ok' })
+        resolve({ satatus: 'ok' })
       }
     })
     return promesa;
