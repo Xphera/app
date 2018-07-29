@@ -1,0 +1,7 @@
+/* Header Style */
+.header-ios .toolbar-ios:last-child .toolbar-background-ios {
+  border-width: 0;
+  top: 0;
+  border-top-width: 0;
+  box-shadow: 0px 0px 0px #ffffff;
+}

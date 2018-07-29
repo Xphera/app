@@ -22,8 +22,12 @@ export class IonicComponentProvider {
   showLongToastMessage(mensaje: string) {
     this.showLongToast({
       message: mensaje,
-      duration: 3000,
-      position: 'top'
+      // duration: 6000,
+      // dismissOnPageChange: true,
+      closeButtonText:'X',
+      showCloseButton:true,
+      position: 'top',
+      duration: 10000,
     })
   }
 

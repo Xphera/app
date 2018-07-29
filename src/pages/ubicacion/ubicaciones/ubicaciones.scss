@@ -1,0 +1,13 @@
+page-ubicaciones {
+  .boton-mapa {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .reset {
+    padding: 0;
+    padding-left: 1px;
+  }
+}

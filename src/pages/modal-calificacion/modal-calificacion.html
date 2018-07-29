@@ -1,0 +1,24 @@
+<!--
+  Generated template for the ModalCalificacionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Calificar sesión</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <xph-calificar
+    [prestador]="sesion.prestador.nombreCompleto"
+    [prestadorImagenPath]="sesion.prestador.imagePath"
+    [fechaInicio]="sesion.fechaInicio"
+    [sesionId]="sesion.sesionId"
+    (clickBotonEnviar)="enviarCalificacion($event)"
+  ></xph-calificar>
+</ion-content>

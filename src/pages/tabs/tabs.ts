@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {SesionProvider } from '../../providers/sesion/sesion';
+import { IonicPage} from 'ionic-angular';
 
 /**
  * Generated class for the TabsPage page.
@@ -15,30 +14,15 @@ import {SesionProvider } from '../../providers/sesion/sesion';
   templateUrl: 'tabs.html',
 })
 export class TabsPage {
+  tab1Root = 'HomePage';
+  tab2Root = 'AboutPage';
+  tab3Root = 'ContactPage';
 
-  tab1Root = 'SesionPage';
-  tab2Root = 'DetalleSesionPage';
-  tab3Root = 'MiCuentaPage';
-
-  public sesionIniciada
-
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public _sesionPrvdr:SesionProvider) {
-
+  constructor() {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
   }
-
-  detalleSesion(sesion) {
-    this.navCtrl.push('DetalleSesionPage',{sesion,tipoSesion:''})
-  }
-
-  tabSelected(tab) {
-  console.log(tab.index);
-}
 
 }

@@ -1,13 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  URL_LOGIN,
-  URL_RESTABLECER_PASSWORD
-} from '../../config/url.config';
-import { PeticionProvider } from '../peticion/peticion';
+import { MenuController, App } from 'ionic-angular';
+
+import { URL_LOGIN,RESTABLECER_PASSWORD,URL_REGISTRO_USUARIO,URL_ACTIVAR_USUARIO } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
-import { App } from "ionic-angular";
-import { Observable } from "rxjs/Observable";
+import { PeticionProvider } from '../peticion/peticion';
+import { IonicComponentProvider } from '../ionic-component/ionic-component';
+import 'rxjs/add/operator/map';
 import { PushNotificationProvider } from '../push-notification/push-notification';
 
 /*
@@ -20,93 +19,202 @@ import { PushNotificationProvider } from '../push-notification/push-notification
 export class AutenticacionProvider {
 
   protected token: string;
-  protected nav;
-  public restablecer_pasword
 
   constructor(
-    public http: HttpClient,
-    private _peticionPrvdr: PeticionProvider,
+    private http: HttpClient,
     private _almacenamientoPrvdr: AlmacenamientoProvider,
-    public app: App,
-    public _pushNotificationPrvdr:PushNotificationProvider
-  ) {
+    private _peticionPrvdr: PeticionProvider,
+    private menuCtrl: MenuController,
+    public _ionicComponentPrvdr: IonicComponentProvider,
+    public _pushNotificationPrvdr:PushNotificationProvider,
+    public app: App) {
+
     console.log('Hello AutenticacionProvider Provider');
     this.cargarToken();
-    this._almacenamientoPrvdr.obtener('restablecer_pasword').then(
-      (data: any) => {
-        this.restablecer_pasword = data.data;
-      })
   }
 
 
-  login(username, password) {
-    this.nav = this.app.getActiveNav();
-    let request = this.http.post(URL_LOGIN, { username, password })
-    this._peticionPrvdr.peticion({ request: request })
-      .subscribe((data) => {
-        this.guardarToken(data["token"])
-        this.nav.setRoot('TabsPage')
-        this._pushNotificationPrvdr.addtagsNotificacion({ "userId": data["user_id"] })
-      })
-  }
 
-  logout() {
-    this.token = null;
-    this._pushNotificationPrvdr.deletetagsNotificacion("usrerId")
-    return this._almacenamientoPrvdr.eliminar('token')
-
-  }
-
-  restablecerPasword(data) {
-    let request = this.http.post(URL_RESTABLECER_PASSWORD, data)
-    return new Observable(observer => {
-      this._peticionPrvdr.peticion({ request: request })
-        .subscribe((resp: any) => {
-          this.restablecer_pasword = data.usuario
-          this._almacenamientoPrvdr.guardar('restablecer_pasword', this.restablecer_pasword)
-            .then(
-              () => {
-                observer.next(true);
-              })
-        })
-    })
-  }
-
-  restablecerPaswordValidaCodigo(data) {
-
-    let request = this.http.put(URL_RESTABLECER_PASSWORD, data)
-    return new Observable(observer => {
-      this._peticionPrvdr.peticion({ request: request })
-        .subscribe((resp: any) => {
-          this.restablecer_pasword = null
-          this._almacenamientoPrvdr.eliminar('restablecer_pasword')
-            .then(
-              () => {
-
-                this.nav = this.app.getActiveNav();
-                this.guardarToken(resp["token"])
-                this.nav.setRoot('TabsPage')
-
-                observer.next(true);
-              })
-        })
-    })
-  }
-
-  public activo() {
-    return this._almacenamientoPrvdr.obtener('token');
-  }
-
-
-  public guardarToken(token) {
-    this.token = token;
-    this._almacenamientoPrvdr.guardar('token', this.token)
-  }
   protected cargarToken(): void {
-    this._almacenamientoPrvdr.obtener('token')
+    this._almacenamientoPrvdr.obtener('usuario')
       .then((almacenamiento: any) => {
-        this.token = almacenamiento.data;
+        if (almacenamiento.data !== null) {
+          let data = JSON.parse(almacenamiento.data)
+          this.token = data.token;
+        }
       }
       )
   }
+
+  protected crearSesion(resp){
+    this._almacenamientoPrvdr.eliminar('restablcerUsuario')
+    this.guardarUsuario(resp)
+    this._pushNotificationPrvdr.addtagsNotificacion({ "userId": resp["user_id"] })
+    this.cargaMenu()
+      .then((resp: string) => {
+        this.app.getRootNavs()[0].setRoot(resp)
+        this._almacenamientoPrvdr.obtener('ir')
+          .then((data) => {
+            if (data["data"] != null) {
+              data = JSON.parse(data["data"])
+              this.app.getRootNavs()[0].push(data["pagina"], data["param"]);
+              this._almacenamientoPrvdr.eliminar('ir')
+            }
+          })
+      })
+  }
+
+  public obetenetToken(): string {
+    return this.token;
+  }
+
+  public activo() {
+    return this._almacenamientoPrvdr.obtener('usuario');
+  }
+
+  public login(username: string, password: string) {
+    let request = this.http.post(URL_LOGIN, { username, password })
+     this._peticionPrvdr.peticion(request)
+      .subscribe((resp)=>{
+       this.crearSesion(resp)
+     })
+  }
+
+  public cerrarSesion() {
+    this.token = null;
+    this._pushNotificationPrvdr.deletetagsNotificacion("usrerId")
+    let promesa = new Promise((resolve, reject) => {
+      this._almacenamientoPrvdr.eliminar('usuario')
+        .then(() => {
+          this.cargaMenu()
+            .then((resp) => {
+              resolve(resp);
+            })
+        })
+
+    })
+    return promesa;
+  }
+
+  public guardarUsuario(usuario) {
+    this.token = usuario.token;
+    this._almacenamientoPrvdr.guardar('usuario', JSON.stringify(usuario))
+  }
+
+  public gerHeaders(): HttpHeaders {
+    let headers = new HttpHeaders({
+      'Authorization': 'Token ' + this.token
+    });
+    // console.log(headers, this.token);
+    return headers;
+  }
+
+  public cargaMenu() {
+
+    let promesa = new Promise((resolve, reject) => {
+      this.activo()
+        .then((data) => {
+          let pagina: string
+
+          if (data['data'] != null) {
+            this.menuCtrl.enable(false, 'sesionInactiva');
+            this.menuCtrl.enable(true, 'sesionActiva');
+            pagina = "HomeUsuarioPage"
+          } else {
+            this.menuCtrl.enable(true, 'sesionInactiva');
+            this.menuCtrl.enable(false, 'sesionActiva');
+            pagina = "HomePage"
+          }
+          resolve(pagina);
+        }).catch(() => {
+          this.menuCtrl.enable(true, 'sesionInactiva');
+          this.menuCtrl.enable(false, 'sesionActiva');
+          resolve("HomePage");
+        })
+    })
+    return promesa;
+  }
+
+  public restablecerPasswordUsuario(usuario){
+    let request = this.http.post(RESTABLECER_PASSWORD, { usuario })
+    let promesa = new Promise((resolve, reject) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          this._almacenamientoPrvdr.guardar('restablcerUsuario', usuario)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Se ha enviado correo electrónico con código para continuar con proceso.')
+              resolve(true);
+            })
+        })
+    })
+    return promesa;
+  }
+
+  public restablecerPasswordCodigo(data){
+    let request = this.http.put(RESTABLECER_PASSWORD, data)
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp) => {
+          this._almacenamientoPrvdr.eliminar('restablcerUsuario')
+          this.crearSesion(resp)
+    })
+
+  }
+
+  public crearUsario(email: string, passw: string, repassw: string) {
+    let request = this.http.post(URL_REGISTRO_USUARIO, { email, passw, repassw })
+    let promesa = new Promise((resolve, reject) => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((data) => {
+          //guardar infomarmacion de registroUsuario.
+          this._almacenamientoPrvdr.guardar('registroUsuario', email)
+            .then(() => {
+              this._ionicComponentPrvdr.showLongToastMessage('Cuenta creada, se ha enviado correo electrónico con código para activar cuenta.')
+              resolve(true);
+            })
+        })
+    })
+    return promesa;
+  }
+
+  public activarCuenta(email: string, codigoValidacion: string) {
+
+    let request = this.http.post(URL_ACTIVAR_USUARIO, { email, codigoValidacion })
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp) => {
+          this._almacenamientoPrvdr.eliminar('registroUsuario')
+          this._ionicComponentPrvdr.showLongToastMessage('Cuenta activada con éxito.')
+          this.crearSesion(resp)
+        })
+
+  }
+
+  public guardian(pagina, param) {
+    return new Promise((resolve, reject) => {
+      this.activo()
+        .then((data) => {
+          if (data['data'] == null) {
+            setTimeout(() => {
+              this.app.getActiveNavs()[0].push('LoginPage');
+              this._ionicComponentPrvdr.showLongToastMessage("para continuar inicia sesión")
+
+              let data = {
+                'pagina': pagina,
+                'param': param
+              }
+              this._almacenamientoPrvdr.guardar('ir', JSON.stringify(data))
+            }, 0);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        }).catch(() => {
+          setTimeout(() => {
+            this.app.getActiveNavs()[0].push('LoginPage');
+            this._ionicComponentPrvdr.showLongToastMessage("para continuar inicia sesión")
+          }, 0);
+          resolve(false);
+        });
+    })
+  }
+
 }

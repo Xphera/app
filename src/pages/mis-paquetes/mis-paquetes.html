@@ -1,0 +1,60 @@
+<!--
+  Generated template for the MisPaquetesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Mis Paquetes</ion-title>
+    <ion-buttons left>
+      <button ion-button color="light" menuToggle icon-only>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <ion-card *ngFor="let paquete of _usuariosPrvdr.misPaquetes">
+    <ion-card-header>
+      <h1>{{paquete.paquete}}</h1>
+
+    </ion-card-header>
+    <ion-card-content>
+      {{paquete.detalle}}
+    </ion-card-content>
+
+    <ion-list>
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="{{paquete.prestador.imagePath|pathImagen}} ">
+        </ion-avatar>
+        <h2>{{paquete.prestador.nombreCompleto}}</h2>
+      </ion-item>
+      <ion-item>
+        Sesiones
+        <div item-end>{{paquete.sesiones}}</div>
+      </ion-item>
+      <ion-item>
+        Estado
+        <div item-end>{{paquete.estado.estado}}</div>
+      </ion-item>
+      <ion-item>
+        Valor
+        <div item-end>{{paquete.valor|currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}</div>
+      </ion-item>
+    </ion-list>
+
+
+      <button ion-button block  icon-start color="secondary" style="margin:0px;padding:0px" (click)="renovar(paquete.id)">
+      <ion-icon name="md-refresh-circle"></ion-icon>
+      <div>Renovar</div>
+    </button>
+
+
+  </ion-card>
+</ion-content>

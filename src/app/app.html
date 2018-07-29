@@ -1,1 +1,70 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<!-- showSplash -->
+<div *ngIf="showSplash" class="splash">
+  <div class="spinner"></div>
+</div>
+
+
+<div class="{{global.state['theme']}}">
+<ion-menu [content]="content" side="left" id="sesionInactiva">
+  <!-- Side menu header option -->
+  <ion-header no-border>
+    <ion-toolbar>
+      <div class="contents">
+        <div class="left">
+          <img class="logo" [src]="CONFIG.LOGO">
+        </div>
+        <div class="right">
+          <h4>{{CONFIG.APP_NAME}}</h4>
+        </div>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Side menu content option -->
+  <ion-content>
+    <ion-list no-lines>
+      <ion-item menuClose *ngFor="let p of pages" (click)="openPage(p.page)">
+        <ion-icon ion-text color="dark" [name]="p.leftIcon" item-left></ion-icon>
+        <span ion-text color="dark">{{p.title }}</span>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+  <!-- Side Menu Footer  -->
+  <ion-footer>
+    <button menuClose ion-button full color="dark" no-margin (click)="openPagePush('LoginPage')">
+      Iniciar Sesión
+    </button>
+
+  </ion-footer>
+</ion-menu>
+
+
+<!--Material Design Menu-->
+<ion-menu [content]="content" id="sesionActiva">
+  <ion-content>
+    <div class="menu-header">
+      <!--material-design-background-->
+      <img class="user-avatar round" [src]="chosenPicture || placeholder" onerror="this.src='assets/imgs/avatar/cosima-avatar.jpg'" />
+      <p class="name">Cosima Niehaus</p>
+      <p class="e-mail">pbolliger@email.com</p>
+    </div>
+    <ion-list no-lines>
+      <button menuClose="left" ion-item detail-none *ngFor="let p of pages_authenticated" (click)="openPage(p.page)">
+      <ion-icon [name]="p.leftIcon" item-left></ion-icon>
+      {{p.title}}
+    </button>
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <button menuClose ion-button full color="dark" no-margin (click)="cerrarSesion()">
+      Cerrar Sesión
+    </button>
+  </ion-footer>
+</ion-menu>
+
+
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+</div>
