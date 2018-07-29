@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OneSignal } from '@ionic-native/onesignal';
 import { Platform, App } from 'ionic-angular';
-// import { SesionProvider } from '../sesion/sesion';
+import { SesionProvider } from '../sesion/sesion';
 /*
   Generated class for the PushnNotificationProvider provider.
 
@@ -18,7 +18,7 @@ export class PushNotificationProvider {
     private oneSignal: OneSignal,
     public platform: Platform,
     public app: App,
-    // private _sesionPrvdr: SesionProvider,
+    private _sesionPrvdr: SesionProvider,
     public zone: NgZone
   ) {
     console.log('Hello PushnNotificationProvider Provider');
@@ -31,16 +31,16 @@ export class PushNotificationProvider {
 
       this.oneSignal.startInit('96150a2e-39ac-477d-a116-16cc8c5e2e88', '807999059175');
 
-      this.oneSignal.sendTag("app", "cliente");
+      this.oneSignal.sendTag("app", "prestador");
 
       this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
       this.oneSignal.handleNotificationReceived().subscribe((data: any) => {
         this.zone.run(() => {
-          if (data.payload.additionalData.tipo == "detalleSesion" ||data.payload.additionalData.tipo == "detalleSesionAutomatica") {
-            // this._sesionPrvdr.getSesionPorIniciar()
-            // this._sesionPrvdr.getSesionProxima()
-            // this._sesionPrvdr.getSesionFinalizada()
+          if (data.payload.additionalData.tipo == "detalleSesion") {
+            this._sesionPrvdr.getSesionPorIniciar()
+            this._sesionPrvdr.getSesionProxima()
+            this._sesionPrvdr.getSesionFinalizada()
           }
         })
         // do something when notification is received
@@ -49,12 +49,13 @@ export class PushNotificationProvider {
 
       this.oneSignal.handleNotificationOpened().subscribe((data: any) => {
         // do something when a notification is opened
-        if (data.notification.payload.additionalData.tipo == "detalleSesion" || data.notification.payload.additionalData.tipo == "detalleSesionAutomatica") {
 
-          // this._sesionPrvdr.getSesion(data.notification.payload.additionalData.sesionId)
-          //   .subscribe((data) => {
-          //     this.app.getRootNavs()[0].push('DetalleSesionPage', { sesion: data });
-          //   })
+        if (data.notification.payload.additionalData.tipo == "detalleSesion") {
+
+          this._sesionPrvdr.getSesion(data.notification.payload.additionalData.sesionId)
+            .subscribe((data) => {
+              this.app.getRootNavs()[0].push('DetalleSesionPage', { sesion: data });
+            })
         }
       });
 

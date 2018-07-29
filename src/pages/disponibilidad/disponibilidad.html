@@ -1,0 +1,22 @@
+<!--
+  Generated template for the DisponibilidadPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Disponibilidad</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <xph-grilla-disponibilidad
+    [disponibilidad]="_disponibilidadPrvdr.disponibiliad"
+    (getDisponibilidad)="guardar($event)"
+  ></xph-grilla-disponibilidad>
+
+</ion-content>

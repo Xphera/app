@@ -1,13 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CreditCardTypePipe } from './credit-card-type/credit-card-type';
 import { PathImagenPipe } from './path-imagen/path-imagen';
 @NgModule({
-	declarations: [CreditCardTypePipe,
-    PathImagenPipe,
-    ],
+	declarations: [PathImagenPipe],
 	imports: [],
-	exports: [CreditCardTypePipe,
-    PathImagenPipe,
-    ]
+	exports: [PathImagenPipe]
 })
 export class PipesModule {}

@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable"
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
-import { App } from 'ionic-angular';
+
 /*
   Generated class for the PeticionProvider provider.
 
@@ -12,39 +12,51 @@ import { App } from 'ionic-angular';
 */
 @Injectable()
 export class PeticionProvider {
-
   peticionId: number = 0;
   showloader: any;
-  protected loading: boolean = true
-
+  private token:string
+  // protected loading: boolean
   constructor(
     public http: HttpClient,
-    private _ionicComponentPrvdr: IonicComponentProvider,
-    public _almacenamientoPrvdr: AlmacenamientoProvider,
-    public app: App) {
+    private _almacenamientoPrvdr: AlmacenamientoProvider,
+    private _ionicComponentPrvdr: IonicComponentProvider, ) {
     console.log('Hello PeticionProvider Provider');
+    this._almacenamientoPrvdr.obtener('token').then(
+      (data: any) => {
+        this.token = data.data;
+      })
   }
 
-  peticion(request, key?: string, loading?: boolean) {
+  public getHeaders(): HttpHeaders {
+    let headers = new HttpHeaders({
+      'Authorization': 'Token ' + this.token,
+      'Content-Type': 'application/json'
+    });
+    return headers;
+  }
 
-    if (loading == undefined || loading == true) {
+  peticion(input: input) {
+
+    let loading = false
+    if (input.loading == undefined || input.loading == true) {
       loading = true
     }
 
     let observable = new Observable((observer) => {
 
-      if (loading) {
-        if (this.peticionId == 0) {
+      if(loading){
+        if (this.peticionId == 0 ) {
           this.showloaderOpen()
         }
         ++this.peticionId
-      }
 
-      request.subscribe((resp) => {
-      //si existe almacena valor por key
-        if (key) {
-          this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
-        }
+      }
+      console.log(input.request)
+      input.request.subscribe((resp) => {
+        //si existe almacena valor por key
+        // if (input.key) {
+        //   this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
+        // }
         observer.next(resp);
 
         if (loading) {
@@ -52,50 +64,25 @@ export class PeticionProvider {
           if (this.peticionId == 0) {
             this.showloaderClose()
           }
-        }
 
+        }
       },
         (errores) => {
           --this.peticionId
           if (this.peticionId == 0) {
             this.showloaderClose()
           }
-
-          if (errores.status == 401) {
-            this.app.getRootNavs()[0].push('LoginPage')
-          }
-          else if (errores.status == 500 || errores.status == 0) {
-            this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
-          } else {
-            let listaerrores: string = this.httpErrores(errores);
-            this._ionicComponentPrvdr.showAlert({
-              title: '',
-              subTitle: listaerrores,
-              buttons: ['OK']
-            });
-            observer.error(errores);
-          }
+          let listaerrores: string = this.httpErrores(errores);
+          this._ionicComponentPrvdr.showAlert({
+            title: '',
+            subTitle: listaerrores,
+            buttons: ['OK']
+          });
+          observer.error(errores);
         }
       )
     })
     return observable;
-  }
-
-  protected showloaderOpen() {
-
-    if (this.loading) {
-      this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
-      console.log('abrir')
-    }
-
-  }
-
-  protected showloaderClose() {
-    if (this.loading && this.showloader) {
-      this.showloader.dismiss()
-      console.log('cerrar')
-    }
-
   }
 
   private httpErrores(errores) {
@@ -106,33 +93,35 @@ export class PeticionProvider {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {
           if (!isBoolean(errores)) {
-            listaerrores += error + "<br>"
             // listaerrores += e + ' ' + error + "<br>"
+            listaerrores += error + "<br>"
           }
 
         }
       }
       else {
         if (!isBoolean(errores.error[e]))
+          // listaerrores += errores.error[e] + "<br>"
           listaerrores += errores.error[e] + "<br>"
       }
     }
     return listaerrores;
-
-
   }
 
-  almacenamiento(key) {
-    let promesa = new Promise((resolve, reject) => {
-      this._almacenamientoPrvdr.obtener(key)
-        .then((datos) => {
-          resolve(datos);
-        },
-          error => {
-            reject({ status: 'false' });
-          });
-    })
-    return promesa;
+  protected showloaderOpen() {
+    this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
+    console.log('abro')
   }
 
+  protected showloaderClose() {
+    // if(this.showloader)
+    this.showloader.dismiss()
+    console.log('cierro')
+  }
+}
+
+export interface input {
+  request,
+  key?: string,
+  loading?: boolean
 }
