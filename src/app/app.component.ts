@@ -2,7 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 import { AutenticacionProvider } from '../providers/autenticacion/autenticacion';
+import { PushNotificationProvider } from '../providers/push-notification/push-notification';
+
 import { CONFIG } from '../config/comunes.config';
 
 import { InicioProvider } from '../providers/inicio/inicio';
@@ -39,7 +42,9 @@ export class MyApp {
     _inicioPrvdr: InicioProvider,
     cache: CacheService,
     imgCache: ImgCacheService,
-    public global: AppState) {
+    public global: AppState,
+    public _pushNotificationPrvdr: PushNotificationProvider
+  ) {
 
 
 
@@ -49,6 +54,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
 
+      this._pushNotificationPrvdr.init_notifications();
 
       this._autenticacionPrvdr.cargaMenu()
         .then((resp: string) => {

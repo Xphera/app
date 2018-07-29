@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { OneSignal } from '@ionic-native/onesignal';
 
 import {HttpClientModule} from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -30,6 +31,7 @@ import { ClienteProvider } from '../providers/cliente/cliente';
 import { PeticionProvider } from '../providers/peticion/peticion';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/localizar-ubicacion';
+import { PushNotificationProvider } from '../providers/push-notification/push-notification';
 
 
 @NgModule({
@@ -52,6 +54,7 @@ import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/loc
     AppState,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    OneSignal,
     CategoriasProvider,
     ServiciosProvider,
     UsuariosProvider,
@@ -68,7 +71,8 @@ import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/loc
     ClienteProvider,
     PeticionProvider,
     Geolocation,
-    LocalizarUbicacionProvider
+    LocalizarUbicacionProvider,
+    PushNotificationProvider
   ]
 })
 export class AppModule {}
