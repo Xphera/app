@@ -1,0 +1,104 @@
+<!--
+  Generated template for the PerfilEditarPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Editar perfil</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="cerrarModal()">
+            <ion-icon name="close"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="myForm" (ngSubmit)="guardar()">
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Nombres</ion-label>
+      <ion-input formControlName="nombres" type="text"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.nombres.hasError('maxlength') && myForm.controls.nombres.touched">
+      <p>Nombres es mayor {{ myForm.controls.nombres.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+    <div class="error-box" *ngIf="myForm.controls.nombres.hasError('pattern') && myForm.controls.nombres.touched">
+      <p>solo se permiten valores alfanumerico</p>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Primer apellido</ion-label>
+      <ion-input formControlName="primerApellido" type="text"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.primerApellido.hasError('maxlength') && myForm.controls.primerApellido.touched">
+      <p>Primer apellido es mayor {{ myForm.controls.primerApellido.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+    <div class="error-box" *ngIf="myForm.controls.primerApellido.hasError('pattern') && myForm.controls.primerApellido.touched">
+      <p>solo se permiten valores alfanumerico</p>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Segundo apellido</ion-label>
+      <ion-input formControlName="segundoApellido" type="text"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.segundoApellido.hasError('maxlength') && myForm.controls.segundoApellido.touched">
+      <p>Segundo apellido es mayor {{ myForm.controls.segundoApellido.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+    <div class="error-box" *ngIf="myForm.controls.segundoApellido.hasError('pattern') && myForm.controls.segundoApellido.touched">
+      <p>solo se permiten valores alfanumerico</p>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Tipo documento</ion-label>
+      <ion-select formControlName="tipoDocumento">
+        <ion-option value="CC">CC</ion-option>
+        <ion-option value="PA">PA</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Número documento</ion-label>
+      <ion-input formControlName="numeroDocumento" type="text"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.numeroDocumento.hasError('maxlength') && myForm.controls.numeroDocumento.touched">
+      <p>Número documento es mayor {{ myForm.controls.numeroDocumento.errors.maxlength.requiredLength }} caracteres</p>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Teléfono</ion-label>
+      <ion-input formControlName="telefono" type="text"></ion-input>
+    </ion-item>
+
+    <div class="error-box" *ngIf="myForm.controls.telefono.hasError('pattern') && myForm.controls.telefono.touched">
+      <p>Teléfono inválido</p>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Sexo</ion-label>
+      <ion-select formControlName="sexo" >
+        <ion-option value="F">Femenino</ion-option>
+        <ion-option value="M">Masculinio</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Fecha nacimiento</ion-label>
+      <ion-datetime formControlName="fechaNacimiento" displayFormat="YYYY-MM-DD"></ion-datetime>
+    </ion-item>
+  </ion-list>
+
+  <button [disabled]="!myForm.valid" ion-button type="button" color="themeColor1" block type="submit">
+       Guardar
+    </button>
+</form>
+</ion-content>

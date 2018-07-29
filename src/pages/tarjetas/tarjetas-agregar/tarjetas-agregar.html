@@ -1,0 +1,94 @@
+<!--
+  Generated template for the TarjetasAgregarPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Nueva tarjeta de crédito</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="cerrarModal()">
+            <ion-icon name="close"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <!-- <form [formGroup]="myForm" (ngSubmit)="saveData()"> -->
+  <form [formGroup]="myForm" (ngSubmit)="guardar()">
+    <ion-list>
+      <!-- <ion-item>
+        <ion-label stacked>Franquicia</ion-label>
+        <ion-input type="tel" placeholder="" ></ion-input>
+
+      </ion-item> -->
+      <ion-row>
+
+        <ion-item col-12>
+          <ion-label floating>Número de tarjeta de crédito</ion-label>
+          <ion-icon [name]="franquiciaImagen" item-left></ion-icon>
+          <ion-input type="text" formControlName="cardNumber"></ion-input>
+          <button ion-button icon-only clear (click)="scanCard()" color="dark" item-right>
+                <ion-icon name="ios-camera-outline"></ion-icon>
+          </button>
+        </ion-item>
+        <!-- <ion-item col-3 [ngStyle]="{'background': 'url(' + franquiciaImagen +') no-repeat center'}">
+          <ion-input fromControlName="paymentMethod" type="text"></ion-input>
+        </ion-item> -->
+      </ion-row>
+      <div class="error-box" *ngIf="myForm.controls.cardNumber.invalid &&myForm.controls.cardNumber.touched">
+        Número de tarjeta de crédito inválido.
+      </div>
+
+      <ion-item>
+        <ion-label floating>Nombre del titular</ion-label>
+        <ion-input formControlName="fullName" type="text"></ion-input>
+      </ion-item>
+      <div class="error-box" *ngIf="myForm.controls.fullName.invalid &&myForm.controls.fullName.touched">
+        Nombre del titular es obligatorio
+      </div>
+      <ion-row>
+        <ion-item col-6>
+          <ion-label floating>Año</ion-label>
+          <ion-input formControlName="year" type="text"></ion-input>
+        </ion-item>
+        <ion-item col-6>
+          <ion-label floating>Mes</ion-label>
+          <ion-input formControlName="month" type="text"></ion-input>
+
+        </ion-item>
+
+      </ion-row>
+
+      <ion-row class="sinBorder">
+        <ion-item col-6>
+          <div class="error-box" *ngIf="myForm.controls.year.invalid &&myForm.controls.year.touched">
+            Año inválido
+          </div>
+        </ion-item>
+        <ion-item col-6>
+          <div class="error-box" *ngIf="myForm.controls.month.invalid &&myForm.controls.month.touched">
+            Mes inválido
+          </div>
+
+        </ion-item>
+
+      </ion-row>
+
+
+
+
+
+      <div>
+        <button ion-button block type="submit" [disabled]="!myForm.valid">Guardar</button>
+      </div>
+    </ion-list>
+
+  </form>
+
+</ion-content>

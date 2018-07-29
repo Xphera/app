@@ -1,0 +1,31 @@
+<!-- Generated template for the ChartSesionesComponent component -->
+<ion-card>
+  <ion-item text-center>
+    <h2>{{ paquete.nombre }}</h2>
+    <p>{{ paquete.valor |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL }}</p>
+  </ion-item>
+  <ion-item>
+    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+  </canvas>
+  </ion-item>
+  <ion-item text-justify text-wrap>
+    <p>{{ detalle }}</p>
+  </ion-item>
+  <ion-item>
+    <ion-avatar item-start>
+      <img [src]="paquete.prestador.imagePath|pathImagen">
+    </ion-avatar>
+    <p>Prestador</p>
+    <h2>{{paquete.prestador.nombres +' '+paquete.prestador.primerApellido+' '+paquete.prestador.segundoApellido}}</h2>
+  </ion-item>
+
+  <button ion-item (click)='onClick()'>
+    <ion-icon color="primary" name="ios-play" item-start large></ion-icon>
+    Sesiones disponibles
+    <ion-badge item-end>{{ paquete.cantidadDeSesiones-paquete.sesionFinalizadas }} de {{ paquete.cantidadDeSesiones }}</ion-badge>
+  </button>
+
+  <ion-list>
+  </ion-list>
+
+</ion-card>

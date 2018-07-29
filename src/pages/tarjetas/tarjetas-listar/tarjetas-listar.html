@@ -1,0 +1,57 @@
+<!--
+  Generated template for the TarjetasListarPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle icon-only>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+    </ion-buttons>
+    <ion-title>Tarjetas de crédito</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <div *ngIf="_metodoPagoPrvdr.td.length == 0" id="sindatos"> Sin medio de pagos registrado ... </div>
+    <ion-item-sliding *ngFor="let card of _metodoPagoPrvdr.td">
+      <ion-item (click)="clickCard()">
+        <ion-icon name="custom-{{ card.paymentMethod }}" item-left></ion-icon>
+        <ion-label> {{ card.maskedNumber }}</ion-label>
+        <ion-icon *ngIf="card.principal" name="checkmark" (click)=" eliminarTarjeta(card)" color="secondary" item-end></ion-icon>
+      </ion-item>
+      <ion-item-options side="right">
+        <button *ngIf="!card.principal" ion-button color="secondary" (click)="tarjetaCreditoPrincipal(card.creditCardTokenId)">
+        <ion-icon name="checkmark"></ion-icon>
+        Principal
+      </button>
+        <button ion-button color="danger" (click)=" eliminarTarjeta(card)">
+        <ion-icon name="trash"></ion-icon>
+        Eliminar
+      </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+
+  <!-- <ion-list>
+    <div *ngIf="_metodoPagoPrvdr.td.length == 0" id="sindatos"> Sin medio de pagos registrado ... </div>
+
+    <ion-item *ngFor="let card of _metodoPagoPrvdr.td">
+      <ion-icon name="custom-{{ card.paymentMethod }}" item-left></ion-icon>
+      <ion-label> {{ card.maskedNumber }}</ion-label>
+      <ion-icon name="ios-trash-outline" (click)=" eliminarTarjeta(card)" color="danger" item-end></ion-icon>
+    </ion-item>
+  </ion-list> -->
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="modalAgregar()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>

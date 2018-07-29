@@ -1,0 +1,12 @@
+export { Categoria } from './categoria.model';
+export { Servicio } from './servicio.model';
+export { TarjetaCredito } from './tarjeta-credito.model';
+export { Asociado } from './asociado.model';
+export { Paquete } from './paquete.model';
+export { Ubicacion } from './ubicacion.model';
+export { Cliente } from './cliente.model';
+export { PaqueteActivo } from './paquete-activo.model';
+export { Sesion } from './sesion.model';
+export { EstadoSesion } from './estado-sesion.model';
+export { Bolsa } from './bolsa.model';
+export { MisPaquetes } from './mis-paquetes.model';
