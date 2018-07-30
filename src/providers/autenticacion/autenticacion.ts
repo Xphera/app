@@ -82,7 +82,6 @@ export class AutenticacionProvider {
   }
 
   public cerrarSesion() {
-
     this.token = null;
     this._pushNotificationPrvdr.deletetagsNotificacion("userId")
     let promesa = new Promise((resolve, reject) => {
