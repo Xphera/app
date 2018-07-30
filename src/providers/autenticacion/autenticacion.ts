@@ -50,6 +50,7 @@ export class AutenticacionProvider {
     this._almacenamientoPrvdr.eliminar('restablcerUsuario')
     this.guardarUsuario(resp)
     this._pushNotificationPrvdr.addtagsNotificacion({ "userId": resp["user_id"] })
+
     this.cargaMenu()
       .then((resp: string) => {
         this.app.getRootNavs()[0].setRoot(resp)
@@ -81,8 +82,9 @@ export class AutenticacionProvider {
   }
 
   public cerrarSesion() {
+
     this.token = null;
-    this._pushNotificationPrvdr.deletetagsNotificacion("usrerId")
+    this._pushNotificationPrvdr.deletetagsNotificacion("userId")
     let promesa = new Promise((resolve, reject) => {
       this._almacenamientoPrvdr.eliminar('usuario')
         .then(() => {

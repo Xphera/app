@@ -38,6 +38,7 @@ export class PushNotificationProvider {
       this.oneSignal.handleNotificationReceived().subscribe((data: any) => {
         this.zone.run(() => {
           if (data.payload.additionalData.tipo == "detalleSesion" ||data.payload.additionalData.tipo == "detalleSesionAutomatica") {
+
             // this._sesionPrvdr.getSesionPorIniciar()
             // this._sesionPrvdr.getSesionProxima()
             // this._sesionPrvdr.getSesionFinalizada()
