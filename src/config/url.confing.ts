@@ -35,3 +35,4 @@ export const URL_PROGRAMAR_SESION = BASE_URL + "/api/servicios/ProgramarSesion/"
 export const URL_CANCELAR_SESION = BASE_URL + "/api/servicios/CancelarSesion/"
 export const URL_CANCELAR_PAQUETE = BASE_URL + "/api/servicios/CancelarPaquete/"
 export const URL_CANCELAR_RENOVAR= BASE_URL + "/api/servicios/RenovarPaquete/"
+export const URL_SESION_DETALLE= BASE_URL + "/api/servicios/SesionDetalle/";

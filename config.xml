@@ -103,4 +103,5 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="onesignal-cordova-plugin" spec="^2.4.1" />
+    <engine name="android" spec="7.0.0" />
 </widget>

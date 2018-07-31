@@ -38,7 +38,7 @@ export class UbicacionesProvider {
   }
 
   grabarUbicaciones() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<Ubicacion[]>(URL_UBICACIONES, { headers })
     this._peticionPrvdr.peticion(request, this.key)
       .subscribe((data: Ubicacion[]) => {
@@ -64,7 +64,7 @@ export class UbicacionesProvider {
   */
   eliminarUbicacion(ubicacion: Ubicacion) {
 
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.delete(URL_UBICACIONES + ubicacion.id, { headers })
 
 
@@ -111,7 +111,7 @@ export class UbicacionesProvider {
 
   guardarUbicacion(ubicacion: Ubicacion) {
 
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post<Ubicacion>(URL_UBICACIONES, ubicacion, { headers })
 
     let observable = new Observable((observer) => {
@@ -128,7 +128,7 @@ export class UbicacionesProvider {
     return observable;
 
     // let loader = this._ionicComponentPrvdr.showloader("por favor espera...")
-    // let headers = this._autenticacionPrvdr.gerHeaders();
+    // let headers = this._peticionPrvdr.getHeaders();
     // let observable = new Observable((observer) => {
     //   this.http.post<Ubicacion>(URL_UBICACIONES, ubicacion, { headers })
     //     .subscribe((data: Ubicacion) => {
@@ -162,7 +162,7 @@ export class UbicacionesProvider {
   }
 
   editarUbicacion(ubicacion: Ubicacion) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.put<Ubicacion>(URL_UBICACIONES + ubicacion.id + '/', ubicacion, { headers })
 
     let observable = new Observable((observer) => {
@@ -179,7 +179,7 @@ export class UbicacionesProvider {
     return observable;
 
     // let loader = this._ionicComponentPrvdr.showloader("por favor espera...")
-    // let headers = this._autenticacionPrvdr.gerHeaders();
+    // let headers = this._peticionPrvdr.getHeaders();
     //
     // let observable = new Observable((observer) => {
     //   this.http.put<Ubicacion>(URL_UBICACIONES + ubicacion.id + '/', ubicacion, { headers })

@@ -5,8 +5,7 @@ import { CONFIG } from '../../config/comunes.config';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
 import ol from 'openlayers';
 import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
-
-import { Observable } from 'Rxjs/rx';
+import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
@@ -54,6 +53,7 @@ export class DetalleSesionPage {
     public navParams: NavParams,
     private _usuariosPrvdr: UsuariosProvider,
     private _localizarUbicacionPrvdr: LocalizarUbicacionProvider,
+    public _ionicComponentPrvdr:IonicComponentProvider,
     public modalCtrl: ModalController) {
     this.sesion = this.navParams.get('sesion');
     this.drawerOptions = {
@@ -65,53 +65,54 @@ export class DetalleSesionPage {
       hideTitle: "Detalle sesión",
     };
 
-
-
-
-
-
-
-
   }
 
-  inicio(){
-    this.watch = Observable.interval(1000).subscribe(() => {
-      this._usuariosPrvdr.obetenerPaqueteActivos()
-      this.sesion = this._usuariosPrvdr.paqueteActivo.compradetallesesiones.find(
-        (data) => {
-          if (data.sesionId == this.sesion.sesionId) {
-            return true
-          }
-        });
-
+  inicio(){  
       this.sesionPorIniciar = this._usuariosPrvdr.sesionPorIniciar(this.sesion)
       this.diferenciaHora = this._usuariosPrvdr.diferenciaHora(this.sesion.fechaInicio)
       this.sesionnoIniciada = this._usuariosPrvdr.sesionnoIniciada(this.sesion) && (this.sesion.estado.id == 2 || this.sesion.estado.id == 4)
+      this.loadMap();
 
-
-      if (this._usuariosPrvdr.localizar(this.sesion)) {
-        this._localizarUbicacionPrvdr.localizar();
-        this.ubicarPuntos();
-      }
-
-      if (this.sesion.estado.id == 5) {
-        this._localizarUbicacionPrvdr.deterner()
-        //limpiar puntos en mapa
-        this.vectorLayerLocalizacion.getSource().clear()
-      }
-
-
-    });
+      // if (this._usuariosPrvdr.localizar(this.sesion)) {
+      //   this._localizarUbicacionPrvdr.localizar();
+      //   this.ubicarPuntos();
+      // }
+      // if (this.sesion.estado.id == 5) {
+      //   this._localizarUbicacionPrvdr.deterner()
+      //   //limpiar puntos en mapa
+      //   this.vectorLayerLocalizacion.getSource().clear()
+      // }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DetalleSesionPage');
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter DetalleSesionPage');
     this.inicio();
-    this.loadMap();
+    this.watch = this._usuariosPrvdr.sesionSubject.subscribe((sesion:Sesion)=>{
+        if(this.sesion.sesionId == sesion.sesionId){
+          this.sesion = sesion
+          this.inicio()
+        }
+
+      // this.sesion = sesion
+      // this.inicio()
+      // let sesionId = this.sesion.sesionId
+      // let sesion = paquete.compradetallesesiones.find(
+      //   (sesion:any) => {
+      //     if (sesion.sesionId == sesionId) {
+      //       return true
+      //     }
+      //   });
+      //   if(sesion != undefined){
+      //     this.sesion = sesion
+      //     this.inicio()
+      //   }
+    })
+
+
   }
 
   ionViewWillLeave() {
-    this._localizarUbicacionPrvdr.deterner()
+    // this._localizarUbicacionPrvdr.deterner()
     this.watch.unsubscribe()
   }
 
@@ -121,7 +122,7 @@ export class DetalleSesionPage {
   }
 
   loadMap() {
-
+    console.log(this.sesion.ubicacion)
     this.map = new ol.Map({
       controls: [],
       layers: [this.raster, this.vectorLayer, this.vectorLayerLocalizacion],

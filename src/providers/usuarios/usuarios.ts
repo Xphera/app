@@ -4,7 +4,7 @@ import { ModalController } from 'ionic-angular';
 
 import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
-import { AutenticacionProvider } from '../autenticacion/autenticacion';
+
 import { Observable } from "rxjs/Observable"
 
 import { PaqueteActivo, Sesion,Bolsa,MisPaquetes } from '../../models/models.index';
@@ -12,6 +12,7 @@ import { PaqueteActivo, Sesion,Bolsa,MisPaquetes } from '../../models/models.ind
 import * as arraySort from 'array-sort';
 import * as moment from 'moment';
 
+import { Subject } from 'rxjs/Subject';
 
 import {
   URL_PAGAR,
@@ -24,7 +25,8 @@ import {
   URL_CANCELAR_PAQUETE,
   URL_SALDO_BOLSA,
   URL_BOLSA,
-  URL_CANCELAR_RENOVAR
+  URL_CANCELAR_RENOVAR,
+  URL_SESION_DETALLE
 } from '../../config/url.confing';
 
 /*
@@ -43,13 +45,16 @@ export class UsuariosProvider {
 
   public paqueteActivo: PaqueteActivo = new PaqueteActivo();
   public sesionesPorCalificar: Sesion = new Sesion()
+  public sesion: Sesion = new Sesion()
   public proximaSesion: Sesion = new Sesion()
 
+  public paqueteActivoSubject = new Subject();
+  public sesionSubject = new Subject();
   constructor(
     private http: HttpClient,
     private _peticionPrvdr: PeticionProvider,
     private _ionicComponentPrvdr: IonicComponentProvider,
-    public _autenticacionPrvdr: AutenticacionProvider,
+    // public _autenticacionPrvdr: AutenticacionProvider,
     public modalCtrl: ModalController,
   ) {
     console.log('Hello UsuariosProvider Provider');
@@ -57,7 +62,7 @@ export class UsuariosProvider {
 
 
   public pagar(datos) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_PAGAR, datos, { headers })
     let observable = new Observable((observer) => {
       this._peticionPrvdr.peticion(request)
@@ -74,7 +79,7 @@ export class UsuariosProvider {
   }
 
   public obtenerMisPaquetes() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<MisPaquetes>(URL_MIS_PAQUETES, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp:MisPaquetes[]) => {
@@ -83,14 +88,15 @@ export class UsuariosProvider {
   }
 
   public renovarPaquete(compraDetalleId){
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_CANCELAR_RENOVAR,{compraDetalleId:compraDetalleId},{ headers })
     return this._peticionPrvdr.peticion(request)
 
   }
 
   public obetenerPaqueteActivos() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    // this.xx = new Subject();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
     this._peticionPrvdr.peticion(request, '', false)
       .map((resp: PaqueteActivo) => {
@@ -104,12 +110,14 @@ export class UsuariosProvider {
       .subscribe((resp: PaqueteActivo) => {
         if (Object.keys(resp).length) {
           this.paqueteActivo = resp;
+          this.paqueteActivoSubject.next(resp)
+          console.log('subscribe')
         }
       })
   }
 
   public obtenerSesionesPorCalificar() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.get(URL_CALIFICAR_SESION, { headers })
     this._peticionPrvdr.peticion(request, '',false)
@@ -125,7 +133,7 @@ export class UsuariosProvider {
   }
 
   public calificarSesion(calificacion) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.post(URL_CALIFICAR_SESION, calificacion, { headers })
     this._peticionPrvdr.peticion(request)
@@ -137,8 +145,8 @@ export class UsuariosProvider {
       })
   }
 
-  obtenerProximaSesion() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+  public obtenerProximaSesion() {
+    let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.get(URL_PROXIMA_SESION, { headers })
     this._peticionPrvdr.peticion(request,'',false)
@@ -148,6 +156,25 @@ export class UsuariosProvider {
       .subscribe((resp: any) => {
         this.proximaSesion = resp
       })
+  }
+
+  public obtenerSesion(sesionId){
+
+  this.obtenerSesionObservable(sesionId)
+  .subscribe((sesion:Sesion)=>{
+    console.log(sesion)
+      this.sesion = sesion
+      this.sesionSubject.next(sesion)
+    })
+  }
+
+  public obtenerSesionObservable(sesionId){
+  let headers = this._peticionPrvdr.getHeaders();
+  let request = this.http.get<Sesion[]>(URL_SESION_DETALLE+sesionId+'/',{ headers })
+  return this._peticionPrvdr.peticion(request)
+    .map((resp: any) => {
+      return this.mapSesion(resp)
+    })
   }
 
   public programarSesionModalOpen(sesion) {
@@ -181,7 +208,7 @@ export class UsuariosProvider {
     // longitud,
     // sesionId,
     // titulo
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.post(URL_PROGRAMAR_SESION, data, { headers })
 
@@ -199,7 +226,7 @@ export class UsuariosProvider {
   }
 
   public saldoBolsa() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get(URL_SALDO_BOLSA, { headers })
     return this._peticionPrvdr.peticion(request)
     // .subscribe((resp:any) => {
@@ -208,7 +235,7 @@ export class UsuariosProvider {
   }
 
   public getbolsa() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<Bolsa>(URL_BOLSA, { headers })
     return this._peticionPrvdr.peticion(request)
       .subscribe((resp: Bolsa) => {
@@ -250,7 +277,7 @@ export class UsuariosProvider {
   }
 
   public cancelarSesion(sesion) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_CANCELAR_SESION, { sesionId: sesion.sesionId }, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp) => {
@@ -260,71 +287,10 @@ export class UsuariosProvider {
   }
 
   public cancelarPaquete(data) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_CANCELAR_PAQUETE, data, { headers })
     return this._peticionPrvdr.peticion(request)
 
-  }
-
-  protected mapSesion(resp: any) {
-    let sesion: Sesion = new Sesion()
-    if (Object.keys(resp).length) {
-      sesion.calificacion = resp.calificacion
-      sesion.sesionId = resp.id
-      sesion.prestador.nombreCompleto = resp.compraDetalle.prestador.nombres + resp.compraDetalle.prestador.primerApellido + resp.compraDetalle.prestador.segundoApellido
-      sesion.prestador.imagePath = resp.compraDetalle.prestador.imagePath;
-      sesion.prestador.zona = resp.compraDetalle.prestador.zona
-      sesion.fechaInicio = resp.fechaInicio
-      sesion.ubicacion.title = resp.titulo
-      sesion.ubicacion.complemento = resp.complemento
-      sesion.ubicacion.direccion = resp.direccion
-      sesion.ubicacion.longitud = resp.longitud
-      sesion.ubicacion.latitud = resp.latitud
-      sesion.estado.id = resp.estado.id
-      sesion.estado.estado = resp.estado.estado
-      sesion.paquete.nombre = resp.compraDetalle.nombre
-      sesion.paquete.valor = resp.compraDetalle.valor
-      sesion.paquete.detalle = resp.compraDetalle.detalle
-      sesion.fin = resp.fin
-      sesion.inicio = resp.inicio
-      sesion.duracion = this.diff(sesion.inicio, sesion.fin)["minuto"] * -1
-    }
-    return sesion
-  }
-
-
-  protected actulizarDetalleSesion(data) {
-
-    this.paqueteActivo.compradetallesesiones
-      .map((resp) => {
-        if (resp.sesionId == data.sesionId) {
-          resp.ubicacion.complemento = data.complemento
-          resp.ubicacion.direccion = data.direccion
-          resp.fechaInicio = data.fechaInicio
-          resp.ubicacion.latitud = data.latitud
-          resp.ubicacion.title = data.titulo
-
-          if (data.estado.id == 2) {
-            resp.estado.id = data.estado.id
-            resp.estado.estado = data.estado.estado
-            this.paqueteActivo.sesionAgendadas++
-            this.paqueteActivo.sesionPorAgendar--
-          }
-          else if (data.estado.id == 4) {
-            resp.estado.id = data.estado.id
-            resp.estado.estado = data.estado.estado
-          }
-          else if (data.estado.id == 1) {
-            resp.estado.id = data.estado.id
-            resp.estado.estado = data.estado.estado
-            this.paqueteActivo.sesionAgendadas--
-            this.paqueteActivo.sesionPorAgendar++
-          }
-
-        }
-      })
-
-    arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio')
   }
 
   //toda sesion con hora de inicio con diferencia de una 1 hora a hora actual
@@ -387,5 +353,64 @@ export class UsuariosProvider {
     return { hora: hora, minuto: minuto, dia: dia }
   }
 
+  protected mapSesion(resp: any) {
+    let sesion: Sesion = new Sesion()
+    if (Object.keys(resp).length) {
+      sesion.calificacion = resp.calificacion
+      sesion.sesionId = resp.id
+      sesion.prestador.nombreCompleto = resp.compraDetalle.prestador.nombres + resp.compraDetalle.prestador.primerApellido + resp.compraDetalle.prestador.segundoApellido
+      sesion.prestador.imagePath = resp.compraDetalle.prestador.imagePath;
+      sesion.prestador.zona = resp.compraDetalle.prestador.zona
+      sesion.fechaInicio = resp.fechaInicio
+      sesion.ubicacion.title = resp.titulo
+      sesion.ubicacion.complemento = resp.complemento
+      sesion.ubicacion.direccion = resp.direccion
+      sesion.ubicacion.longitud = resp.longitud
+      sesion.ubicacion.latitud = resp.latitud
+      sesion.estado.id = resp.estado.id
+      sesion.estado.estado = resp.estado.estado
+      sesion.paquete.nombre = resp.compraDetalle.nombre
+      sesion.paquete.valor = resp.compraDetalle.valor
+      sesion.paquete.detalle = resp.compraDetalle.detalle
+      sesion.fin = resp.fin
+      sesion.inicio = resp.inicio
+      sesion.duracion = this.diff(sesion.inicio, sesion.fin)["minuto"] * -1
+    }
+    return sesion
+  }
+
+  protected actulizarDetalleSesion(data) {
+    console.log('actulizarDetalleSesion')
+    this.paqueteActivo.compradetallesesiones
+      .map((resp) => {
+        if (resp.sesionId == data.sesionId) {
+          resp.ubicacion.complemento = data.complemento
+          resp.ubicacion.direccion = data.direccion
+          resp.fechaInicio = data.fechaInicio
+          resp.ubicacion.latitud = data.latitud
+          resp.ubicacion.title = data.titulo
+
+          if (data.estado.id == 2) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+            this.paqueteActivo.sesionAgendadas++
+            this.paqueteActivo.sesionPorAgendar--
+          }
+          else if (data.estado.id == 4) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+          }
+          else if (data.estado.id == 1) {
+            resp.estado.id = data.estado.id
+            resp.estado.estado = data.estado.estado
+            this.paqueteActivo.sesionAgendadas--
+            this.paqueteActivo.sesionPorAgendar++
+          }
+
+        }
+      })
+
+    arraySort(this.paqueteActivo.compradetallesesiones, 'fechaInicio')
+  }
 
 }

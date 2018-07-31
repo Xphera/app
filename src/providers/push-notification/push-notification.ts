@@ -1,7 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OneSignal } from '@ionic-native/onesignal';
 import { Platform, App } from 'ionic-angular';
-// import { SesionProvider } from '../sesion/sesion';
+import { UsuariosProvider } from '../usuarios/usuarios';
+
 /*
   Generated class for the PushnNotificationProvider provider.
 
@@ -18,7 +19,7 @@ export class PushNotificationProvider {
     private oneSignal: OneSignal,
     public platform: Platform,
     public app: App,
-    // private _sesionPrvdr: SesionProvider,
+    public _usuariosPrvdr: UsuariosProvider,
     public zone: NgZone
   ) {
     console.log('Hello PushnNotificationProvider Provider');
@@ -36,26 +37,32 @@ export class PushNotificationProvider {
       this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
       this.oneSignal.handleNotificationReceived().subscribe((data: any) => {
+        // do something when notification is received
         this.zone.run(() => {
-          if (data.payload.additionalData.tipo == "detalleSesion" ||data.payload.additionalData.tipo == "detalleSesionAutomatica") {
+          if (data.payload.additionalData.tipo == "detalleSesion" || data.payload.additionalData.tipo == "detalleSesionAutomatica") {
+            let pageId = this.app.getRootNavs()[0].getActive()["id"]
+            this._usuariosPrvdr.obetenerPaqueteActivos()
+            // llamar proceso segun pagina activa
+            if(pageId == 'HomeUsuarioPage'){
+              this._usuariosPrvdr.obtenerSesionesPorCalificar()
+              this._usuariosPrvdr.obtenerProximaSesion()
+            }else if(pageId =='DetalleSesionPage'){
+              this._usuariosPrvdr.obtenerSesion(data.payload.additionalData.sesionId)
+            }
 
-            // this._sesionPrvdr.getSesionPorIniciar()
-            // this._sesionPrvdr.getSesionProxima()
-            // this._sesionPrvdr.getSesionFinalizada()
           }
         })
-        // do something when notification is received
 
       });
 
       this.oneSignal.handleNotificationOpened().subscribe((data: any) => {
+        console.log(data.notification.payload.additionalData.sesionId)
         // do something when a notification is opened
         if (data.notification.payload.additionalData.tipo == "detalleSesion" || data.notification.payload.additionalData.tipo == "detalleSesionAutomatica") {
-
-          // this._sesionPrvdr.getSesion(data.notification.payload.additionalData.sesionId)
-          //   .subscribe((data) => {
-          //     this.app.getRootNavs()[0].push('DetalleSesionPage', { sesion: data });
-          //   })
+          this._usuariosPrvdr.obtenerSesionObservable(data.notification.payload.additionalData.sesionId)
+            .subscribe((data) => {
+              this.app.getRootNavs()[0].push('DetalleSesionPage', { sesion: data })
+            })
         }
       });
 

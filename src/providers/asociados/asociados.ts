@@ -4,7 +4,6 @@ import { URL_ASOCIADOS, URL_DISPONIBILIDAD_MES } from '../../config/url.confing'
 import { Asociado } from "../../models/models.index";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
-import { AutenticacionProvider } from '../autenticacion/autenticacion';
 
 
 /*
@@ -24,7 +23,7 @@ export class AsociadosProvider {
     public http: HttpClient,
     public _almacenamientoPrvidr: AlmacenamientoProvider,
     private _peticionPrvdr: PeticionProvider,
-    private _autenticacionPrvdr: AutenticacionProvider, ) {
+    ) {
     console.log('Hello AsociadosProvider Provider');
 
   }
@@ -32,7 +31,7 @@ export class AsociadosProvider {
   obtenerAgendaAsociado(año, mes, sesionId: number) {
     mes++
     let events: Array<any> = new Array<any>()
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_DISPONIBILIDAD_MES, { mes, año, sesionId }, { headers })
 
     return this._peticionPrvdr.peticion(request, this.key)

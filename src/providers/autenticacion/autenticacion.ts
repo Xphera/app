@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MenuController, App } from 'ionic-angular';
 
@@ -50,7 +50,8 @@ export class AutenticacionProvider {
     this._almacenamientoPrvdr.eliminar('restablcerUsuario')
     this.guardarUsuario(resp)
     this._pushNotificationPrvdr.addtagsNotificacion({ "userId": resp["user_id"] })
-
+    // inicializar Token
+    this._peticionPrvdr.cargarToken()
     this.cargaMenu()
       .then((resp: string) => {
         this.app.getRootNavs()[0].setRoot(resp)
@@ -102,13 +103,13 @@ export class AutenticacionProvider {
     this._almacenamientoPrvdr.guardar('usuario', JSON.stringify(usuario))
   }
 
-  public gerHeaders(): HttpHeaders {
-    let headers = new HttpHeaders({
-      'Authorization': 'Token ' + this.token
-    });
-    // console.log(headers, this.token);
-    return headers;
-  }
+  // public gerHeaders(): HttpHeaders {
+  //   let headers = new HttpHeaders({
+  //     'Authorization': 'Token ' + this.token
+  //   });
+  //   // console.log(headers, this.token);
+  //   return headers;
+  // }
 
   public cargaMenu() {
 

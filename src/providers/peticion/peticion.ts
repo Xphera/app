@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable"
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
@@ -16,6 +16,7 @@ export class PeticionProvider {
   peticionId: number = 0;
   showloader: any;
   protected loading: boolean = true
+  private token: string
 
   constructor(
     public http: HttpClient,
@@ -23,9 +24,21 @@ export class PeticionProvider {
     public _almacenamientoPrvdr: AlmacenamientoProvider,
     public app: App) {
     console.log('Hello PeticionProvider Provider');
+    this.cargarToken()
   }
 
-  peticion(request, key?: string, loading?: boolean) {
+  public cargarToken(): void {
+    this._almacenamientoPrvdr.obtener('usuario')
+      .then((almacenamiento: any) => {
+        if (almacenamiento.data !== null) {
+          let data = JSON.parse(almacenamiento.data)
+          this.token = data.token;
+        }
+      }
+      )
+  }
+
+  public peticion(request, key?: string, loading?: boolean) {
 
     if (loading == undefined || loading == true) {
       loading = true
@@ -41,7 +54,7 @@ export class PeticionProvider {
       }
 
       request.subscribe((resp) => {
-      //si existe almacena valor por key
+        //si existe almacena valor por key
         if (key) {
           this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
         }
@@ -98,7 +111,7 @@ export class PeticionProvider {
 
   }
 
-  private httpErrores(errores) {
+  protected httpErrores(errores) {
     const isBoolean = val => 'boolean' === typeof val;
     let listaerrores: string = '';
 
@@ -122,7 +135,7 @@ export class PeticionProvider {
 
   }
 
-  almacenamiento(key) {
+  public almacenamiento(key) {
     let promesa = new Promise((resolve, reject) => {
       this._almacenamientoPrvdr.obtener(key)
         .then((datos) => {
@@ -134,5 +147,14 @@ export class PeticionProvider {
     })
     return promesa;
   }
+
+  public getHeaders(): HttpHeaders {
+    let headers = new HttpHeaders({
+      'Authorization': 'Token ' + this.token
+    });
+    // console.log(headers, this.token);
+    return headers;
+  }
+
 
 }

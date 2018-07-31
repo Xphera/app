@@ -38,7 +38,7 @@ export class ClienteProvider {
   }
 
   obtenerCliente() {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<Cliente>(URL_CLIENTE, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp: Cliente) => {
@@ -49,7 +49,7 @@ export class ClienteProvider {
 
   guardar(cliente: Cliente) {
 
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.put<Cliente>(URL_CLIENTE, cliente, { headers })
     return new Observable((observer) => {
       this._peticionPrvdr.peticion(request)
@@ -62,7 +62,7 @@ export class ClienteProvider {
   }
 
   cambioContraseña(passwords) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.put<Cliente>(URL_CAMBIAR_PASSWORD, passwords, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp: any) => {
@@ -71,7 +71,7 @@ export class ClienteProvider {
   }
 
   cambioUsuario(datos) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post<Cliente>(URL_CAMBIAR_USUARIO, datos, { headers })
     return new Observable(observer => {
       this._peticionPrvdr.peticion(request)
@@ -90,7 +90,7 @@ export class ClienteProvider {
   }
 
   cambioUsuarioValidarCodigo(datos) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.put<Cliente>(URL_CAMBIAR_USUARIO_VALIDAR_CODIGO, datos, { headers })
     return new Observable(observer => {
       this._peticionPrvdr.peticion(request)

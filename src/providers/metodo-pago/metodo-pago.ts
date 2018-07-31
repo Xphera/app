@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { AutenticacionProvider } from '../autenticacion/autenticacion';
 import { PeticionProvider } from '../peticion/peticion';
 
 import { TarjetaCredito } from '../../models/models.index';
@@ -29,14 +28,13 @@ export class MetodoPagoProvider {
 
   constructor(
     private http: HttpClient,
-    private _autenticacionPrvdr: AutenticacionProvider,
     private _peticionPrvdr: PeticionProvider
   ) {
     console.log('Hello MetodoPagoProvider Provider');
   }
 
   guardarTarjetaCredito(tarjeta) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let observable = new Observable((observer) => {
       let request = this.http.post(URL_TARJETAS_CREDITO, tarjeta, { headers })
       this._peticionPrvdr.peticion(request)
@@ -57,7 +55,7 @@ export class MetodoPagoProvider {
 
   obtenerTarjetasCredito() {
     this.tcPrincipal = new Subject();
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<TarjetaCredito[]>(URL_TARJETAS_CREDITO, { headers })
     this.td = Array<TarjetaCredito>()
 
@@ -79,7 +77,7 @@ export class MetodoPagoProvider {
 
 
   eliminarTarjeta(token: string) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let observable = new Observable((observer) => {
       let request = this.http.delete(URL_TARJETAS_CREDITO + token, { headers })
       this._peticionPrvdr.peticion(request).subscribe((resp) => {
@@ -96,7 +94,7 @@ export class MetodoPagoProvider {
   }
 
   public tarjetaCreditoPrincipal(creditCardTokenId: string) {
-    let headers = this._autenticacionPrvdr.gerHeaders();
+    let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.post(URL_TARJETAS_CREDITO_PRINCIPAL, { creditCardTokenId: creditCardTokenId }, { headers })
     this._peticionPrvdr.peticion(request)
       .subscribe((resp) => {
