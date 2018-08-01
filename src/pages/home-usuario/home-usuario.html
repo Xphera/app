@@ -16,10 +16,14 @@
 </ion-header>
 
 <ion-content>
-  <xph-chart-sesiones *ngIf="_usuariosPrvdr.paqueteActivo.id"
+  <xph-chart-sesiones
     [paquete] = "_usuariosPrvdr.paqueteActivo"
     (clickBotonSesiones)="sesiones($event)"
   ></xph-chart-sesiones>
+
+
+
+
 
   <xph-calificar *ngIf="_usuariosPrvdr.sesionesPorCalificar.sesionId"
     [prestador]="_usuariosPrvdr.sesionesPorCalificar.prestador.nombreCompleto"

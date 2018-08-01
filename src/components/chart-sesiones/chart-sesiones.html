@@ -1,5 +1,5 @@
 <!-- Generated template for the ChartSesionesComponent component -->
-<ion-card>
+<ion-card *ngIf="paquete.id">
   <ion-item text-center>
     <h2>{{ paquete.nombre }}</h2>
     <p>{{ paquete.valor |currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL }}</p>
@@ -27,5 +27,17 @@
 
   <ion-list>
   </ion-list>
+
+</ion-card>
+
+<ion-card *ngIf="!paquete.id">
+  <ion-card-content text-center class="sinPaquete">
+    <ion-icon name="md-information-circle" class="icono"></ion-icon>
+    <p class="texto">no cuentas con paquete de servicios activo.</p>
+    <button ion-button icon-start block outline large (click)="iraCategoria()">
+      <ion-icon name="ios-redo"></ion-icon>
+        ir a categorias
+    </button>
+  </ion-card-content>
 
 </ion-card>

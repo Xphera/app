@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CONFIG } from '../../config/comunes.config';
-
+import { App } from 'ionic-angular';
 /**
  * Generated class for the ChartSesionesComponent component.
  *
@@ -24,7 +24,9 @@ export class ChartSesionesComponent {
   public pieChartData: number[];
   public pieChartType: string = 'pie';
 
-  constructor() {
+  constructor(
+    public app: App
+  ) {
     console.log('Hello ChartSesionesComponent Component');
     // copia de objeto
 
@@ -59,6 +61,10 @@ export class ChartSesionesComponent {
   }
   public chartHovered(e: any): void {
     console.log(e);
+  }
+
+  iraCategoria(){
+    this.app.getRootNavs()[0].setRoot('HomePage')
   }
 
 }
