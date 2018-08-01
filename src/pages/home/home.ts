@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Slides } from 'ionic-angular';
+import { IonicPage, NavController, Slides,NavParams } from 'ionic-angular';
 
 import { CategoriasProvider } from '../../providers/categorias/categorias';
-
+import {AutenticacionProvider} from '../../providers/autenticacion/autenticacion';
 
 
 @IonicPage()
@@ -21,8 +21,19 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
+    public navParams: NavParams,
+    public _autenticacionPrvdr:AutenticacionProvider,
     public _categoriasPrvdr: CategoriasProvider) {
 
+
+
+  }
+
+  ionViewDidEnter() {
+    //limpiar datos de sesion
+    if(this.navParams.get('cerrarSesion')==true){
+      this._autenticacionPrvdr.cerrarSesion()
+    }
   }
 
 

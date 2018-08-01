@@ -36,7 +36,18 @@ export class LoginPage {
     private _almacenamientoPrvdr: AlmacenamientoProvider
   ) {
     this.myForm = this.createMyForm();
+
+    // console.log('constructor',this.navParams.get('cerrarSesion'));
+    // if(this.navParams.get('cerarSesion')==true){
+    //   this._autenticacionPrvdr.cerrarSesion()
+    //     .then((resp: string) => {
+    //         console.log('limpia menu')
+    //       }).catch((e)=>{
+    //           console.log('e')
+    //       })
+    // }
   }
+
 
   createMyForm() {
     return this.formBuilder.group({

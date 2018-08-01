@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Observable"
+import { Observable } from "rxjs/Observable";
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { App } from 'ionic-angular';
+import 'rxjs/add/operator/finally';
 /*
   Generated class for the PeticionProvider provider.
 
@@ -15,8 +16,8 @@ export class PeticionProvider {
 
   peticionId: number = 0;
   showloader: any;
-  protected loading: boolean = true
-  private token: string
+  protected token: string;
+  protected sinAutizacion: boolean = false
 
   constructor(
     public http: HttpClient,
@@ -46,65 +47,96 @@ export class PeticionProvider {
 
     let observable = new Observable((observer) => {
 
-      if (loading) {
-        if (this.peticionId == 0) {
-          this.showloaderOpen()
-        }
-        ++this.peticionId
-      }
-
-      request.subscribe((resp) => {
-        //si existe almacena valor por key
-        if (key) {
-          this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
-        }
-        observer.next(resp);
-
+      if (this.peticionId == 0) {
         if (loading) {
-          --this.peticionId
-          if (this.peticionId == 0) {
-            this.showloaderClose()
-          }
+          this.showloaderOpen(loading)
         }
+      }
+      ++this.peticionId
 
-      },
-        (errores) => {
-          --this.peticionId
-          if (this.peticionId == 0) {
-            this.showloaderClose()
+      request
+        .finally(() => {
+          if (this.sinAutizacion && this.peticionId == 0) {
+            this.sinAutizacion = false
+            this.app.getRootNavs()[0].setRoot('HomePage',{'cerrarSesion':true})
+            setTimeout(() => {
+              this.app.getRootNavs()[0].push('LoginPage');
+            },1000);
           }
+        })
+        .subscribe(
+          (resp) => {
+            //si existe almacena valor por key
+            if (key) {
+              this._almacenamientoPrvdr.guardar(key, JSON.stringify(resp))
+            }
+            observer.next(resp);
 
-          if (errores.status == 401) {
-            this.app.getRootNavs()[0].push('LoginPage')
-          }
-          else if (errores.status == 500 || errores.status == 0) {
-            this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
-          } else {
-            let listaerrores: string = this.httpErrores(errores);
-            this._ionicComponentPrvdr.showAlert({
-              title: '',
-              subTitle: listaerrores,
-              buttons: ['OK']
-            });
-            observer.error(errores);
-          }
-        }
+            --this.peticionId
+            if (this.peticionId == 0) {
+              if (loading) {
+                this.showloaderClose(loading)
+              }
+            }
+
+          },
+          (errores) => {
+            --this.peticionId
+            if (this.peticionId == 0 && loading) {
+              this.showloaderClose(loading)
+            }
+
+
+            if (errores.status == 401) {
+              this.sinAutizacion = true
+              // this.subject.debounceTime(3000).take(1).subscribe(()=>{
+              //   console.log('kakakakak',errores.status)
+              //   // this.app.getRootNavs()[0].push('LoginPage');
+              // })
+              // this.subject.next('some value');
+              //  this.stream.subscribe(res => {
+              //    // this.app.getRootNavs()[0].setRoot('HomePage')
+              //    // this.app.getRootNavs()[0].push('LoginPage');
+              //  });
+              // let o = this.requestSubject.debounceTime(500)
+              // this.requestSubject.next(true)
+              // this.requestSubject.subscribe((resp: any) => {
+              // this.app.getRootNavs()[0].setRoot('HomePage')
+              // this.app.getRootNavs()[0].push('LoginPage');
+              // });
+
+
+            }
+            else if (errores.status == 500 || errores.status == 0) {
+              this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
+            } else {
+              let listaerrores: string = this.httpErrores(errores);
+              this._ionicComponentPrvdr.showAlert({
+                title: '',
+                subTitle: listaerrores,
+                buttons: ['OK']
+              });
+              observer.error(errores);
+            }
+          },
+
       )
+
     })
     return observable;
   }
 
-  protected showloaderOpen() {
+  protected showloaderOpen(loading) {
 
-    if (this.loading) {
+    if (loading) {
       this.showloader = this._ionicComponentPrvdr.showloaderMessage('por favor espera...')
       console.log('abrir')
     }
 
   }
 
-  protected showloaderClose() {
-    if (this.loading && this.showloader) {
+  protected showloaderClose(loading) {
+    if (loading && this.showloader) {
       this.showloader.dismiss()
       console.log('cerrar')
     }
