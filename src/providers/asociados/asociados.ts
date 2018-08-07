@@ -18,6 +18,8 @@ export class AsociadosProvider {
   asociados: Array<Asociado> = new Array<Asociado>();
   key: string = 'asociados'
   agendaasociado;
+  zonasServicio:Array<any> = new Array()
+  prestadorSesvicioZona:Array<any> = new Array()
 
   constructor(
     public http: HttpClient,
@@ -69,6 +71,27 @@ export class AsociadosProvider {
         this._almacenamientoPrvidr.guardar(this.key, JSON.stringify(data));
       });
   }
+
+  obtenerZonaServicios(dataInput) {
+    this.zonasServicio = []
+    this.prestadorSesvicioZona = []
+    this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
+    .subscribe((zonas) => {
+      for (let zona in zonas) {
+         this.zonasServicio.push(zonas[zona]["zona"])
+         this.prestadorSesvicioZona.push({
+           'zonaId':zonas[zona]["id"],
+           'name':zonas[zona]["name"],
+           'zona':zonas[zona]["zona"],
+           'prestadores':zonas[zona]['prestadores'],
+           'catidadPrestadores':zonas[zona]['prestadores'].length
+         })
+      }
+      console.log(this.prestadorSesvicioZona)
+    })
+
+  }
+
 
   obtenerAsociadosServicios(dataInput) {
 

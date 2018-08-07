@@ -20,12 +20,11 @@
 
 
 <ion-content>
-
-  <xph-map-marker-fixed
-  *ngIf="mostrarmapa"
+  <xph-map
   [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
+  [listadoubicaciones]="listadoubicaciones"
   (getCoordenadas)="coordenadas($event)">
-  </xph-map-marker-fixed>
+</xph-map>
 
   <div class="boton-mapa" *ngIf="mostrarbotonmapa==true">
     <ion-grid class="reset">

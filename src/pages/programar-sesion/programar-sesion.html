@@ -27,10 +27,14 @@
 
 <!-- (click)="mostrarCalendario()" -->
 <div *ngIf="navegacion=='ubicacion'">
-<xph-map-marker-fixed
-[zoom]="mapa.zoom"
-(getCoordenadas)="coordenadas($event)"
-[ubicaciones]="ubicaciones"></xph-map-marker-fixed>
+
+  <xph-map
+  [zoom]="mapa.zoom"
+  [zona]="[sesion.prestador.zona]"
+  (getCoordenadas)="coordenadas($event)"
+  [ubicaciones]="ubicaciones"
+  ></xph-map>
+
 <button *ngIf="botonmapa" class="boton-mapa" ion-button large full
 
 (click)="complementoDireccion()"

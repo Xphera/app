@@ -3,8 +3,11 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { AsociadosProvider } from '../../providers/asociados/asociados';
 import { UbicacionesProvider } from '../../providers/ubicaciones/ubicaciones';
 import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
-import ol from 'openlayers';
+// import ol from 'openlayers';
 import * as moment from 'moment';
+import GeoJSON from 'ol/format/GeoJSON';
+import Feature from 'ol/Feature';
+import {Point} from 'ol/geom';
 
 
 /**
@@ -276,12 +279,12 @@ export class ProgramarSesionPage {
 
 
   ubicacionEnZona(longitud, latitud) {
-    let polygonGeometry = (new ol.format.GeoJSON())
+    let polygonGeometry = (new GeoJSON())
       .readFeature(this.sesion.prestador.zona)
       .getGeometry();
 
-    let punto = new ol.Feature({
-      geometry: new ol.geom.Point([
+    let punto = new Feature({
+      geometry: new Point([
         longitud,
         latitud
       ])

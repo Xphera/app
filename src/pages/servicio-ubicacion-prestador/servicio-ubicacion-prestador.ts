@@ -34,6 +34,8 @@ export class ServicioUbicacionPrestadorPage {
     private _asociadosPrvr: AsociadosProvider,
     public _ionicComponentPrvdr: IonicComponentProvider,
     public _autenticacionPrvdr: AutenticacionProvider) {
+      this.servicio = this.navParams.get('servicio');
+      this._asociadosPrvr.obtenerZonaServicios({ servicio: this.servicio.id })
   }
 
   ionViewCanEnter() {
@@ -41,7 +43,6 @@ export class ServicioUbicacionPrestadorPage {
   }
 
   ionViewDidLoad() {
-    this.servicio = this.navParams.get('servicio');
     this._ubicacionesPrvdr.obtenerUbicaciones()
     this._ionicComponentPrvdr.showAlert({
       title: '',

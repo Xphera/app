@@ -3,10 +3,21 @@ import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angul
 import { Sesion } from '../../models/models.index';
 import { CONFIG } from '../../config/comunes.config';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
-import ol from 'openlayers';
 import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
 import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
 import { Subscription } from 'rxjs/Subscription';
+
+
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import OSM from 'ol/source/OSM';
+import Vector from 'ol/source/Vector';
+import Feature from 'ol/Feature';
+import { Icon, Style, } from 'ol/style';
+import {defaults as defaultInteractions} from 'ol/interaction';
+import Point from 'ol/geom/Point';
 
 /**
  * Generated class for the DetalleSesionPage page.
@@ -23,20 +34,20 @@ import { Subscription } from 'rxjs/Subscription';
 export class DetalleSesionPage {
   public sesion: Sesion
   CONFIG = CONFIG;
-  private map: ol.Map
-  private raster = new ol.layer.Tile({
-    source: new ol.source.OSM()
+  private map: Map
+  private raster = new TileLayer({
+    source: new OSM()
   });
+  //
+  public vectorSource = new Vector();
 
-  public vectorSource = new ol.source.Vector();
-
-  public vectorLayer = new ol.layer.Vector({
+  public vectorLayer = new VectorLayer({
     source: this.vectorSource,
   });
-
-  public vectorSourceLocalizacion = new ol.source.Vector();
-
-  public vectorLayerLocalizacion = new ol.layer.Vector({
+  //
+  public vectorSourceLocalizacion = new Vector();
+  //
+  public vectorLayerLocalizacion = new VectorLayer({
     source: this.vectorSourceLocalizacion,
   });
 
@@ -67,7 +78,7 @@ export class DetalleSesionPage {
 
   }
 
-  inicio(){  
+  inicio(){
       this.sesionPorIniciar = this._usuariosPrvdr.sesionPorIniciar(this.sesion)
       this.diferenciaHora = this._usuariosPrvdr.diferenciaHora(this.sesion.fechaInicio)
       this.sesionnoIniciada = this._usuariosPrvdr.sesionnoIniciada(this.sesion) && (this.sesion.estado.id == 2 || this.sesion.estado.id == 4)
@@ -123,16 +134,16 @@ export class DetalleSesionPage {
 
   loadMap() {
     console.log(this.sesion.ubicacion)
-    this.map = new ol.Map({
+    this.map = new Map({
       controls: [],
       layers: [this.raster, this.vectorLayer, this.vectorLayerLocalizacion],
       target: 'map',
-      view: new ol.View({
+      view: new View({
         projection: 'EPSG:4326',
         center: [this.sesion.ubicacion.longitud, this.sesion.ubicacion.latitud],
         zoom: 17
       }),
-      interactions: ol.interaction.defaults({
+      interactions: defaultInteractions({
         dragPan: false,
         pinchRotate: false,
         keyboardPan: false,
@@ -149,12 +160,12 @@ export class DetalleSesionPage {
   }
 
   addPoint(longitud, latitud, vector, icono) {
-    let iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point([longitud, latitud]),
+    let iconFeature = new Feature({
+      geometry: new Point([longitud, latitud]),
     });
 
-    iconFeature.setStyle(new ol.style.Style({
-      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
+    iconFeature.setStyle(new Style({
+      image: new Icon(/** @type {olx.style.IconOptions} */({
         crossOrigin: 'anonymous',
         src: 'assets/imgs/markerMap/' + icono
       }))
@@ -164,10 +175,11 @@ export class DetalleSesionPage {
   }
 
   ubicarPuntos() {
-    this.vectorLayerLocalizacion.getSource().clear()
-    this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
-    this.addPoint(this._localizarUbicacionPrvdr.prestador.lng, this._localizarUbicacionPrvdr.prestador.lat, this.vectorSourceLocalizacion, 'expert.png');
-  }
+  //   this.vectorLayerLocalizacion.getSource().clear()
+  //   this.addPoint(this._localizarUbicacionPrvdr.usuario.lng, this._localizarUbicacionPrvdr.usuario.lat, this.vectorSourceLocalizacion, 'male-2.png');
+  //   this.addPoint(this._localizarUbicacionPrvdr.prestador.lng, this._localizarUbicacionPrvdr.prestador.lat, this.vectorSourceLocalizacion, 'expert.png');
+  //
+ }
 
   calificarSesion(){
     if (this.sesion.estado.id == 3 && this.sesion.calificacion == 0) {

@@ -39,7 +39,7 @@
     "card.io.cordova.mobilesdk": "^2.1.0",
     "chart.js": "^2.7.2",
     "cordova": "8.0.0",
-    "cordova-android": "7.0.0",
+    "cordova-android": "^7.1.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -62,8 +62,8 @@
     "ng2-charts": "^1.6.0",
     "ngx-countdown-timer": "^0.1.9",
     "ngx-credit-cards": "^1.0.9",
+    "ol": "^5.1.3",
     "onesignal-cordova-plugin": "^2.4.1",
-    "openlayers": "^4.6.5",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"

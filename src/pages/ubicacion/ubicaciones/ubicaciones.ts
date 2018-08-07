@@ -20,7 +20,8 @@ export class UbicacionesPage {
 
   mostrarBorrar: boolean = false;
   mostrarmapa: boolean = true;
-  mostrarbotonmapa: boolean = true;
+  mostrarbotonmapa: boolean = false;
+  listadoubicaciones: boolean = true;
   coordendas;
 
   constructor(
@@ -37,6 +38,7 @@ export class UbicacionesPage {
   }
 
   coordenadas(event): void {
+
     this.mostrarbotonmapa = false
     if (event.coordenadas.error == false) {
       this.mostrarbotonmapa = true
@@ -51,7 +53,7 @@ export class UbicacionesPage {
       }
     }
 
-
+    console.log(event)
   }
 
   eliminar() {
@@ -82,7 +84,9 @@ export class UbicacionesPage {
     this._ubicacionesPrvdr.eliminarUbicacion(this.coordendas)
       .subscribe((resp) => {
         if (resp) {
-          this.navCtrl.setRoot('UbicacionesPage');
+          // this.navCtrl.setRoot('UbicacionesPage');
+          this._ubicacionesPrvdr.obtenerUbicaciones();
+          this.listadoubicaciones=true
         }
       });
   }
@@ -93,7 +97,9 @@ export class UbicacionesPage {
     modal.present();
     modal.onDidDismiss(data => {
       if(data){
-        this.navCtrl.setRoot('UbicacionesPage');
+        // this.navCtrl.setRoot('UbicacionesPage');
+        this._ubicacionesPrvdr.obtenerUbicaciones();
+        this.listadoubicaciones=true
       }
       this.mostrarmapa = true;
     });

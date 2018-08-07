@@ -1,0 +1,79 @@
+xph-map {
+  .error {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: red;
+
+    h1 {
+      text-align: center;
+      font-size: 60px;
+    }
+
+    p {
+      font-size: 25px;
+      text-align: center;
+      margin: 0 5px;
+    }
+  }
+
+  .searchbar {
+    position: relative;
+    z-index: 1000;
+    top: 0;
+    width: 100%;
+  }
+
+  .listadoubicaciones {
+    height: 100vh;
+    background: #fff;
+  }
+
+  .mapa {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #mapa:after {
+    width: 22px;
+    height: 40px;
+    display: block;
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -40px 0 0 -11px;
+    background: url("https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi_hdpi.png");
+    background-size: 22px 40px;
+    /* Since I used the HiDPI marker version this compensates for the 2x size */
+    pointer-events: none;
+    /* This disables clicks on the marker. Not fully supported by all major browsers, though */
+  }
+
+}
+
+.action-sheets-basic-page {
+  .action-sheet-icon {
+    color: #508AE4;
+  }
+
+  .action-sheet-group button {
+    color: #508AE4;
+  }
+
+  .ion-md-heart-outline {
+    color: #31D55F;
+  }
+
+  .action-sheet-cancel ion-icon,
+  .action-sheet-group-cancel button,
+  .action-sheet-destructive ion-icon {
+    color: #757575;
+  }
+}

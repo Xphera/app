@@ -14,8 +14,13 @@
 
 <!-- *ngIf="asociados.length" -->
 <ion-content>
-  <xph-map-marker-fixed [ubicaciones]="_ubicacionesPrvdr.ubicaciones" (getCoordenadas)="coordenadas($event)">
-  </xph-map-marker-fixed>
+  <xph-map
+    [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
+    [zona]="_asociadosPrvr.zonasServicio"
+    [PrestadoresPorZona]="_asociadosPrvr.prestadorSesvicioZona"
+    (getCoordenadas)="coordenadas($event)"
+  ></xph-map>
+
   <div class="boton-mapa" *ngIf="mosatarBotonMapa == true">
     <button ion-button icon-only large full (click)="continuar(asociados)" *ngIf="asociados.length > 0">
               <ion-icon name="body"></ion-icon>
