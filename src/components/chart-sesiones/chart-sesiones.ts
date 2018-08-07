@@ -33,7 +33,7 @@ export class ChartSesionesComponent {
   }
 
   ngOnChanges() {
-    this.pieChartLabels = ['Por Agendar', 'Agendada', 'finalizada']
+    this.pieChartLabels = ['Por Programar', 'Programada', 'Finalizada']
     this.pieChartData = [this.paquete.sesionPorAgendar, this.paquete.sesionAgendadas, this.paquete.sesionFinalizadas]
     // copiar objeto paquete
     this.objetoPaquete = Object.assign({}, this.paquete)
@@ -63,7 +63,7 @@ export class ChartSesionesComponent {
     console.log(e);
   }
 
-  iraCategoria(){
+  iraCategoria() {
     this.app.getRootNavs()[0].setRoot('HomePage')
   }
 

@@ -12,7 +12,7 @@ import { InicioProvider } from '../providers/inicio/inicio';
 
 import { ImgCacheService } from 'ng-imgcache';
 import { CacheService } from "ionic-cache";
-
+ 
 import { AppState } from './app.global';
 
 import { timer } from 'rxjs/observable/timer';

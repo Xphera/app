@@ -52,25 +52,31 @@
         </ion-list>
 
         <form [formGroup]="myForm" (ngSubmit)="guardar()">
-          <ion-row>
-            <ion-col class="resetmarginpadding" col-12>
-              <ion-textarea class="myInput" [attr.rows]="5" placeholder="Describa motivo para cancelar este paquete" autocomplete="on" autocorrect="on"  formControlName="motivoCancelacion">
-              </ion-textarea>
-            </ion-col>
-            <ion-col class="resetmarginpadding">
-              <button ion-button full color="danger" class="resetmarginpadding" [disabled]="!myForm.valid" type="submit">Cancelar Paquete </button>
-            </ion-col>
-          </ion-row>
+          <ion-item>
+            <ion-label stacked>
+                Motivo de cancelación
+            </ion-label>
+            <ion-textarea class="textarea" [attr.rows]="5" placeholder="Describa motivo para cancelar este paquete" autocomplete="on" autocorrect="on" formControlName="motivoCancelacion">
+            </ion-textarea>
+          </ion-item>
+          <div class="error-box" *ngIf="myForm.controls.motivoCancelacion.hasError('required') && myForm.controls.motivoCancelacion.touched">
+            Motivo de cancelación es requrido.
+          </div>
+          <div class="error-box" *ngIf="myForm.controls.motivoCancelacion.hasError('minlength')">
 
+            Motivo de cancelación no debe ser menor a {{myForm.controls.motivoCancelacion.errors.minlength.requiredLength}} caracteres
+          </div>
+          <div class="error-box" *ngIf="myForm.controls.motivoCancelacion.hasError('maxlength')">
+            Motivo de cancelación no debe ser mayor a {{myForm.controls.motivoCancelacion.errors.maxlength.requiredLength}} caracteres
+          </div>
+            <button ion-button full color="danger" class="resetmarginpadding" [disabled]="!myForm.valid" type="submit">Cancelar Paquete </button>
         </form>
-
       </ion-card>
     </div>
   </div>
 </ion-content>
-
-<ion-footer>
-  <ion-segment [(ngModel)]="accionPaquete" color="primary">
+<ion-footer style="background-color: #fff;">
+  <ion-segment [(ngModel)]="accionPaquete">
     <ion-segment-button value="activo">
       Activo
     </ion-segment-button>

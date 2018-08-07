@@ -278,7 +278,6 @@ export class MapMarkerFixedComponent {
         }
       )
       .catch(error => {
-        // coordenas por defecto bogota.
         this.coordenadas.longitud = 0;
         this.coordenadas.latitud = 0;
         this.coordenadas.error = true;
@@ -414,7 +413,7 @@ export class MapMarkerFixedComponent {
   }
 
   /**
-  * emplementacion de componente loadingCtrl.
+  * implementación de componente loadingCtrl.
   */
   showloader(texto) {
     let loader = this.loadingCtrl.create({
