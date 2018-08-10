@@ -19,8 +19,6 @@ import { Paquete } from '../../models/models.index';
   templateUrl: 'paquetes.html',
 })
 export class PaquetesPage {
-  agendarpage = 'AgendarPage';
-
   CONFIG = CONFIG;
   asociado: Asociado;
 

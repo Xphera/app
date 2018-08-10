@@ -75,7 +75,8 @@ export class AsociadosProvider {
   obtenerZonaServicios(dataInput) {
     this.zonasServicio = []
     this.prestadorSesvicioZona = []
-    this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
+    let request = this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
+    this._peticionPrvdr.peticion(request)
     .subscribe((zonas) => {
       for (let zona in zonas) {
          this.zonasServicio.push(zonas[zona]["zona"])

@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angul
 import { Sesion } from '../../models/models.index';
 import { CONFIG } from '../../config/comunes.config';
 import { UsuariosProvider } from '../../providers/usuarios/usuarios';
-import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
+// import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
 import { IonicComponentProvider } from '../../providers/ionic-component/ionic-component';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -63,7 +63,7 @@ export class DetalleSesionPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private _usuariosPrvdr: UsuariosProvider,
-    private _localizarUbicacionPrvdr: LocalizarUbicacionProvider,
+    // private _localizarUbicacionPrvdr: LocalizarUbicacionProvider,
     public _ionicComponentPrvdr:IonicComponentProvider,
     public modalCtrl: ModalController) {
     this.sesion = this.navParams.get('sesion');

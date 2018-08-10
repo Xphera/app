@@ -89,4 +89,8 @@ export class DetallePaqueteActivoPage {
     this._usuariosPrvdr.programarSesionModalOpen(event)
   }
 
+  chat(compraDetalleId){
+     this.navCtrl.push('MensajePage', { compraDetalleId: compraDetalleId });
+  }
+
 }

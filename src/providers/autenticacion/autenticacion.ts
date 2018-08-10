@@ -19,6 +19,7 @@ import { PushNotificationProvider } from '../push-notification/push-notification
 export class AutenticacionProvider {
 
   protected token: string;
+  public usuario:any
 
   constructor(
     private http: HttpClient,
@@ -71,7 +72,11 @@ export class AutenticacionProvider {
   }
 
   public activo() {
-    return this._almacenamientoPrvdr.obtener('usuario');
+    let ua = this._almacenamientoPrvdr.obtener('usuario')
+      ua.then((data)=>{
+        this.usuario = JSON.parse(data["data"])
+      })
+      return ua;
   }
 
   public login(username: string, password: string) {

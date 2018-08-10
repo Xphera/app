@@ -74,6 +74,12 @@
       </ion-card>
     </div>
   </div>
+
+  <ion-fab top right >
+    <button ion-fab (click)="chat(paqueteActivo.id)"><ion-icon name="md-chatboxes"></ion-icon></button>
+  </ion-fab>
+
+
 </ion-content>
 <ion-footer style="background-color: #fff;">
   <ion-segment [(ngModel)]="accionPaquete">

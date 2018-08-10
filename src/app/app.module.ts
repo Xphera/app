@@ -32,6 +32,7 @@ import { PeticionProvider } from '../providers/peticion/peticion';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/localizar-ubicacion';
 import { PushNotificationProvider } from '../providers/push-notification/push-notification';
+import { MensajeProvider } from '../providers/mensaje/mensaje';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { PushNotificationProvider } from '../providers/push-notification/push-no
     PeticionProvider,
     Geolocation,
     LocalizarUbicacionProvider,
-    PushNotificationProvider
+    PushNotificationProvider,
+    MensajeProvider
   ]
 })
 export class AppModule {}

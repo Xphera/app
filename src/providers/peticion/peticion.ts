@@ -89,23 +89,6 @@ export class PeticionProvider {
 
             if (errores.status == 401) {
               this.sinAutizacion = true
-              // this.subject.debounceTime(3000).take(1).subscribe(()=>{
-              //   console.log('kakakakak',errores.status)
-              //   // this.app.getRootNavs()[0].push('LoginPage');
-              // })
-              // this.subject.next('some value');
-              //  this.stream.subscribe(res => {
-              //    // this.app.getRootNavs()[0].setRoot('HomePage')
-              //    // this.app.getRootNavs()[0].push('LoginPage');
-              //  });
-              // let o = this.requestSubject.debounceTime(500)
-              // this.requestSubject.next(true)
-              // this.requestSubject.subscribe((resp: any) => {
-              // this.app.getRootNavs()[0].setRoot('HomePage')
-              // this.app.getRootNavs()[0].push('LoginPage');
-              // });
-
-
             }
             else if (errores.status == 500 || errores.status == 0) {
               this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
