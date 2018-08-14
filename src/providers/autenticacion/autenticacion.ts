@@ -17,8 +17,7 @@ import { PushNotificationProvider } from '../push-notification/push-notification
 */
 @Injectable()
 export class AutenticacionProvider {
-
-  protected token: string;
+  
   public usuario:any
 
   constructor(
@@ -31,21 +30,9 @@ export class AutenticacionProvider {
     public app: App) {
 
     console.log('Hello AutenticacionProvider Provider');
-    this.cargarToken();
+
   }
 
-
-
-  protected cargarToken(): void {
-    this._almacenamientoPrvdr.obtener('usuario')
-      .then((almacenamiento: any) => {
-        if (almacenamiento.data !== null) {
-          let data = JSON.parse(almacenamiento.data)
-          this.token = data.token;
-        }
-      }
-      )
-  }
 
   protected crearSesion(resp){
     this._almacenamientoPrvdr.eliminar('restablcerUsuario')
@@ -67,10 +54,6 @@ export class AutenticacionProvider {
       })
   }
 
-  public obetenetToken(): string {
-    return this.token;
-  }
-
   public activo() {
     let ua = this._almacenamientoPrvdr.obtener('usuario')
       ua.then((data)=>{
@@ -88,7 +71,6 @@ export class AutenticacionProvider {
   }
 
   public cerrarSesion() {
-    this.token = null;
     this._pushNotificationPrvdr.deletetagsNotificacion("userId")
     let promesa = new Promise((resolve, reject) => {
       this._almacenamientoPrvdr.eliminar('usuario')
@@ -104,17 +86,8 @@ export class AutenticacionProvider {
   }
 
   public guardarUsuario(usuario) {
-    this.token = usuario.token;
     this._almacenamientoPrvdr.guardar('usuario', JSON.stringify(usuario))
   }
-
-  // public gerHeaders(): HttpHeaders {
-  //   let headers = new HttpHeaders({
-  //     'Authorization': 'Token ' + this.token
-  //   });
-  //   // console.log(headers, this.token);
-  //   return headers;
-  // }
 
   public cargaMenu() {
 
