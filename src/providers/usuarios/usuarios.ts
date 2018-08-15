@@ -98,7 +98,7 @@ export class UsuariosProvider {
     // this.xx = new Subject();
     let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
-    this._peticionPrvdr.peticion(request, '', false)
+    this._peticionPrvdr.peticion(request, '')
       .map((resp: PaqueteActivo) => {
         if (resp.compradetallesesiones) {
           for (let i = 0; i < resp.compradetallesesiones.length; i++) {
@@ -120,7 +120,7 @@ export class UsuariosProvider {
     let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.get(URL_CALIFICAR_SESION, { headers })
-    this._peticionPrvdr.peticion(request, '',false)
+    this._peticionPrvdr.peticion(request, '')
       .map((resp: any) => {
         return this.mapSesion(resp)
       })
@@ -149,7 +149,7 @@ export class UsuariosProvider {
     let headers = this._peticionPrvdr.getHeaders();
 
     let request = this.http.get(URL_PROXIMA_SESION, { headers })
-    this._peticionPrvdr.peticion(request,'',false)
+    this._peticionPrvdr.peticion(request,'')
       .map((resp: any) => {
         return this.mapSesion(resp)
       })

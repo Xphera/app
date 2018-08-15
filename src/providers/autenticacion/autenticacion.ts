@@ -17,7 +17,7 @@ import { PushNotificationProvider } from '../push-notification/push-notification
 */
 @Injectable()
 export class AutenticacionProvider {
-  
+
   public usuario:any
 
   constructor(
@@ -38,6 +38,9 @@ export class AutenticacionProvider {
     this._almacenamientoPrvdr.eliminar('restablcerUsuario')
     this.guardarUsuario(resp)
     this._pushNotificationPrvdr.addtagsNotificacion({ "userId": resp["user_id"] })
+    // info usuario en menu
+    this.usuario = resp
+
     // inicializar Token
     this._peticionPrvdr.cargarToken()
     this.cargaMenu()

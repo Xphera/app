@@ -11,7 +11,7 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { ImgCacheModule } from 'ng-imgcache';
 import { CacheModule } from 'ionic-cache';
 import { AppState } from './app.global';
-
+import { PipesModule } from '../pipes/pipes.module';
 
 
 import { MyApp } from './app.component';
@@ -44,6 +44,7 @@ import { MensajeProvider } from '../providers/mensaje/mensaje';
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     ImgCacheModule,
+    PipesModule,
     CacheModule.forRoot()
   ],
   bootstrap: [IonicApp],

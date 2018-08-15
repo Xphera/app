@@ -18,8 +18,8 @@ export class AsociadosProvider {
   asociados: Array<Asociado> = new Array<Asociado>();
   key: string = 'asociados'
   agendaasociado;
-  zonasServicio:Array<any> = new Array()
-  prestadorSesvicioZona:Array<any> = new Array()
+  zonasServicio:Array<any>
+  prestadorSesvicioZona:Array<any>
 
   constructor(
     public http: HttpClient,
@@ -73,11 +73,13 @@ export class AsociadosProvider {
   }
 
   obtenerZonaServicios(dataInput) {
-    this.zonasServicio = []
-    this.prestadorSesvicioZona = []
+    this.zonasServicio = new Array()
+    this.prestadorSesvicioZona = new Array()
     let request = this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
     this._peticionPrvdr.peticion(request)
     .subscribe((zonas) => {
+      this.zonasServicio = []
+      this.prestadorSesvicioZona = []
       for (let zona in zonas) {
          this.zonasServicio.push(zonas[zona]["zona"])
          this.prestadorSesvicioZona.push({
