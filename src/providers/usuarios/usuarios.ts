@@ -96,6 +96,7 @@ export class UsuariosProvider {
 
   public obetenerPaqueteActivos() {
     // this.xx = new Subject();
+    this.paqueteActivo = new PaqueteActivo();
     let headers = this._peticionPrvdr.getHeaders();
     let request = this.http.get<PaqueteActivo>(URL_PAQUETE_ACTIVO, { headers })
     this._peticionPrvdr.peticion(request, '')
@@ -113,6 +114,7 @@ export class UsuariosProvider {
           this.paqueteActivoSubject.next(resp)
           console.log('subscribe')
         }
+
       })
   }
 

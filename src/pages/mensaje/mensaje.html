@@ -64,8 +64,8 @@
   </div>
 	<form [formGroup]="messageForm" (submit)="enviarMensaje(chatBox)" novalidate >
 		<ion-item>
-			<ion-textarea formControlName="message" [(ngModel)]="chatBox" placeholder="Escibir mensaje"></ion-textarea>
-			<button ion-button [disabled]="!messageForm.valid" clear item-end><ion-icon class="footer-btn" name="send"></ion-icon></button>
+			<ion-textarea formControlName="message" [(ngModel)]="chatBox" placeholder="Escribir mensaje"></ion-textarea>
+			<button ion-button [disabled]="!messageForm.valid" clear icon-only item-end><ion-icon class="footer-btn" name="md-send"></ion-icon></button>
 		</ion-item>
 	</form>
 </ion-footer>

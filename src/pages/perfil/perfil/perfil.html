@@ -19,8 +19,8 @@
 
 <ion-content parallax-header no-bounce class="bg-modal">
   <div class="header-image" [ngStyle]="{'background-image': 'url(assets/imgs/background/background-2.jpg)'}"></div>
-  <div class="main-content" text-wrap text-center>
-    <div class="circular" [ngStyle]="{'background-image': 'url(assets/imgs/avatar/cosima-avatar.jpg)'}">
+  <div class="main-content" text-wrap text-center >
+    <div class="circular" [ngStyle]="{'background-image': 'url(' + _clientePrvdr.cliente.imagePath+')'}">
     </div>
     <h2>{{ _clientePrvdr.cliente.nombres }} {{ _clientePrvdr.cliente.primerApellido }} {{ _clientePrvdr.cliente.segundoApellido }}</h2>
     <hr>
@@ -28,6 +28,7 @@
       <ion-item>
         <ion-icon name="mail" color="primary" item-start></ion-icon>
         <p>Correo electrónico</p>
+
         {{_clientePrvdr.cliente.email}}
 
       </ion-item>

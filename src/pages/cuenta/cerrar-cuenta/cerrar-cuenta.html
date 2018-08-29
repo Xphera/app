@@ -1,5 +1,5 @@
 <!--
-  Generated template for the EliminarCuentaPage page.
+  Generated template for the CerrarCuentaPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,18 +7,17 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Eliminar cuenta</ion-title>
+    <ion-title>Cerrar cuenta</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <h4>Eliminar cuenta de usuario</h4>
-  <p>¿Esta seguro que quiere eliminar su cuenta de usuario?
+  <h4>Cerrar cuenta de usuario</h4>
+  <p>¿Esta seguro que quiere cerrar su cuenta de usuario?
   <ion-toggle  [(ngModel)]="aceptar"></ion-toggle>
   </p>
-
   <button ion-button  [disabled]="!aceptar" type="button" color="danger" block type="submit" (click)="showAlert()" >
        Eliminar
     </button>
