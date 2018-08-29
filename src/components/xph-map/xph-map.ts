@@ -7,7 +7,7 @@ import OSM from 'ol/source/OSM';
 import Vector from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { getDistance } from 'ol/sphere';
-import { Fill, Style, } from 'ol/style';//Stroke, Text
+import { Fill, Style, Text } from 'ol/style';//
 import { getCenter } from 'ol/extent';
 
 
@@ -51,9 +51,25 @@ export class XphMapComponent {
   public vectorLayer = new VectorLayer({
     source: this.vectorSource,
     style: ((feature, resolution) => {
+      let color = 'rgb(102, 102, 255, 0.3)'
+      let text = ''
+      if(feature.get('color')){
+        color = feature.get('color')
+      }
+      if(feature.get('name')){
+        text = feature.get('name')
+      }
       let style = new Style({
         fill: new Fill({
-          color: 'rgba(75, 131, 192, 0.3)'
+          color: color
+        }),
+        text: new Text({
+          font: '30px Calibri,sans-serif',
+          overflow: 'true',
+          text: text,
+          fill: new Fill({
+            color: 'rgb(255, 255, 255,0.7)'
+          })
         }),
       })
       return style
@@ -159,16 +175,6 @@ export class XphMapComponent {
           text: this.PrestadoresPorZona[zona]["name"] + " ( " + this.PrestadoresPorZona[zona]["catidadPrestadores"] + " )",
           icon: 'pin',
           handler: () => {
-            // let z = this.vectorSource.getFeatures()
-            //   .find((data: any, index: number) => {
-            //     if (data.getId() == this.PrestadoresPorZona[zona]["zonaId"]) {
-            //       return data
-            //     }
-            //   })
-            // console.log(JSON.stringify(this.PrestadoresPorZona[zona]["zona"]),JSON.stringify(z))
-            // this.map.getView().setZoom(12)
-            // let centroZona = getCenter(z.getGeometry().getExtent())
-            // this.cambiarcentroMapa(centroZona[0], centroZona[1])
             this.obternerZonaCentro(zona)
           }
         })
@@ -187,7 +193,7 @@ export class XphMapComponent {
   }
 
 
-  obternerZonaCentro(zonaId){
+  obternerZonaCentro(zonaId) {
     let z = this.vectorSource.getFeatures()
       .find((data: any, index: number) => {
         if (data.getId() == this.PrestadoresPorZona[zonaId]["zonaId"]) {
@@ -456,13 +462,13 @@ export class XphMapComponent {
 
   protected pintarZona() {
     if (this.zona != undefined && this.zona.length > 0) {
-        this.vectorSource.clear();
-        let g = new GeoJSON()
-        this.vectorSource.addFeatures(g);
-        for (let zona of this.zona) {
-          this.vectorSource.addFeatures(g.readFeatures(zona));
-        }
+      this.vectorSource.clear();
+      let g = new GeoJSON()
+      this.vectorSource.addFeatures(g);
+      for (let zona of this.zona) {
+        this.vectorSource.addFeatures(g.readFeatures(zona));
       }
+    }
 
   }
 

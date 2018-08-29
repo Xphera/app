@@ -68,7 +68,6 @@ export class ServicioUbicacionPrestadorPage {
       this._asociadosPrvr.obtenerAsociadosServicios(data)
         .subscribe((data: Asociado[]) => {
           this.asociados = data
-
         })
     }
 

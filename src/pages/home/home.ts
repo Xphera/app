@@ -47,7 +47,7 @@ export class HomePage {
 
   onSlideChanged() {
     this.slideIndex = this.slider.getActiveIndex();
-    console.log('Slide changed! Current index is', this.slideIndex);
+    console.log('Slide changed! Current index is'+ this.slideIndex);
   }
 
   irServicios() {

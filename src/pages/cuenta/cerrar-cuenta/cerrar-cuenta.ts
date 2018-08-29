@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { ClienteProvider } from '../../../providers/cliente/cliente';
 
 /**
- * Generated class for the EliminarCuentaPage page.
+ * Generated class for the CerrarCuentaPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,21 +11,20 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 
 @IonicPage()
 @Component({
-  selector: 'page-eliminar-cuenta',
-  templateUrl: 'eliminar-cuenta.html',
+  selector: 'page-cerrar-cuenta',
+  templateUrl: 'cerrar-cuenta.html',
 })
-export class EliminarCuentaPage {
-
-  aceptar = false;
-
+export class CerrarCuentaPage {
+  public aceptar: boolean
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private _clientePrvdr: ClienteProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EliminarCuentaPage');
+    console.log('ionViewDidLoad CerrarCuentaPage');
   }
 
   showAlert() {
@@ -33,9 +33,9 @@ export class EliminarCuentaPage {
       subTitle: 'Your friend, Obi wan Kenobi, just accepted your friend request!',
       buttons: [
         {
-          text: 'Aceptar y borrar',
+          text: 'Aceptar y Cerrar cuenta',
           handler: data => {
-            console.log('Aceptar y borrar');
+            this.cerraCuenta()
           }
         },
         {
@@ -47,6 +47,15 @@ export class EliminarCuentaPage {
       ]
     });
     alert.present();
+  }
+
+
+  cerraCuenta() {
+    this._clientePrvdr.cerrarCuenta(this.aceptar)
+      .subscribe((request) => {
+        console.log(request)
+        this.navCtrl.setRoot('HomeUsuarioPage')
+      })
   }
 
 }

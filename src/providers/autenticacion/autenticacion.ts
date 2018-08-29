@@ -98,11 +98,13 @@ export class AutenticacionProvider {
       this.activo()
         .then((data) => {
           let pagina: string
-
+          console.log(data)
           if (data['data'] != null) {
             this.menuCtrl.enable(false, 'sesionInactiva');
             this.menuCtrl.enable(true, 'sesionActiva');
             pagina = "HomeUsuarioPage"
+            // inicializar Token
+            this._peticionPrvdr.cargarToken()
           } else {
             this.menuCtrl.enable(true, 'sesionInactiva');
             this.menuCtrl.enable(false, 'sesionActiva');

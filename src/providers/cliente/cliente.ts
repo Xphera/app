@@ -6,7 +6,8 @@ import {
   URL_CLIENTE,
   URL_CAMBIAR_PASSWORD,
   URL_CAMBIAR_USUARIO,
-  URL_CAMBIAR_USUARIO_VALIDAR_CODIGO
+  URL_CAMBIAR_USUARIO_VALIDAR_CODIGO,
+  CERRAR_CUENTA
 } from '../../config/url.confing';
 import { AutenticacionProvider } from '../autenticacion/autenticacion';
 
@@ -104,5 +105,19 @@ export class ClienteProvider {
     })
   }
 
+  cerrarCuenta(confirmacion:boolean){
+    let headers = this._peticionPrvdr.getHeaders();
+    let request = this.http.post<Cliente>(CERRAR_CUENTA,{confirmacion}, { headers }) 
+    return new Observable(observer => {
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp: any) => {
+          this._almacenamientoPrvdr.guardar('nuevo_usuario', datos.newusuario)
+            .then(
+              () => {
+                observer.next(true);
+              })
+        })
+    })
+  }
 
 }

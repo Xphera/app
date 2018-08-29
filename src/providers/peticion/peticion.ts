@@ -34,6 +34,7 @@ export class PeticionProvider {
         if (almacenamiento.data !== null) {
           let data = JSON.parse(almacenamiento.data)
           this.token = data.token;
+          console.log(this.token+'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTtt')
         }
       }
       )
@@ -85,8 +86,6 @@ export class PeticionProvider {
             if (this.peticionId == 0 && loading) {
               this.showloaderClose(loading)
             }
-
-
             if (errores.status == 401) {
               this.sinAutizacion = true
             }
