@@ -16,8 +16,8 @@ import { Cliente } from '../../models/models.index';
 import { Observable } from "rxjs/Observable";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
-
-
+import { App } from 'ionic-angular';
+import { IonicComponentProvider } from '../ionic-component/ionic-component';
 /*
   Generated class for the ClienteProvider provider.
 
@@ -32,8 +32,10 @@ export class ClienteProvider {
 
   constructor(
     public http: HttpClient,
+    public app: App,
     private _autenticacionPrvdr: AutenticacionProvider,
     private _almacenamientoPrvdr: AlmacenamientoProvider,
+    private _ionicComponentPrvdr: IonicComponentProvider,
     private _peticionPrvdr: PeticionProvider) {
     console.log('Hello ClienteProvider Provider');
   }
@@ -105,19 +107,17 @@ export class ClienteProvider {
     })
   }
 
-  cerrarCuenta(confirmacion:boolean){
+  cerrarCuenta(datos){
     let headers = this._peticionPrvdr.getHeaders();
-    let request = this.http.post<Cliente>(CERRAR_CUENTA,{confirmacion}, { headers }) 
-    return new Observable(observer => {
+    let request = this.http.post<Cliente>(CERRAR_CUENTA,datos, { headers })
       this._peticionPrvdr.peticion(request)
         .subscribe((resp: any) => {
-          this._almacenamientoPrvdr.guardar('nuevo_usuario', datos.newusuario)
-            .then(
-              () => {
-                observer.next(true);
-              })
+          this._autenticacionPrvdr.cerrarSesion()
+            .then((resp: string) => {
+              this.app.getRootNavs()[0].setRoot(resp)
+              this._ionicComponentPrvdr.showLongToastMessage('Cuenta Cerrada con éxito.')
+            });
         })
-    })
   }
 
 }

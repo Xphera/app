@@ -1,8 +1,8 @@
 // export const BASE_URL = "http://appservicios.danielgranados.net/";
 // export const BASE_URL = "http://192.168.137.1:9090";
-// export const BASE_URL_LOCAL = "http://192.168.226.77:9090/";
+// export const BASE_URL = "http://192.168.226.77:9090/";
 // export const BASE_URL =  "http://ec2-18-217-156-134.us-east-2.compute.amazonaws.com:8000";
-export const BASE_URL = "http://ec2-18-223-121-206.us-east-2.compute.amazonaws.com";
+export const BASE_URL = "http://18.223.121.206";
 
 export const URL_CATEGORIA = BASE_URL + "/api/nav/categorias/";
 export const URL_SERVICIO = BASE_URL + "/api/nav/servicios/";

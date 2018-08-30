@@ -14,11 +14,31 @@
 
 
 <ion-content padding>
-  <h4>Cerrar cuenta de usuario</h4>
-  <p>¿Esta seguro que quiere cerrar su cuenta de usuario?
-  <ion-toggle  [(ngModel)]="aceptar"></ion-toggle>
-  </p>
-  <button ion-button  [disabled]="!aceptar" type="button" color="danger" block type="submit" (click)="showAlert()" >
-       Eliminar
-    </button>
+  <form [formGroup]="myForm" (ngSubmit)="showAlert()">
+      <h4>Terminos y condiciones</h4>
+    <ion-list>
+      <p>¿Esta seguro que quiere cerrar su cuenta de usuario?
+      <ion-toggle  formControlName="terminosCondiciones"></ion-toggle>
+    </p>
+    <div class="error-box" *ngIf="myForm.controls.terminosCondiciones.invalid && myForm.controls.terminosCondiciones.touched">
+      Acepté terminos y condiciones.
+    </div>
+       <ion-item>
+         <ion-label floating>Contraseña</ion-label>
+         <ion-input formControlName="password" type="password"></ion-input>
+       </ion-item>
+     </ion-list>
+     <div class="error-box" *ngIf="myForm.controls.password.hasError('required') && myForm.controls.password.touched">
+       Contraseña es requerida.
+     </div>
+     <div>
+       <button ion-button  [disabled]="!myForm.valid"  type="submit" color="danger" block type="submit">
+            Cerrar Cuenta
+         </button>
+     </div>
+
+</form>
+
+
+
 </ion-content>

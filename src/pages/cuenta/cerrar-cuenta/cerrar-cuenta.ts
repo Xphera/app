@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ClienteProvider } from '../../../providers/cliente/cliente';
-
+import { FormBuilder, FormGroup, Validators,FormControl } from '@angular/forms';
 /**
  * Generated class for the CerrarCuentaPage page.
  *
@@ -15,12 +15,22 @@ import { ClienteProvider } from '../../../providers/cliente/cliente';
   templateUrl: 'cerrar-cuenta.html',
 })
 export class CerrarCuentaPage {
-  public aceptar: boolean
+
+  myForm: FormGroup;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private formBuilder: FormBuilder,
     private alertCtrl: AlertController,
     private _clientePrvdr: ClienteProvider) {
+      this.myForm = this.createMyForm();
+  }
+
+  private createMyForm() {
+    return this.formBuilder.group({
+      password: ['', Validators.compose([Validators.required])],
+      terminosCondiciones: [false, Validators.compose([Validators.required,this.terminoCondicion])],
+    });
   }
 
   ionViewDidLoad() {
@@ -51,11 +61,17 @@ export class CerrarCuentaPage {
 
 
   cerraCuenta() {
-    this._clientePrvdr.cerrarCuenta(this.aceptar)
-      .subscribe((request) => {
-        console.log(request)
-        this.navCtrl.setRoot('HomeUsuarioPage')
-      })
+    this._clientePrvdr.cerrarCuenta(this.myForm.value)
+  }
+
+  terminoCondicion(control:FormControl):{[s:string]:boolean}{
+    if(control.value != true)
+    {
+      return{
+        terminoCondicion:true
+      }
+    }
+    return null
   }
 
 }
