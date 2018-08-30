@@ -33,6 +33,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/localizar-ubicacion';
 import { PushNotificationProvider } from '../providers/push-notification/push-notification';
 import { MensajeProvider } from '../providers/mensaje/mensaje';
+import { Facebook} from '@ionic-native/facebook';
+import { SocialFbProvider } from '../providers/social-fb/social-fb';
 
 
 @NgModule({
@@ -73,9 +75,11 @@ import { MensajeProvider } from '../providers/mensaje/mensaje';
     ClienteProvider,
     PeticionProvider,
     Geolocation,
+    Facebook,
     LocalizarUbicacionProvider,
     PushNotificationProvider,
-    MensajeProvider
+    MensajeProvider,
+    SocialFbProvider
   ]
 })
 export class AppModule {}
