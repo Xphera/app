@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "5.0.3",
     "@ionic-native/card-io": "^4.12.0",
     "@ionic-native/core": "4.4.0",
+    "@ionic-native/facebook": "^4.12.0",
     "@ionic-native/file": "^4.12.0",
     "@ionic-native/file-transfer": "^4.12.0",
     "@ionic-native/geolocation": "^4.12.0",
@@ -39,8 +40,9 @@
     "card.io.cordova.mobilesdk": "^2.1.0",
     "chart.js": "^2.7.2",
     "cordova": "8.0.0",
-    "cordova-android": "^7.1.1",
+    "cordova-android": "7.1.1",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-facebook4": "^2.3.0",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-geolocation": "^4.0.1",
@@ -90,7 +92,11 @@
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
-      "onesignal-cordova-plugin": {}
+      "onesignal-cordova-plugin": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "288418815095991",
+        "APP_NAME": "appservicios"
+      }
     },
     "platforms": [
       "android"

@@ -5,6 +5,7 @@ import { CONFIG } from '../../../config/comunes.config';
 
 import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
 import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
+import {SocialFbProvider} from '../../../providers/social-fb/social-fb';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -33,7 +34,8 @@ export class LoginPage {
     public _usuariosPrvdr: UsuariosProvider,
     private _autenticacionPrvdr: AutenticacionProvider,
     private formBuilder: FormBuilder,
-    private _almacenamientoPrvdr: AlmacenamientoProvider
+    private _almacenamientoPrvdr: AlmacenamientoProvider,
+    private _socialFbPrv : SocialFbProvider
   ) {
     this.myForm = this.createMyForm();
 
@@ -62,6 +64,9 @@ export class LoginPage {
     }
   }
 
+  loginFb(){
+    console.log(this._socialFbPrv.getToken());
+  }
   cerrarLogin() {
     this.navCtrl.pop()
     this._almacenamientoPrvdr.obtener('ir')
