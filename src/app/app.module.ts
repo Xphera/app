@@ -35,6 +35,7 @@ import { PushNotificationProvider } from '../providers/push-notification/push-no
 import { MensajeProvider } from '../providers/mensaje/mensaje';
 import { Facebook} from '@ionic-native/facebook';
 import { SocialFbProvider } from '../providers/social-fb/social-fb';
+import { SocialGooGProvider } from '../providers/social-goog/social-goog';
 
 
 @NgModule({
@@ -79,7 +80,8 @@ import { SocialFbProvider } from '../providers/social-fb/social-fb';
     LocalizarUbicacionProvider,
     PushNotificationProvider,
     MensajeProvider,
-    SocialFbProvider
+    SocialFbProvider,
+    SocialGooGProvider
   ]
 })
 export class AppModule {}

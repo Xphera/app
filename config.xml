@@ -3,7 +3,7 @@
     <name>appServicios</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.137.1:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -23,6 +23,7 @@
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreen" value="true" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="loadUrlTimeoutValue" value="700000" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -112,5 +113,6 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
     <plugin name="card.io.cordova.mobilesdk" spec="^2.1.0" />
+    <allow-navigation href="http://192.168.137.1:8100" sessionid="3ab69bc3" />
     <engine name="android" spec="7.0.0" />
 </widget>

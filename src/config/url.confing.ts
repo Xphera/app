@@ -9,6 +9,10 @@ export const URL_SERVICIO = BASE_URL + "/api/nav/servicios/";
 export const URL_REGISTRO_USUARIO = BASE_URL + "/api/clientes/registro/";
 export const URL_ACTIVAR_USUARIO = BASE_URL + "/api/clientes/validarEmail/";
 export const URL_LOGIN = BASE_URL + "/api-token-auth/"
+export const URL_LOGINFB = BASE_URL + "/api/clientes/authfb/"
+export const URL_LOGINGOOG = BASE_URL + "/api/clientes/authgoog/"
+
+
 export const RESTABLECER_PASSWORD = BASE_URL + "/api/clientes/RestablecerPassword/"
 
 export const URL_ASOCIADOS = BASE_URL+"/api/prestadores/Prestador/"

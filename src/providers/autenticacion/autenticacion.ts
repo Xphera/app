@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MenuController, App } from 'ionic-angular';
 
-import { URL_LOGIN,RESTABLECER_PASSWORD,URL_REGISTRO_USUARIO,URL_ACTIVAR_USUARIO } from '../../config/url.confing';
+import { URL_LOGIN,RESTABLECER_PASSWORD,URL_REGISTRO_USUARIO,URL_ACTIVAR_USUARIO, URL_LOGINFB, URL_LOGINGOOG } from '../../config/url.confing';
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
@@ -72,7 +72,20 @@ export class AutenticacionProvider {
        this.crearSesion(resp)
      })
   }
-
+  public loginFb(token:string){
+    let request = this.http.post(URL_LOGINFB, { token })
+     this._peticionPrvdr.peticion(request)
+      .subscribe((resp)=>{
+       this.crearSesion(resp)
+     })
+  }
+  public loginGoog(token:string){
+    let request = this.http.post(URL_LOGINGOOG, { token })
+     this._peticionPrvdr.peticion(request)
+      .subscribe((resp)=>{
+       this.crearSesion(resp)
+     })
+  }
   public cerrarSesion() {
     this._pushNotificationPrvdr.deletetagsNotificacion("userId")
     let promesa = new Promise((resolve, reject) => {
