@@ -14,23 +14,25 @@ export class SocialGooGProvider implements ISocialProvider  {
       console.log('Hello SocialGooGProvider Provider');
     }
 
-    getToken():string{
+    getToken():Promise<any>{
+      return new Promise<any>(function(resolve,reject){
+        let token:any = {};
+            
+            if(localStorage.getItem("googToken") == null) {
 
-      let token:any = {};
+              /**TODO: get token google */
+              token = {
+                "token":"googTokenData"
+              }
+              localStorage.setItem("googToken",JSON.stringify(token));  
+            }
+            else{
+              token = JSON.parse(localStorage.getItem("googToken"));
+            }
+
+            resolve(token.token);
+      });
       
-      if(localStorage.getItem("googToken") == null) {
-
-        /**TODO: get token google */
-        token = {
-          "token":"googTokenData"
-        }
-        localStorage.setItem("googToken",JSON.stringify(token));  
-      }
-      else{
-        token = JSON.parse(localStorage.getItem("googToken"));
-      }
-
-      return token.token;
 
     }
 }

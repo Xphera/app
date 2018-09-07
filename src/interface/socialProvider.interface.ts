@@ -1,3 +1,3 @@
 export interface ISocialProvider{
-  getToken():string;
+  getToken():Promise<any>;
 }

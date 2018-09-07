@@ -67,13 +67,21 @@ export class LoginPage {
   }
 
   loginFb(){
-    let token = this._socialFbPrv.getToken();
-    this._autenticacionPrvdr.loginFb(token);
+    this._socialFbPrv.getToken().then(token => {
+      this._autenticacionPrvdr.loginFb(token);
+    }).catch(e => {
+      console.log(e);
+      /**@TODO: que sucede aqui?
+       * 
+      */
+    });
+    
   }
 
   loginGoog(){
-    let token = this._socialGooGPrv.getToken();
-    this._autenticacionPrvdr.loginGoog(token);
+    this._socialGooGPrv.getToken().then(token => {
+      this._autenticacionPrvdr.loginGoog(token);
+    });
   }
   cerrarLogin() {
     this.navCtrl.pop()
