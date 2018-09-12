@@ -8,6 +8,8 @@ import { PeticionProvider } from '../peticion/peticion';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
 import 'rxjs/add/operator/map';
 import { PushNotificationProvider } from '../push-notification/push-notification';
+import {SocialFbProvider} from '../social-fb/social-fb';
+import {SocialGooGProvider} from '../social-goog/social-goog';
 
 /*
   Generated class for the AutenticacionProvider provider.
@@ -27,6 +29,8 @@ export class AutenticacionProvider {
     private menuCtrl: MenuController,
     public _ionicComponentPrvdr: IonicComponentProvider,
     public _pushNotificationPrvdr:PushNotificationProvider,
+    private _socialFbPrv : SocialFbProvider,
+    private _socialGooGPrv :  SocialGooGProvider,
     public app: App) {
 
     console.log('Hello AutenticacionProvider Provider');
@@ -72,19 +76,35 @@ export class AutenticacionProvider {
        this.crearSesion(resp)
      })
   }
-  public loginFb(token:string){
-    let request = this.http.post(URL_LOGINFB, { token })
-     this._peticionPrvdr.peticion(request)
-      .subscribe((resp)=>{
-       this.crearSesion(resp)
-     })
+  public loginFb(){
+    this._socialFbPrv.getToken().then(token => {
+      let request = this.http.post(URL_LOGINFB, { token })
+      this._peticionPrvdr.peticion(request)
+        .subscribe((resp)=>{
+        this.crearSesion(resp)
+      },
+      err=>{  
+        this._socialFbPrv.removeToken();
+      });
+    }).catch(e => {
+      console.log(e);
+      /**@TODO: que sucede aqui?
+       * 
+      */
+    });
+
   }
-  public loginGoog(token:string){
-    let request = this.http.post(URL_LOGINGOOG, { token })
-     this._peticionPrvdr.peticion(request)
-      .subscribe((resp)=>{
-       this.crearSesion(resp)
-     })
+  public loginGoog(){
+    this._socialGooGPrv.getToken().then(token => {
+        let request = this.http.post(URL_LOGINGOOG, token)
+        this._peticionPrvdr.peticion(request)
+          .subscribe((resp)=>{
+              this.crearSesion(resp)
+            },err=>{
+              this._socialGooGPrv.removeToken();
+            }
+          );
+    });
   }
   public cerrarSesion() {
     this._pushNotificationPrvdr.deletetagsNotificacion("userId")

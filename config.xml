@@ -3,7 +3,7 @@
     <name>appServicios</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.137.1:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -114,5 +114,8 @@
     </plugin>
     <plugin name="card.io.cordova.mobilesdk" spec="^2.1.0" />
     <allow-navigation href="http://192.168.137.1:8100" sessionid="3ab69bc3" />
+    <plugin name="cordova-plugin-googleplus" spec="^5.3.1">
+        <variable name="REVERSED_CLIENT_ID" value="900716962448-c7j48ssbar5jjrnleofvombo33l2mcvm.apps.googleusercontent.com" />
+    </plugin>
     <engine name="android" spec="7.0.0" />
 </widget>

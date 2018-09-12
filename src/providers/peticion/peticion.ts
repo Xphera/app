@@ -90,16 +90,18 @@ export class PeticionProvider {
               this.sinAutizacion = true
             }
             else if (errores.status == 500 || errores.status == 0) {
-              this._ionicComponentPrvdr.showLongToastMessage("error al conectar con servidor!")
-            } else {
+              this._ionicComponentPrvdr.showLongToastMessage("Ocurrio un error al intentar conectar con servidor!, Intenta de nuevo.")
+            } else if(errores.status == 400){
+              this._ionicComponentPrvdr.showLongToastMessage(errores.error);
+            }else {
               let listaerrores: string = this.httpErrores(errores);
               this._ionicComponentPrvdr.showAlert({
                 title: '',
                 subTitle: listaerrores,
                 buttons: ['OK']
               });
-              observer.error(errores);
             }
+            observer.error(errores);
           },
 
       )

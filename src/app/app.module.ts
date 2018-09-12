@@ -36,6 +36,8 @@ import { MensajeProvider } from '../providers/mensaje/mensaje';
 import { Facebook} from '@ionic-native/facebook';
 import { SocialFbProvider } from '../providers/social-fb/social-fb';
 import { SocialGooGProvider } from '../providers/social-goog/social-goog';
+import { GooglePlus } from '@ionic-native/google-plus';
+
 
 
 @NgModule({
@@ -81,7 +83,8 @@ import { SocialGooGProvider } from '../providers/social-goog/social-goog';
     PushNotificationProvider,
     MensajeProvider,
     SocialFbProvider,
-    SocialGooGProvider
+    SocialGooGProvider,
+    GooglePlus
   ]
 })
 export class AppModule {}

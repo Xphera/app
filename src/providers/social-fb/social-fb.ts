@@ -14,7 +14,9 @@ export class SocialFbProvider implements ISocialProvider  {
     constructor(public http: HttpClient,private fb: Facebook) {
       console.log('Hello SocialFbProvider Provider');
     }
-
+    removeToken(){
+      localStorage.removeItem("fbToken");
+    }
     getToken():Promise<any>{
         return new Promise<any>((resolve,reject)=>{
           let token:any = {};

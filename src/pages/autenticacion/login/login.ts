@@ -5,9 +5,6 @@ import { CONFIG } from '../../../config/comunes.config';
 
 import { AutenticacionProvider } from '../../../providers/autenticacion/autenticacion';
 import { AlmacenamientoProvider } from '../../../providers/almacenamiento/almacenamiento';
-import {SocialFbProvider} from '../../../providers/social-fb/social-fb';
-import {SocialGooGProvider} from '../../../providers/social-goog/social-goog';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
@@ -35,9 +32,7 @@ export class LoginPage {
     public _usuariosPrvdr: UsuariosProvider,
     private _autenticacionPrvdr: AutenticacionProvider,
     private formBuilder: FormBuilder,
-    private _almacenamientoPrvdr: AlmacenamientoProvider,
-    private _socialFbPrv : SocialFbProvider,
-    private _socialGooGPrv :  SocialGooGProvider
+    private _almacenamientoPrvdr: AlmacenamientoProvider
   ) {
     this.myForm = this.createMyForm();
 
@@ -67,21 +62,11 @@ export class LoginPage {
   }
 
   loginFb(){
-    this._socialFbPrv.getToken().then(token => {
-      this._autenticacionPrvdr.loginFb(token);
-    }).catch(e => {
-      console.log(e);
-      /**@TODO: que sucede aqui?
-       * 
-      */
-    });
-    
+      this._autenticacionPrvdr.loginFb();
   }
 
   loginGoog(){
-    this._socialGooGPrv.getToken().then(token => {
-      this._autenticacionPrvdr.loginGoog(token);
-    });
+      this._autenticacionPrvdr.loginGoog();
   }
   cerrarLogin() {
     this.navCtrl.pop()
