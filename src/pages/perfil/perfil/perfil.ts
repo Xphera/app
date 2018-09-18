@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,ModalController } from 'ionic-angular';
 
 import { ClienteProvider } from '../../../providers/cliente/cliente';
+import {
+  BASE_URL
+} from '../../../config/url.confing';
 
 /**
  * Generated class for the PerfilPage page.
@@ -16,6 +19,7 @@ import { ClienteProvider } from '../../../providers/cliente/cliente';
   templateUrl: 'perfil.html',
 })
 export class PerfilPage {
+  BASE_URL = BASE_URL
 
   constructor(
     public navCtrl: NavController,

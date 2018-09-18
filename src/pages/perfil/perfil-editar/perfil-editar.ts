@@ -30,7 +30,7 @@ export class PerfilEditarPage {
     private _clientePrvdr: ClienteProvider) {
 
     this.cliente = this.navParams.get('cliente');
-    // delete this.cliente.email;
+    delete this.cliente.imagePath;
 
     this.myForm = this.createMyForm();
     this.myForm.setValue(this.cliente);

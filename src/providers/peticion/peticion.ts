@@ -92,7 +92,8 @@ export class PeticionProvider {
             else if (errores.status == 500 || errores.status == 0) {
               this._ionicComponentPrvdr.showLongToastMessage("Ocurrio un error al intentar conectar con servidor!, Intenta de nuevo.")
             } else if(errores.status == 400){
-              this._ionicComponentPrvdr.showLongToastMessage(errores.error);
+              let listaerrores: string = this.httpErrores(errores);
+              this._ionicComponentPrvdr.showLongToastMessage(listaerrores);
             }else {
               let listaerrores: string = this.httpErrores(errores);
               this._ionicComponentPrvdr.showAlert({
@@ -135,8 +136,8 @@ export class PeticionProvider {
       if (Array.isArray(errores.error[e])) {
         for (let error of errores.error[e]) {
           if (!isBoolean(errores)) {
-            listaerrores += error + "<br>"
-            // listaerrores += e + ' ' + error + "<br>"
+            listaerrores += error + "\n\r"
+            // listaerrores += e + ' ' + error + "\n"
           }
 
         }
