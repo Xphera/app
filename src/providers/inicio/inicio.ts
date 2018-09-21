@@ -25,9 +25,7 @@ export class InicioProvider {
   }
 
   cargar() {
-    // this._asociadosPrvdr.grabarAsociados();
-    // this._paquetesPrvdr.grabarPaquetes();
-    this._categoriasPrvdr.grabarCategorias();
+    // this._categoriasPrvdr.grabarCategorias();
     this._serviciosPrvdr.grabarServicios()
   }
 

@@ -16,8 +16,8 @@ import { PeticionProvider } from '../peticion/peticion';
 @Injectable()
 export class CategoriasProvider {
   categorias: Array<Categoria> = new Array<Categoria>();
-  key:string = 'categoria'
-
+  chunkCategorias;
+  itemPorfila = 3;
   constructor(
     public http: HttpClient,
     private _peticionPrvdr: PeticionProvider) {
@@ -25,18 +25,21 @@ export class CategoriasProvider {
   }
 
   obtenerCategorias() {
-    this._peticionPrvdr.almacenamiento(this.key)
-      .then((datos) => {
-        this.categorias = JSON.parse(datos['data']);
-      });
+    let request = this.http.get<Categoria[]>(URL_CATEGORIA)
+    return this._peticionPrvdr.peticion(request)
+      .subscribe((resp: Categoria[]) => {
+          this.categorias = resp;
+          this.chunkCategorias = this.categorias.map(x => Object.assign({}, x));
+          this.chunkCategorias = this.chunkArray(this.chunkCategorias,this.itemPorfila)
+      })
   }
 
-  grabarCategorias() {
-    let request = this.http.get<Categoria[]>(URL_CATEGORIA)
-    this._peticionPrvdr.peticion(request,this.key,false)
-      .subscribe((resp: Categoria[]) => {
-        this.categorias = resp;
-      })
+  chunkArray(myArray, chunk_size){
+      let results = [];
+      while (myArray.length) {
+          results.push(myArray.splice(0, chunk_size));
+      }
+      return results;
   }
 
 }

@@ -1,4 +1,41 @@
-<ion-header no-border>
+<!--
+  Generated template for the ServicioPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar no-shadow no-border color = "dark">
+    <ion-title>
+      Servicios
+    </ion-title>
+  </ion-navbar>
+
+  <ion-toolbar no-shadow no-border color = "dark">
+    <ion-segment [(ngModel)]="segmentCategoria" mode="md" (ionChange)="onSegmentChanged($event)"  color="light">
+      <ion-segment-button *ngFor="let cat of _categoriasPrvdr.categorias" [value]="cat.id">
+        {{cat.nombre}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list [virtualScroll]="_serviciosPrvdr.servicios" [approxItemHeight]="'80px'">
+      <button ion-item *virtualItem="let servicios" (click)="iraAsociados(servicios)">
+        <ion-thumbnail item-start class="custom-thumbnail">
+        <!-- <ion-img  [src]="servicios.imagePath" class="custom-img" ></ion-img> -->
+        <img [src]="servicios.imagePath" class="custom-img" [alt]="servicios.nombre">
+      </ion-thumbnail>
+        <h2>{{servicios.nombre}}</h2>
+      </button>
+    </ion-list>
+</ion-content>
+<!--
+  proximamente te ofreceremos los mejores servicios.
+ -->
+
+<!-- <ion-header no-border>
   <ion-navbar transparent color="primary">
     <ion-title >{{ categoria.nombre }}</ion-title>
     <ion-buttons left>
@@ -18,7 +55,6 @@
           <p>{{ servicio.detalle }}</p>
         </div>
       </div>
-      <!-- Add Pagination -->
       <div *ngIf="slideIndex > 0" class="swiper-button-prev swiper-button-white" (click)="previousSlide()"></div>
       <div *ngIf="slideIndex < _serviciosPrvdr.servicios.length-1" class="swiper-button-next swiper-button-white" (click)="nextSlide()"></div>
     </ion-slide>
@@ -26,4 +62,4 @@
   <div class="floating-buttons pop-in">
     <button ion-button clear large full (click)="iraAsociados()">Ver Asociados</button>
   </div>
-</ion-content>
+</ion-content> -->

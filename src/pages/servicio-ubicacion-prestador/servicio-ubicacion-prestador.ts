@@ -23,7 +23,8 @@ export class ServicioUbicacionPrestadorPage {
 
   public coordendas;
   public mostrarmapa: boolean = true;
-  public mosatarBotonMapa:boolean = false
+  public mosatarBotonMapa:boolean = false;
+  public abrirZona:boolean = true;
   servicio: Servicio = new Servicio();
   asociados: Array<Asociado> = new Array<Asociado>()
 
@@ -44,33 +45,43 @@ export class ServicioUbicacionPrestadorPage {
 
   ionViewDidLoad() {
     this._ubicacionesPrvdr.obtenerUbicaciones()
-    this._ionicComponentPrvdr.showAlert({
-      title: '',
-      subTitle: 'Selecciona el lugar en el cual quieres ver los prestadores disponibles',
-      buttons: ['Aceptar']
-    })
+    // this._ionicComponentPrvdr.showAlert({
+    //   title: '',
+    //   subTitle: 'Selecciona el lugar en el cual quieres ver los prestadores disponibles',
+    //   buttons: ['Aceptar']
+    // })
   }
 
   continuar(asociados) {
-    this.navCtrl.push('AsociadosPage', { asociados });
+    let data = {
+      servicio: this.servicio.id,
+      longitud: this.coordendas.longitud,
+      latitud: this.coordendas.latitud
+    }
+    this._asociadosPrvr.obtenerAsociadosServicios(data)
+      .subscribe((data: Asociado[]) => {
+        this.navCtrl.push('AsociadosPage', { asociados:data });
+      })
+
   }
 
   coordenadas(event): void {
     this.mosatarBotonMapa = false
+    console.log(event.coordenadas)
     if (event.coordenadas.error == false) {
-      this.mosatarBotonMapa = true
+      this.mosatarBotonMapa = event.coordenadas.ubicacionenzona
       this.coordendas = event.coordenadas;
-      let data = {
-        servicio: this.servicio.id,
-        longitud: this.coordendas.longitud,
-        latitud: this.coordendas.latitud
-      }
-      this._asociadosPrvr.obtenerAsociadosServicios(data)
-        .subscribe((data: Asociado[]) => {
-          this.asociados = data
-        })
-    }
+      if(event.coordenadas.ubicacionenzona == false &&(this.coordendas.latitud !=0 && this.coordendas.longitud !=0)){
+        this._ionicComponentPrvdr.showLongToast(
+          {
+            message: 'Ubicación fuera del área de cobertura',
+            duration: 3000,
+            position: 'bottom'
+          }
+          )
 
+      }
+    }
   }
 
 }

@@ -15,23 +15,20 @@
 <!-- *ngIf="asociados.length" -->
 <ion-content>
   <xph-map
-    [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
-    [zona]="_asociadosPrvr.zonasServicio"
-    [PrestadoresPorZona]="_asociadosPrvr.prestadorSesvicioZona"
-    (getCoordenadas)="coordenadas($event)"
-  ></xph-map>
+  [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
+  [zona]="_asociadosPrvr.zonasServicio"
+  [listadoubicaciones]=false
+  [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
+  [PrestadoresPorZona]="_asociadosPrvr.prestadorSesvicioZona"
+  (getCoordenadas)="coordenadas($event)">
+  </xph-map>
 
-  <div class="boton-mapa" *ngIf="mosatarBotonMapa == true">
-    <button ion-button icon-only large full (click)="continuar(asociados)" *ngIf="asociados.length > 0">
-              <ion-icon name="body"></ion-icon>
-            {{asociados[0].zona.properties.name}}  ({{asociados.length}})
-               &nbsp;&nbsp;
-            </button>
-    <button ion-button full icon-only large color="danger" *ngIf="asociados.length <= 0">
-              <ion-icon ios="ios-sad" md="md-sad" ></ion-icon>
-              ({{asociados.length}})
-               &nbsp;&nbsp;
-            </button>
-
+  <div class="boton-mapa">
+    <button ion-button icon-only large full (click)="continuar(asociados)" *ngIf="mosatarBotonMapa == true">
+      Continuar
+      &nbsp;&nbsp;
+    </button>
   </div>
 </ion-content>
+
+<!-- proximamente los mejores profecionales -->

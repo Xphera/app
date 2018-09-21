@@ -37,7 +37,6 @@ export class ServiciosProvider {
         this.servicios = JSON.parse(datos['data']).filter((item) => {
           return (item.categoria_id === idcategoria);
         });
-        console.log(this.servicios)
       })
   }
 

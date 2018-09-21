@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Slides,NavParams } from 'ionic-angular';
-
+import { Component } from '@angular/core';
+import { IonicPage, NavController,NavParams } from 'ionic-angular';
 import { CategoriasProvider } from '../../providers/categorias/categorias';
 import {AutenticacionProvider} from '../../providers/autenticacion/autenticacion';
 
@@ -11,22 +10,12 @@ import {AutenticacionProvider} from '../../providers/autenticacion/autenticacion
   templateUrl: 'home.html'
 })
 export class HomePage {
-
-  @ViewChild('slider') slider: Slides;
-  servicioPage = 'ServiciosPage'
-
-  slideIndex = 0;
-
-  serviciospage: any = 'ServiciosPage';
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public _autenticacionPrvdr:AutenticacionProvider,
     public _categoriasPrvdr: CategoriasProvider) {
-
-
-
+      this._categoriasPrvdr.obtenerCategorias()
   }
 
   ionViewDidEnter() {
@@ -36,23 +25,7 @@ export class HomePage {
     }
   }
 
-
-  nextSlide() {
-    this.slider.slideNext();
+  irServicios(data) {
+    this.navCtrl.push('ServiciosPage', { categoria: data})
   }
-
-  previousSlide() {
-    this.slider.slidePrev();
-  }
-
-  onSlideChanged() {
-    this.slideIndex = this.slider.getActiveIndex();
-    console.log('Slide changed! Current index is'+ this.slideIndex);
-  }
-
-  irServicios() {
-    this.navCtrl.push(this.serviciospage, { categoria: this._categoriasPrvdr.categorias[this.slideIndex] })
-  }
-
-
 }
