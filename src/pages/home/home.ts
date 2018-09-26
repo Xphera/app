@@ -26,6 +26,7 @@ export class HomePage {
   }
 
   irServicios(data) {
-    this.navCtrl.push('ServiciosPage', { categoria: data})
+    console.log(data)
+    this.navCtrl.push('ServiciosPage', { "categoria": data})
   }
 }

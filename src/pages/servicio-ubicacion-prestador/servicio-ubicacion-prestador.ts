@@ -31,20 +31,23 @@ export class ServicioUbicacionPrestadorPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private _ubicacionesPrvdr: UbicacionesProvider,
-    private _asociadosPrvr: AsociadosProvider,
+    public _ubicacionesPrvdr: UbicacionesProvider,
+    public _asociadosPrvr: AsociadosProvider,
     public _ionicComponentPrvdr: IonicComponentProvider,
     public _autenticacionPrvdr: AutenticacionProvider) {
       this.servicio = this.navParams.get('servicio');
-      this._asociadosPrvr.obtenerZonaServicios({ servicio: this.servicio.id })
+
   }
+
+
 
   ionViewCanEnter() {
     return this._autenticacionPrvdr.guardian('ServicioUbicacionPrestadorPage', this.navParams.data)
   }
 
-  ionViewDidLoad() {
+  ionViewCanLeave() {
     this._ubicacionesPrvdr.obtenerUbicaciones()
+
     // this._ionicComponentPrvdr.showAlert({
     //   title: '',
     //   subTitle: 'Selecciona el lugar en el cual quieres ver los prestadores disponibles',

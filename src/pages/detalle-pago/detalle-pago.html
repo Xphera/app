@@ -17,13 +17,13 @@
   <form [formGroup]="myForm" (ngSubmit)="guardar()">
     <ion-card class="item-ribbon">
       <ion-card-header>
-        Paquete
+        {{ paquete.nombre }}
       </ion-card-header>
       <span class="ribbon {{ paquete.ribbon.estilo }}" *ngIf="paquete.ribbon">
         <span>{{ paquete.ribbon.text }}</span>
       </span>
       <ion-card-content>
-        <h2><span ion-text color="color2">{{ paquete.nombre }}</span></h2>
+        <!-- <h2><span ion-text color="color2">{{ paquete.nombre }}</span></h2> -->
         <p>
           {{ paquete.detalle }}
         </p>
@@ -31,12 +31,12 @@
         <ion-grid>
           <ion-row>
             <ion-col col-6>
-              <ion-card-title ion-text color="tomato">
+              <ion-card-title ion-text>
                 sesiones {{ paquete.cantidadDeSesiones }}
               </ion-card-title>
             </ion-col>
             <ion-col col-6>
-              <ion-card-title ion-text color="tomato">
+              <ion-card-title ion-text>
                 {{ paquete.valor|currency:CONFIG.FORMATO_MONEDA:true: CONFIG.FORMATO_MONEDA_DECIMAL}}
               </ion-card-title>
             </ion-col>
@@ -142,7 +142,7 @@
 
       <ion-row no-padding class="linea">
         <ion-col>
-          <button ion-button full icon-start [disabled]="!myForm.valid" type="submit">
+          <button ion-button icon-only large full [disabled]="!myForm.valid" type="submit">
           Pagar
         </button>
         </ion-col>

@@ -13,12 +13,6 @@
     color: white;
   }
 
-
-
-
-
-
-
   ion-icon {
     &[class*="custom-"] {
       mask-size: contain;
@@ -99,7 +93,7 @@
 
       .item {
         background-color: transparent !important;
-        color: #222;
+        color: #000;
         font-weight: bold;
         font-size: 13px;
       }
@@ -137,8 +131,8 @@
       padding: 5px 15px;
       background-image: url("../assets/imgs/misc/material-design-background.jpg");
       background-size: cover;
-      color: white;
-
+      color: #fff; 
+      font-size: 16px;
       .name {
         font-weight: 500;
         margin-bottom: 3px;
@@ -157,12 +151,13 @@
 
     .label,
     h3 {
-      color: #999;
+      color: #000;
       font-weight: 400;
+      font-size: 16px;
     }
 
     ion-icon {
-      color: #777;
+      color: #000;
     }
 
     .round {

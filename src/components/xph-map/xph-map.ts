@@ -219,8 +219,8 @@ export class XphMapComponent {
   fijarUbicacion() {
     this.inputsearchbar[0].disabled = true;
     this.listadoubicaciones = false;
-    let loader = this.showloader('Buscando ubicación...');
-    loader.present();
+    // let loader = this.showloader('Buscando ubicación...');
+    // loader.present();
     this.gps().then(location => {
       this.coordenadas.longitud = location["coords"].longitude;
       this.coordenadas.latitud = location["coords"].latitude;
@@ -233,7 +233,7 @@ export class XphMapComponent {
         this.coordenadas.direccion = direccion;
         this.direccion = this.coordenadas.direccion;
         this.cambiarcentroMapa(this.coordenadas.longitud, this.coordenadas.latitud)
-        loader.dismiss();
+        // loader.dismiss();
       }).catch(() => {
         this.coordenadas.longitud = 0;
         this.coordenadas.latitud = 0;
@@ -243,21 +243,25 @@ export class XphMapComponent {
         this.coordenadas.error = true;
         this.direccion = ''
         this.lanzarCoordenadas();
-        loader.dismiss();
+        // loader.dismiss();
       })
     })
 
   }
 
   protected gps() {
+    let loader = this.showloader('Buscando ubicación...');
+    loader.present();
     return new Promise((resolve, reject) => {
       this.geolocation.getCurrentPosition({ timeout: 20000 })
         .then(
           location => {
+            loader.dismiss();
             resolve(location);
           }
         )
         .catch(error => {
+          loader.dismiss();
           reject(error)
         });
     })

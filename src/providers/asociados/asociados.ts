@@ -4,7 +4,7 @@ import { URL_ASOCIADOS, URL_DISPONIBILIDAD_MES } from '../../config/url.confing'
 import { Asociado } from "../../models/models.index";
 import { AlmacenamientoProvider } from '../almacenamiento/almacenamiento';
 import { PeticionProvider } from '../peticion/peticion';
-
+import { Observable } from "rxjs/Observable";
 
 /*
   Generated class for the AsociadosProvider provider.
@@ -18,7 +18,7 @@ export class AsociadosProvider {
   asociados: Array<Asociado> = new Array<Asociado>();
   key: string = 'asociados'
   agendaasociado;
-  zonasServicio:Array<any>
+  zonasServicio:Array<any>= new Array()
   prestadorSesvicioZona:Array<any>
 
   constructor(
@@ -75,6 +75,7 @@ export class AsociadosProvider {
   obtenerZonaServicios(dataInput) {
     this.zonasServicio = new Array()
     this.prestadorSesvicioZona = new Array()
+    return new Observable(observer => {
     let request = this.http.get<Asociado[]>(URL_ASOCIADOS, { params: dataInput })
     this._peticionPrvdr.peticion(request)
     .subscribe((zonas) => {
@@ -90,9 +91,9 @@ export class AsociadosProvider {
            'catidadPrestadores':zonas[zona]['prestadores'].length
          })
       }
-      console.log(this.prestadorSesvicioZona)
+      observer.next(true);
     })
-
+    })
   }
 
 

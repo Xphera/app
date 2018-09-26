@@ -16,7 +16,7 @@ import { PeticionProvider } from '../peticion/peticion';
 @Injectable()
 export class CategoriasProvider {
   categorias: Array<Categoria> = new Array<Categoria>();
-  chunkCategorias;
+  chunkCategorias = new Array<any>();
   itemPorfila = 3;
   constructor(
     public http: HttpClient,
@@ -26,20 +26,27 @@ export class CategoriasProvider {
 
   obtenerCategorias() {
     let request = this.http.get<Categoria[]>(URL_CATEGORIA)
-    return this._peticionPrvdr.peticion(request)
+    this._peticionPrvdr.peticion(request)
       .subscribe((resp: Categoria[]) => {
           this.categorias = resp;
-          this.chunkCategorias = this.categorias.map(x => Object.assign({}, x));
-          this.chunkCategorias = this.chunkArray(this.chunkCategorias,this.itemPorfila)
+          this.chunkCategorias = resp.map(x => Object.assign({}, x));
+          this.chunkCategorias = this.chunkArray(resp,this.itemPorfila)
+
       })
   }
 
-  chunkArray(myArray, chunk_size){
-      let results = [];
-      while (myArray.length) {
-          results.push(myArray.splice(0, chunk_size));
-      }
-      return results;
+  chunkArray(myArray, chunk_size){    
+   let index = 0;
+   let arrayLength = myArray.length;
+   let tempArray = [];
+
+   for (index = 0; index < arrayLength; index += chunk_size) {
+       let myChunk = myArray.slice(index, index+chunk_size);
+       // Do something if you want with the group
+       tempArray.push(myChunk);
+   }
+
+   return tempArray;
   }
 
 }

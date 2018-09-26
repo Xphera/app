@@ -112,7 +112,7 @@ export class DetallePagoPage {
     if (this._usuariosPrvdr.paqueteActivo.compradetallesesiones.length > 0) {
       this._ionicComponentPrvdr.showAlert({
         title: '',
-        subTitle: 'ya tienes un paquete activo',
+        subTitle: 'Cuentas con sesiones activas.',
         buttons: ['Aceptar']
       })
       return false;

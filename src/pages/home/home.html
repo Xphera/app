@@ -14,10 +14,11 @@
 <ion-content text-center>
   <ion-grid>
   <ion-row *ngFor="let items of _categoriasPrvdr.chunkCategorias">
-    <ion-col text-center  *ngFor="let categoria of items" (click)="irServicios(categoria)">
-      <!-- <ion-img width="70" height="70" [src]="categoria.imagePath"></ion-img> -->
-      <img width="70" height="70" [src]="categoria.imagePath" [alt]="categoria.nombre">
-      <p>{{categoria.nombre}}</p>
+    <ion-col text-center  *ngFor="let cat of items" (click)="irServicios(cat)">
+      <!-- <ion-img width="50" height="50" [src]="cat.imagePath"></ion-img> -->
+      <!-- <img-loader width="50px" height="50px" display="inline-block"  [src]="categoria['imagePath']" ></img-loader> -->
+      <img width="50" height="50" [src]="cat['imagePath']" alt="">
+      <p>{{cat["nombre"]}}</p>
     </ion-col>
   </ion-row>
 </ion-grid>

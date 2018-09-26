@@ -10,9 +10,9 @@ import { CONFIG } from '../config/comunes.config';
 
 import { InicioProvider } from '../providers/inicio/inicio';
 
-import { ImgCacheService } from 'ng-imgcache';
+// import { ImgCacheService } from 'ng-imgcache';
 import { CacheService } from "ionic-cache";
- 
+
 import { AppState } from './app.global';
 
 import { timer } from 'rxjs/observable/timer';
@@ -41,7 +41,7 @@ export class MyApp {
     private _autenticacionPrvdr: AutenticacionProvider,
     _inicioPrvdr: InicioProvider,
     cache: CacheService,
-    imgCache: ImgCacheService,
+    // imgCache: ImgCacheService,
     public global: AppState,
     public _pushNotificationPrvdr: PushNotificationProvider
   ) {
@@ -52,7 +52,7 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
+      statusBar.styleBlackOpaque();
 
       this._pushNotificationPrvdr.init_notifications();
 
@@ -66,9 +66,9 @@ export class MyApp {
       _inicioPrvdr.cargar();
       this.global.set('theme', 'custom-theme');
 
-      imgCache.init({
-        // Pass any options here...
-      });
+      // imgCache.init({
+      //   // Pass any options here...
+      // });
 
       // Set TTL to 12h
       cache.setDefaultTTL(60 * 60 * 12);

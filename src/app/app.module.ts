@@ -8,7 +8,8 @@ import { OneSignal } from '@ionic-native/onesignal';
 import {HttpClientModule} from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage';
 
-import { ImgCacheModule } from 'ng-imgcache';
+// import { ImgCacheModule } from 'ng-imgcache';
+import { IonicImageLoader } from 'ionic-image-loader';
 import { CacheModule } from 'ionic-cache';
 import { AppState } from './app.global';
 import { PipesModule } from '../pipes/pipes.module';
@@ -48,7 +49,8 @@ import { GooglePlus } from '@ionic-native/google-plus';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    ImgCacheModule,
+    // ImgCacheModule,
+    IonicImageLoader.forRoot(),
     PipesModule,
     CacheModule.forRoot()
   ],

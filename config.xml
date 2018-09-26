@@ -97,8 +97,6 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-secure-storage" spec="^2.6.8" />
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
-    <plugin name="cordova-plugin-file" spec="^6.0.1" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="onesignal-cordova-plugin" spec="^2.4.3" />
     <plugin name="cordova-plugin-facebook4" spec="^2.3.0">
         <variable name="APP_ID" value="288418815095991" />
@@ -117,5 +115,8 @@
     <plugin name="cordova-plugin-googleplus" spec="^5.3.1">
         <variable name="REVERSED_CLIENT_ID" value="900716962448-c7j48ssbar5jjrnleofvombo33l2mcvm.apps.googleusercontent.com" />
     </plugin>
-    <engine name="android" spec="^7.0.0" />
+    <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <engine name="android" spec="^7.1.1" />
 </widget>
