@@ -29,15 +29,16 @@
   </ion-item>
 </ion-item-group>
 </div>
-<div id="mapa" class="mapa" [ngStyle]="{'display': coordenadas.error ==false ? 'block' : 'none' }"></div>
+<div id="mapa" class="mapa"></div>
+<!-- <div id="mapa" class="mapa" [ngStyle]="{'display': coordenadas.error ==false ? 'block' : 'none' }"></div> -->
 <div #mapa ></div>
 
-<div class="error" *ngIf="coordenadas.error == true">
+<!-- <div class="error" *ngIf="coordenadas.error == true">
   <div>
     <h1>: (</h1>
     <p>No se pudo encontrar la ubicación.</p>
   </div>
-</div>
+</div> -->
 
 <ion-fab right middle *ngIf="PrestadoresPorZona.length > 0">
    <button ion-fab mini color="secondary"(click)="openMenuZona()">

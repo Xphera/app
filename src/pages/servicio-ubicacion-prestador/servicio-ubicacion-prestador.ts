@@ -74,7 +74,8 @@ export class ServicioUbicacionPrestadorPage {
     if (event.coordenadas.error == false) {
       this.mosatarBotonMapa = event.coordenadas.ubicacionenzona
       this.coordendas = event.coordenadas;
-      if(event.coordenadas.ubicacionenzona == false &&(this.coordendas.latitud !=0 && this.coordendas.longitud !=0)){
+      if(event.coordenadas.ubicacionenzona == false
+        &&(this.coordendas.latitud !=0 && this.coordendas.longitud !=0) ){
         this._ionicComponentPrvdr.showLongToast(
           {
             message: 'Ubicación fuera del área de cobertura',
@@ -82,8 +83,13 @@ export class ServicioUbicacionPrestadorPage {
             position: 'bottom'
           }
           )
-
       }
+    }else{
+      this._ionicComponentPrvdr.showLongToast({
+        message: 'No se pudo encontrar ubicación.',
+        duration: 3000,
+        position: 'bottom'
+      });
     }
   }
 

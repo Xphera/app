@@ -7,7 +7,7 @@ import OSM from 'ol/source/OSM';
 import Vector from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { getDistance } from 'ol/sphere';
-import { Fill, Style, Text } from 'ol/style';//
+import { Fill, Style } from 'ol/style';//, Text
 import { getCenter } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
@@ -16,8 +16,11 @@ import { MapsAPILoader } from '@agm/core';
 
 import { Observable } from 'rxjs/Rx';
 
-import { Geolocation } from '@ionic-native/geolocation';
+// import { Geolocation } from '@ionic-native/geolocation';
+// import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { ToastController, LoadingController, ActionSheetController } from 'ionic-angular';
+import { LocalizarUbicacionProvider } from '../../providers/localizar-ubicacion/localizar-ubicacion';
+// import { } from 'googlemaps';
 /**
  * Generated class for the XphMapComponent component.
  *
@@ -52,26 +55,26 @@ export class XphMapComponent {
   public vectorLayer = new VectorLayer({
     source: this.vectorSource,
     style: ((feature, resolution) => {
-      let color = 'rgb(102, 102, 255, 0.3)'
-      let text = ''
-      if (feature.get('color')) {
-        color = feature.get('color')
-      }
-      if (feature.get('name')) {
-        text = feature.get('name')
-      }
+      let color = 'rgb(102, 102, 255, 0.2)'
+      // let text = ''
+      // if (feature.get('color')) {
+      //   color = feature.get('color')
+      // }
+      // if (feature.get('name')) {
+      //   text = feature.get('name')
+      // }
       let style = new Style({
         fill: new Fill({
           color: color
         }),
-        text: new Text({
-          font: '30px Calibri,sans-serif',
-          overflow: 'true',
-          text: text,
-          fill: new Fill({
-            color: 'rgb(255, 255, 255,0.7)'
-          })
-        }),
+        // text: new Text({
+        //   font: '30px Calibri,sans-serif',
+        //   overflow: 'true',
+        //   text: text,
+        //   fill: new Fill({
+        //     color: 'rgb(255, 255, 255,0.7)'
+        //   })
+        // }),
       })
       return style
     })
@@ -112,16 +115,20 @@ export class XphMapComponent {
  */
   recalculada: boolean;
 
-  activo: boolean = true;
+  // activo: boolean = true;
+
+  ubicacionGps: boolean = true;
 
   actionSheetOpen = false;
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private geolocation: Geolocation,
+    // private geolocation: Geolocation,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    public actionsheetCtrl: ActionSheetController
+    public actionsheetCtrl: ActionSheetController,
+    // private locationAccuracy: LocationAccuracy,
+    private _localizarUbicacionPrvdr:LocalizarUbicacionProvider
   ) {
     console.log('Hello MapComponent Component');
 
@@ -135,11 +142,19 @@ export class XphMapComponent {
 
   ngOnInit() {
     if (this.coordenadas.longitud == 0 && this.coordenadas.longitud == 0) {
-      this.gps().then(location => {
+      this._localizarUbicacionPrvdr.gps().then(location => {
         this.coordenadas.longitud = location["coords"].longitude;
         this.coordenadas.latitud = location["coords"].latitude;
         this.mapInit()
         console.log(this.coordenadas)
+      }).catch((location)=>{
+        // ubicación de por defecto segu ciudad  cuando no se accede a ubiacion de usuario.
+        this.coordenadas.longitud = location["longitud"];
+        this.coordenadas.latitud = location["latitud"];
+        this.coordenadas.error = true;
+        this.coordenadas.index = -1;
+        this.mapInit()
+        console.log(this.coordenadas,'ngOnInit')
       })
     } else {
       this.mapInit()
@@ -168,7 +183,7 @@ export class XphMapComponent {
   protected openMenuZona() {
     // si se envian zonas y si actionSheet no abierto
     if (this.PrestadoresPorZona.length > 0 && this.actionSheetOpen == false) {
-    let buttons = []
+      let buttons = []
       buttons.push({
         text: 'Cerrar',
         role: 'cancel', // will always sort to be on the bottom
@@ -207,7 +222,7 @@ export class XphMapComponent {
           return data
         }
       })
-    this.map.getView().setZoom(12)
+    this.map.getView().setZoom(this.zoom)
     let centroZona = getCenter(z.getGeometry().getExtent())
     this.cambiarcentroMapa(centroZona[0], centroZona[1])
   }
@@ -221,7 +236,8 @@ export class XphMapComponent {
     this.listadoubicaciones = false;
     // let loader = this.showloader('Buscando ubicación...');
     // loader.present();
-    this.gps().then(location => {
+    this.ubicacionGps = true;
+    this._localizarUbicacionPrvdr.gps().then(location => {
       this.coordenadas.longitud = location["coords"].longitude;
       this.coordenadas.latitud = location["coords"].latitude;
       this.coordenadas.error = false;
@@ -233,49 +249,89 @@ export class XphMapComponent {
         this.coordenadas.direccion = direccion;
         this.direccion = this.coordenadas.direccion;
         this.cambiarcentroMapa(this.coordenadas.longitud, this.coordenadas.latitud)
-        // loader.dismiss();
-      }).catch(() => {
-        this.coordenadas.longitud = 0;
-        this.coordenadas.latitud = 0;
-        this.coordenadas.direccion = '';
-        this.coordenadas.titulo = '';
-        this.coordenadas.id = -1;
-        this.coordenadas.error = true;
-        this.direccion = ''
-        this.lanzarCoordenadas();
-        // loader.dismiss();
       })
+      .catch((location) => {
+        this.coordenadas.direccion = '';
+        this.direccion = this.coordenadas.direccion;
+        this.cambiarcentroMapa(this.coordenadas.longitud, this.coordenadas.latitud)
+      })
+    }).catch((location) => {
+      this.coordenadas.longitud = location["longitud"];
+      this.coordenadas.latitud = location["latitud"];
+      this.coordenadas.direccion = '';
+      this.coordenadas.titulo = '';
+      this.coordenadas.id = -1;
+      this.coordenadas.error = true;
+      this.direccion = this.coordenadas.direccion
+      this.cambiarcentroMapa(this.coordenadas.longitud, this.coordenadas.latitud)
+      // loader.dismiss();
+      console.log(location)
     })
 
   }
 
-  protected gps() {
-    let loader = this.showloader('Buscando ubicación...');
-    loader.present();
-    return new Promise((resolve, reject) => {
-      this.geolocation.getCurrentPosition({ timeout: 20000 })
-        .then(
-          location => {
-            loader.dismiss();
-            resolve(location);
-          }
-        )
-        .catch(error => {
-          loader.dismiss();
-          reject(error)
-        });
-    })
+  // protected gps() {
+  //   let loader = this.showloader('Buscando ubicación...');
+  //   loader.present();
+  //   let coords = {
+  //     'longitud':-74.0761965,
+  //     'latitud':4.5981451
+  //   }
+  //   return new Promise((resolve, reject) => {
+  //     this.gpsActivo().then(() => {
+  //       this.geolocation.getCurrentPosition({ timeout: 30000 })
+  //         .then(
+  //           location => {
+  //             loader.dismiss();
+  //             resolve(location);
+  //           }
+  //         )
+  //         .catch(error => {
+  //           loader.dismiss();
+  //           reject(coords)
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       loader.dismiss();
+  //       reject(coords)
+  //     })
+  //
+  //   })
+  // }
 
-  }
+  // protected gpsActivo() {
+  //   return new Promise((resolve, reject) => {
+  //     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+  //       if (canRequest) {
+  //         // the accuracy option will be ignored by iOS
+  //         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+  //           () => {
+  //             console.log('Request successful')
+  //             resolve(true)
+  //           },
+  //           error => {
+  //             console.log('Error requesting location permissions', error)
+  //             reject(false)
+  //           }
+  //         );
+  //       }
+  //     })
+  //   })
+  //
+  // }
 
 
   protected onSelectChange(selectedValue: number, tipo?: string) {
-    this.inputsearchbar[0].disabled = true;
-    this.listadoubicaciones = false;
-    this.autocompleteItems = [];
+
 
     this.obtenerUbicacion(selectedValue, tipo)
       .then((resp: coordenadasInterfaces) => {
+
+        this.inputsearchbar[0].disabled = true;
+        this.listadoubicaciones = false;
+        this.autocompleteItems = [];
+
+
         this.coordenadas.direccion = resp.direccion;
         this.coordenadas.latitud = parseFloat(resp.latitud)
         this.coordenadas.longitud = parseFloat(resp.longitud);
@@ -361,10 +417,10 @@ export class XphMapComponent {
         componentRestrictions: { country: 'CO' }
       }
       Observable.fromPromise(this.search(config))
-      .debounceTime(this.debounceTimeValue)
-      .subscribe((resp: any) => {
-        this.autocompleteItems = resp;
-      });
+        .debounceTime(this.debounceTimeValue)
+        .subscribe((resp: any) => {
+          this.autocompleteItems = resp;
+        });
     }
   }
 
@@ -393,7 +449,10 @@ export class XphMapComponent {
 */
   lanzarCoordenadas() {
 
-    if (this.PrestadoresPorZona.length > 0) {
+    // si hay zanas
+    if (this.PrestadoresPorZona.length > 0
+    && this.listadoubicaciones == false
+    && this.coordenadas.error == false ) {
       this.coordenadas.ubicacionenzona = false
       for (let i = 0; i < this.PrestadoresPorZona.length; i++) {
         if (this.ubicacionenZona(this.PrestadoresPorZona[i].zona, this.coordenadas)) {
@@ -430,14 +489,19 @@ export class XphMapComponent {
       .debounceTime(this.debounceTimeValue)
       .subscribe((result) => {
 
-        if (this.listadoubicaciones === false && this.activo == true) {
+        if (this.listadoubicaciones === false) {
 
           let distanciaCoordenadas = this.getDistanciaMetros(coordenadasGeocoder.latitud, coordenadasGeocoder.longitud, result["latitud"], result["longitud"])
           this.coordenadas.latitud = result["latitud"];
           this.coordenadas.longitud = result["longitud"];
-          this.coordenadas.error = false;
-
           this.recalculada = true;
+
+          // si ubicacion es por GPS
+          if(this.ubicacionGps == true){
+            this.ubicacionGps = false;
+          }else{
+            this.coordenadas.error = false;
+          }
 
           if (this.coordenadas.index != -1 && this.coordenadas.index) {
             if (this.ubicaciones[this.coordenadas.index].longitud == this.coordenadas.longitud && this.ubicaciones[this.coordenadas.index].latitud == this.coordenadas.latitud) {
@@ -459,18 +523,18 @@ export class XphMapComponent {
               loader.dismiss();
               this.lanzarCoordenadas();
             }).catch(error => {
-              this.coordenadas.error = true;
+              // this.coordenadas.error = true;
               this.direccion = '';
               this.pintarMapa();
               loader.dismiss();
-              this.showLongToast({
-                message: 'No se pudo encontrar la ubicación.',
-                duration: 2000
-              });
+              // this.showLongToast({
+              //   message: 'No se pudo encontrar ubicación.',
+              //   duration: 2000
+              // });
             });
 
           } else {
-            this.coordenadas.error = false;
+
             this.recalculada = false;
             this.lanzarCoordenadas();
             // loader.dismiss();
@@ -520,9 +584,9 @@ export class XphMapComponent {
 
   }
 
-  protected sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
+  // protected sleep(time) {
+  //   return new Promise((resolve) => setTimeout(resolve, time));
+  // }
 
   /**
 * obtiene nombre de direccion a partir de coordendas.

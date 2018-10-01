@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
-import { Observable } from "rxjs/Observable";
-import { Subscription } from 'rxjs/Subscription';
-
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { IonicComponentProvider } from '../ionic-component/ionic-component';
 
 /*
   Generated class for the LocalizarUbicacionProvider provider.
@@ -14,94 +12,61 @@ import { Subscription } from 'rxjs/Subscription';
 @Injectable()
 export class LocalizarUbicacionProvider {
 
-  // protected lat = 4.6502275
-  // protected lng = -74.0575201
-
-  protected lat = 4.6883379
-  protected lng = -74.0460433
-
-  private watch: Subscription;
-  public usuario: { lat: number, lng: number }
-  public prestador: { lat: number, lng: number }
-  private ubicacarPrestadorObservable: Subscription
-
-  protected localizando: boolean = false
-
   constructor(
-    public http: HttpClient,
     private geolocation: Geolocation,
+    private locationAccuracy: LocationAccuracy,
+    private _ionicComponentPrvdr: IonicComponentProvider,
   ) {
     console.log('Hello LocalizarUbicacionProvider Provider');
 
   }
 
+    public gps() {
+      let loader = this._ionicComponentPrvdr.showloaderMessage('Buscando ubicación...');
+      let coords = {
+        'longitud':-74.0761965,
+        'latitud':4.5981451
+      }
+      return new Promise((resolve, reject) => {
+        this.gpsActivo().then(() => {
+          this.geolocation.getCurrentPosition({ timeout: 30000 })
+            .then(
+              location => {
+                loader.dismiss();
+                resolve(location);
+              }
+            )
+            .catch(error => {
+              loader.dismiss();
+              reject(coords)
+            });
+        })
+        .catch((error) => {
+          loader.dismiss();
+          reject(coords)
+        })
 
-  localizar(idPrestador?: number) {
-    if (this.localizando == false) {
-      this.ubicarUsuario()
-      this.ubicacarPrestador()
-      this.localizando = true;
-    }
-  }
-
-  deterner() {
-    if (this.localizando == true) {
-      this.detenerUbicacarPrestador()
-      this.detenerUbicacionUsuario()
-      this.localizando = false;
-    }
-  }
-
-  ubicarUsuario() {
-    this.usuario = { lat: 0, lng: 0 }
-    this.geolocation.getCurrentPosition({ timeout: 6000 }).then((resp) => {
-      // resp.coords.latitude
-      // resp.coords.longitude
-      this.usuario = { lat: resp.coords.latitude, lng: resp.coords.longitude }
-      this.watch = this.geolocation.watchPosition()
-        .subscribe((data) => {
-          // data can be a set of coordinates, or an error (if an error occurred).
-          // data.coords.latitude
-          // data.coords.longitude
-          this.usuario = { lat: data.coords.latitude, lng: data.coords.longitude }
-        });
-
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-  }
-
-  detenerUbicacionUsuario() {
-
-    try {
-      this.watch.unsubscribe();
-    } catch (e) {
-      console.log(JSON.stringify(e));
+      })
     }
 
-
-  }
-  // TODO: conectar a servicio lacalizacion prestador
-  ubicacarPrestador(idPrestador?: number) {
-
-    this.prestador = { lat: this.lat, lng: this.lng }
-    //consulta posición de prestador cada 5 minutos
-    this.ubicacarPrestadorObservable = Observable.interval((1000 * 60) * 5).subscribe(() => {
-      this.lat = this.lat + 0.0007983
-      this.lng = this.lng + 0.0001968
-      this.prestador = { lat: this.lat, lng: this.lng }
-    });
-  }
-
-  detenerUbicacarPrestador() {
-    try {
-      this.ubicacarPrestadorObservable.unsubscribe();
-    } catch (e) {
-      console.log(JSON.stringify(e));
+    public gpsActivo() {
+      return new Promise((resolve, reject) => {
+        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+          if (canRequest) {
+            // the accuracy option will be ignored by iOS
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+              () => {
+                console.log('Request successful')
+                resolve(true)
+              },
+              error => {
+                console.log('Error requesting location permissions', error)
+                reject(false)
+              }
+            );
+          }
+        })
+      })
     }
-  }
-
-
 
 }

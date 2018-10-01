@@ -4,6 +4,7 @@ import { IonicModule } from 'ionic-angular';
 import { AgmCoreModule } from '@agm/core';
 import { } from 'googlemaps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { CalificarComponent } from './calificar/calificar';
 import { ProximaSesionComponent } from './proxima-sesion/proxima-sesion';
 import { Ionic2RatingModule } from "ionic2-rating";
@@ -16,7 +17,7 @@ import { MomentModule } from 'angular2-moment';
 import 'moment/locale/es';
 import { ContentDrawerComponent } from './content-drawer/content-drawer';
 import { XphMapComponent } from './xph-map/xph-map';
-// import { IonicComponentProvider } from '../providers/ionic-component/ionic-component';
+import { LocalizarUbicacionProvider } from '../providers/localizar-ubicacion/localizar-ubicacion';
 
 @NgModule({
 	declarations: [
@@ -47,6 +48,10 @@ import { XphMapComponent } from './xph-map/xph-map';
     ContentDrawerComponent,
     XphMapComponent,
     ],
-	providers: [Geolocation]
+	providers: [
+		Geolocation,
+		LocationAccuracy,
+		LocalizarUbicacionProvider
+	]
 })
 export class ComponentsModule {}
