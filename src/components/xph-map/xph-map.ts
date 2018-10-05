@@ -11,6 +11,7 @@ import { Fill, Style } from 'ol/style';//, Text
 import { getCenter } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
+// import { Select } from 'ol/interaction/Select';
 
 import { MapsAPILoader } from '@agm/core';
 
@@ -51,6 +52,17 @@ export class XphMapComponent {
   private raster = new TileLayer({
     source: new OSM()
   });
+
+// private listeners = {
+//    featureclick: function(evt) {
+//       console.log(this.name + " clicked: " + evt.feature.id);
+//    }
+// };
+
+// select_interaction = new Select();
+
+
+
   private vectorSource = new Vector();
   public vectorLayer = new VectorLayer({
     source: this.vectorSource,
@@ -193,9 +205,10 @@ export class XphMapComponent {
           this.actionSheetOpen = false;
         }
       })
+      // + " ( " + this.PrestadoresPorZona[zona]["catidadPrestadores"] + " )"
       for (let zona in this.PrestadoresPorZona) {
         buttons.push({
-          text: this.PrestadoresPorZona[zona]["name"] + " ( " + this.PrestadoresPorZona[zona]["catidadPrestadores"] + " )",
+          text: this.PrestadoresPorZona[zona]["name"] ,
           icon: 'pin',
           handler: () => {
             this.obternerZonaCentro(zona)
@@ -204,7 +217,7 @@ export class XphMapComponent {
         })
       }
       let actionSheet = this.actionsheetCtrl.create({
-        title: 'Prestadores disponibles por zona',
+        title: 'Sedes disponible',
         cssClass: 'action-sheets-basic-page',
         buttons: buttons,
         enableBackdropDismiss: false
@@ -555,6 +568,12 @@ export class XphMapComponent {
     });
     // pintar zonas
     this.pintarZona()
+
+    // this.select_interaction.getFeatures().on("add", (e)=> {
+    //      console.log(e)
+    // });
+    //
+    // this.map.addInteraction(this.select_interaction);
 
   }
 

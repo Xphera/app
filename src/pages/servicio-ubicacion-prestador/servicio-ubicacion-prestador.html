@@ -13,12 +13,13 @@
 </ion-header>
 
 <!-- *ngIf="asociados.length" -->
+<!-- [ubicaciones]="_ubicacionesPrvdr.ubicaciones" -->
 <ion-content>
   <xph-map
   [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
   [zona]="_asociadosPrvr.zonasServicio"
+  [zoom]=12
   [listadoubicaciones]=false
-  [ubicaciones]="_ubicacionesPrvdr.ubicaciones"
   [PrestadoresPorZona]="_asociadosPrvr.prestadorSesvicioZona"
   (getCoordenadas)="coordenadas($event)">
   </xph-map>

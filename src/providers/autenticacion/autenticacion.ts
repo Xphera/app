@@ -83,13 +83,13 @@ export class AutenticacionProvider {
         .subscribe((resp)=>{
         this.crearSesion(resp)
       },
-      err=>{  
+      err=>{
         this._socialFbPrv.removeToken();
       });
     }).catch(e => {
       console.log(e);
       /**@TODO: que sucede aqui?
-       * 
+       *
       */
     });
 
@@ -130,18 +130,16 @@ export class AutenticacionProvider {
     let promesa = new Promise((resolve, reject) => {
       this.activo()
         .then((data) => {
-          let pagina: string
+          let pagina: string = "HomePage"
           console.log(data)
           if (data['data'] != null) {
             this.menuCtrl.enable(false, 'sesionInactiva');
             this.menuCtrl.enable(true, 'sesionActiva');
-            pagina = "HomeUsuarioPage"
             // inicializar Token
             this._peticionPrvdr.cargarToken()
           } else {
             this.menuCtrl.enable(true, 'sesionInactiva');
             this.menuCtrl.enable(false, 'sesionActiva');
-            pagina = "HomePage"
           }
           resolve(pagina);
         }).catch(() => {

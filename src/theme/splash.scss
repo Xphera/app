@@ -6,7 +6,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(-60deg, $themeColor1);
+    background: #fff;
+    background-image:url("../assets/imgs/cajassinfronteras.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    // linear-gradient(-60deg, $themeColor1);
 }
 
 .splash > .spinner {

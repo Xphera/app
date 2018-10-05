@@ -22,7 +22,7 @@ import { timer } from 'rxjs/observable/timer';
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  public rootPage: string = '';
+  public rootPage: string = 'HomePage';
   pages: Array<{ title: string, leftIcon: string, page: string }>;
 
   pages_authenticated: Array<{ title: string, leftIcon: string, page: string }>;

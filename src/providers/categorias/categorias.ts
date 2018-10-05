@@ -26,7 +26,7 @@ export class CategoriasProvider {
 
   obtenerCategorias() {
     let request = this.http.get<Categoria[]>(URL_CATEGORIA)
-    this._peticionPrvdr.peticion(request)
+    this._peticionPrvdr.peticion(request,'',false)
       .subscribe((resp: Categoria[]) => {
           this.categorias = resp;
           this.chunkCategorias = resp.map(x => Object.assign({}, x));
@@ -35,7 +35,7 @@ export class CategoriasProvider {
       })
   }
 
-  chunkArray(myArray, chunk_size){    
+  chunkArray(myArray, chunk_size){
    let index = 0;
    let arrayLength = myArray.length;
    let tempArray = [];

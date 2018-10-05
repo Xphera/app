@@ -46,7 +46,7 @@ export class ServicioUbicacionPrestadorPage {
   }
 
   ionViewCanLeave() {
-    this._ubicacionesPrvdr.obtenerUbicaciones()
+    // this._ubicacionesPrvdr.obtenerUbicaciones()
 
     // this._ionicComponentPrvdr.showAlert({
     //   title: '',
