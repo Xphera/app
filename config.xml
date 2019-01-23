@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.xphera.cliente" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="co.xphera.cliente" version="0.1.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>appServicios</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -114,7 +114,7 @@
     <plugin name="card.io.cordova.mobilesdk" spec="^2.1.0" />
     <allow-navigation href="http://192.168.137.1:8100" sessionid="3ab69bc3" />
     <plugin name="cordova-plugin-googleplus" spec="^5.3.1">
-        <variable name="REVERSED_CLIENT_ID" value="900716962448-c7j48ssbar5jjrnleofvombo33l2mcvm.apps.googleusercontent.com" />
+        <variable name="REVERSED_CLIENT_ID" value="apps.googleusercontent.com.900716962448-c7j48ssbar5jjrnleofvombo33l2mcvm" />
     </plugin>
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
