@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { IonicComponentProvider } from '../ionic-component/ionic-component';
+import { Platform } from "ionic-angular";
 
 /*
   Generated class for the LocalizarUbicacionProvider provider.
@@ -11,62 +12,70 @@ import { IonicComponentProvider } from '../ionic-component/ionic-component';
 */
 @Injectable()
 export class LocalizarUbicacionProvider {
-
   constructor(
     private geolocation: Geolocation,
     private locationAccuracy: LocationAccuracy,
     private _ionicComponentPrvdr: IonicComponentProvider,
+    private platform: Platform
   ) {
-    console.log('Hello LocalizarUbicacionProvider Provider');
-
+    console.log("Hello LocalizarUbicacionProvider Provider");
   }
 
-    public gps() {
-      let loader = this._ionicComponentPrvdr.showloaderMessage('Buscando ubicación...');
-      let coords = {
-        'longitud':-74.0761965,
-        'latitud':4.5981451
-      }
-      return new Promise((resolve, reject) => {
-        this.gpsActivo().then(() => {
-          this.geolocation.getCurrentPosition({ timeout: 30000 })
-            .then(
-              location => {
-                loader.dismiss();
-                resolve(location);
-              }
-            )
+  public gps() {
+    let loader = this._ionicComponentPrvdr.showloaderMessage(
+      "Buscando ubicación..."
+    );
+    let coords = {
+      longitud: -74.0761965,
+      latitud: 4.5981451
+    };
+    return new Promise((resolve, reject) => {
+      this.gpsActivo()
+        .then(() => {
+          this.geolocation
+            .getCurrentPosition({ timeout: 30000 })
+            .then(location => {
+              loader.dismiss();
+              resolve(location);
+            })
             .catch(error => {
               loader.dismiss();
-              reject(coords)
+              reject(coords);
             });
         })
-        .catch((error) => {
+        .catch(error => {
           loader.dismiss();
-          reject(coords)
-        })
+          reject(coords);
+        });
+    });
+  }
 
-      })
-    }
-
-    public gpsActivo() {
-      return new Promise((resolve, reject) => {
+  public gpsActivo() {
+    return new Promise((resolve, reject) => {
+      if (this.platform.is("cordova")) {
         this.locationAccuracy.canRequest().then((canRequest: boolean) => {
           if (canRequest) {
             // the accuracy option will be ignored by iOS
-            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-              () => {
-                console.log('Request successful')
-                resolve(true)
-              },
-              error => {
-                console.log('Error requesting location permissions', error)
-                reject(false)
-              }
-            );
+            this.locationAccuracy
+              .request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+              .then(
+                () => {
+                  console.log("Request successful");
+                  resolve(true);
+                },
+                error => {
+                  console.log("Error requesting location permissions", error);
+                  reject(false);
+                }
+              );
+          }else{
+            resolve(true)
           }
-        })
-      })
-    }
+        });
+      }else{
+        resolve(true);
+      }
 
+    });
+  }
 }

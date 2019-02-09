@@ -7,7 +7,7 @@ import OSM from 'ol/source/OSM';
 import Vector from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { getDistance } from 'ol/sphere';
-import { Fill, Style } from 'ol/style';//, Text
+import { Fill, Style, Stroke} from 'ol/style';//, Text
 import { getCenter } from 'ol/extent';
 import Feature from 'ol/Feature';
 import { Point } from 'ol/geom';
@@ -55,7 +55,7 @@ export class XphMapComponent {
   public vectorLayer = new VectorLayer({
     source: this.vectorSource,
     style: ((feature, resolution) => {
-      let color = 'rgb(102, 102, 255, 0.2)'
+      let color = 'rgba(102, 102, 255, 0.3)'
       // let text = ''
       // if (feature.get('color')) {
       //   color = feature.get('color')
@@ -63,9 +63,14 @@ export class XphMapComponent {
       // if (feature.get('name')) {
       //   text = feature.get('name')
       // }
+
       let style = new Style({
         fill: new Fill({
           color: color
+        }),
+        stroke: new Stroke({
+          color: 'orange',
+          width: 2
         }),
         // text: new Text({
         //   font: '30px Calibri,sans-serif',
